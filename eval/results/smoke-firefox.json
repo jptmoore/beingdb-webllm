@@ -1,0 +1,18 @@
+{
+ "error": "Cannot initialize runtime because of requested maxStorageBuffersPerShaderStage exceeds limit. requested=10, limit=9. ",
+ "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:156.0) Gecko/20100101 Firefox/156.0",
+ "db": {
+  "predicates": 168,
+  "facts": 1842,
+  "entries": 6639,
+  "environmentFingerprint": "sha256:c99e9e82d54a50d2eb201a6637d365278f0198a1399036f9104db57104589aec",
+  "languageVersion": "beingdb-dsl/1"
+ },
+ "dbTimings": {
+  "wasmMs": 245,
+  "fetchMs": 22,
+  "loadMs": 532,
+  "dataBytes": 648896,
+  "schemaMs": 24
+ }
+}

@@ -1,0 +1,11 @@
+body { font-family: system-ui, sans-serif; margin: 2rem auto; max-width: 64rem; padding: 0 1rem; line-height: 1.4; }
+textarea { width: 100%; font: inherit; }
+pre { background: #f4f4f4; padding: 0.75rem; overflow: auto; }
+.log { font-size: 0.85rem; max-height: 10rem; }
+.dsl { font-size: 1rem; }
+.note { color: #555; }
+.ok { color: #067d17; } .bad { color: #b00020; } .warn { color: #a15c00; }
+table { border-collapse: collapse; font-size: 0.9rem; }
+td, th { border: 1px solid #ddd; padding: 0.2rem 0.5rem; text-align: left; vertical-align: top; }
+th { background: #f4f4f4; }
+td pre { margin: 0; padding: 0.25rem; font-size: 0.8rem; }

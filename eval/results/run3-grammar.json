@@ -1,0 +1,5137 @@
+{
+ "started": "2026-09-24T17:00:05.371Z",
+ "model": {
+  "modelId": "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+  "cached": true,
+  "loadMs": 5609.300000011921,
+  "vramMB": 1629.75,
+  "storageMB": 881.005083,
+  "jsHeapMB": 27.13192,
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Code/1.139.0 Chrome/150.0.7871.250 Electron/43.6.0 Safari/537.36",
+  "jsHeapMBAfter": 22.169705
+ },
+ "db": {
+  "predicates": 168,
+  "facts": 1842,
+  "entries": 6639,
+  "environmentFingerprint": "sha256:c99e9e82d54a50d2eb201a6637d365278f0198a1399036f9104db57104589aec",
+  "languageVersion": "beingdb-dsl/1",
+  "timings": {
+   "wasmMs": 34.69999998807907,
+   "fetchMs": 10.300000011920929,
+   "loadMs": 15.799999982118607,
+   "dataBytes": 648896,
+   "schemaMs": 12.100000023841858
+  }
+ },
+ "promptChars": 6655,
+ "maxRepairs": 2,
+ "summary": {
+  "questions": 50,
+  "supported": 38,
+  "unsupported": 12,
+  "firstValid": "24/38 (63%)",
+  "firstCorrect": "10/38 (26%)",
+  "finalValid": "30/38 (79%)",
+  "finalCorrect": "11/38 (29%)",
+  "repairedToValid": 6,
+  "repairedToCorrect": 1,
+  "predicatesOk": "20/38 (53%)",
+  "exactProjection": "11/11 (100%)",
+  "falseRefusals": 0,
+  "unsupportedDetected": "0/12 (0%)",
+  "unsupportedFirstAttempt": "0/12 (0%)",
+  "fabricatedQueries": 4,
+  "overallCorrect": "11/50 (22%)",
+  "byTag": {
+   "easy": "first 7/18 (39%), final 8/18 (44%)",
+   "constant": "first 8/26 (31%), final 9/26 (35%)",
+   "medium": "first 3/14 (21%), final 3/14 (21%)",
+   "join": "first 2/14 (14%), final 2/14 (14%)",
+   "range": "first 2/6 (33%), final 2/6 (33%)",
+   "order": "first 0/2 (0%), final 0/2 (0%)",
+   "hard": "first 0/6 (0%), final 0/6 (0%)",
+   "negation": "first 0/2 (0%), final 0/2 (0%)",
+   "optional": "first 0/1 (0%), final 0/1 (0%)",
+   "self-join": "first 0/1 (0%), final 0/1 (0%)",
+   "disjunction": "first 0/1 (0%), final 0/1 (0%)"
+  },
+  "failures": {
+   "wrong predicate": 10,
+   "argument order (funded_by)": 1,
+   "constant/bound (elsa_stansfield)": 1,
+   "argument order (soundtrack_by)": 1,
+   "invalid (unbound_projection)": 3,
+   "argument order (influenced_by)": 1,
+   "constant/bound (david_critchley)": 1,
+   "constant/bound (delia_derbyshire)": 1,
+   "other (join/semantics)": 1,
+   "invalid (unbound_projection, disconnected_query)": 1,
+   "invalid (unbound_order_variable)": 1,
+   "invalid (unsafe_negation, disconnected_query)": 2,
+   "invalid (unbound_projection, unbound_order_variable)": 1,
+   "constant/bound (1980)": 1,
+   "constant/bound (elsa_stansfield, madelon_hooykaas)": 1,
+   "no valid query (not flagged unsupported)": 8,
+   "fabricated a query": 4
+  },
+  "llmMsPerCall": {
+   "median": 7830,
+   "p90": 9406,
+   "calls": 94
+  },
+  "dbMsPerQuery": {
+   "median": 0.5,
+   "p90": 0.9,
+   "max": 6,
+   "queries": 94
+  },
+  "totalMsPerQuestion": {
+   "median": 10144
+  }
+ },
+ "scores": [
+  {
+   "id": "e01",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e02",
+   "level": "easy",
+   "tags": [],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e03",
+   "level": "easy",
+   "tags": [],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "e04",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "argument order (funded_by)"
+  },
+  {
+   "id": "e05",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "constant/bound (elsa_stansfield)"
+  },
+  {
+   "id": "e06",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e07",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e08",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "argument order (soundtrack_by)"
+  },
+  {
+   "id": "e09",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 1,
+   "firstValid": false,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e10",
+   "level": "easy",
+   "tags": [],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "e11",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unbound_projection)"
+  },
+  {
+   "id": "e12",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e13",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "argument order (influenced_by)"
+  },
+  {
+   "id": "e14",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "constant/bound (david_critchley)"
+  },
+  {
+   "id": "e15",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e16",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unbound_projection)"
+  },
+  {
+   "id": "e17",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "e18",
+   "level": "easy",
+   "tags": [
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "constant/bound (delia_derbyshire)"
+  },
+  {
+   "id": "m01",
+   "level": "medium",
+   "tags": [
+    "join",
+    "range"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "other (join/semantics)"
+  },
+  {
+   "id": "m02",
+   "level": "medium",
+   "tags": [
+    "join",
+    "range"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unbound_projection)"
+  },
+  {
+   "id": "m03",
+   "level": "medium",
+   "tags": [
+    "join",
+    "order"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "m04",
+   "level": "medium",
+   "tags": [
+    "join",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "m05",
+   "level": "medium",
+   "tags": [
+    "join",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "m06",
+   "level": "medium",
+   "tags": [
+    "join"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "m07",
+   "level": "medium",
+   "tags": [
+    "join",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "m08",
+   "level": "medium",
+   "tags": [
+    "join",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unbound_projection, disconnected_query)"
+  },
+  {
+   "id": "m09",
+   "level": "medium",
+   "tags": [
+    "join",
+    "range",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "m10",
+   "level": "medium",
+   "tags": [
+    "range"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "m11",
+   "level": "medium",
+   "tags": [
+    "range"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": true,
+   "correct": true,
+   "exactProjection": true,
+   "predicatesOk": true
+  },
+  {
+   "id": "m12",
+   "level": "medium",
+   "tags": [
+    "constant",
+    "order"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unbound_order_variable)"
+  },
+  {
+   "id": "m13",
+   "level": "medium",
+   "tags": [
+    "join",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "m14",
+   "level": "medium",
+   "tags": [
+    "join",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "h01",
+   "level": "hard",
+   "tags": [
+    "negation",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unsafe_negation, disconnected_query)"
+  },
+  {
+   "id": "h02",
+   "level": "hard",
+   "tags": [
+    "optional",
+    "join"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unbound_projection, unbound_order_variable)"
+  },
+  {
+   "id": "h03",
+   "level": "hard",
+   "tags": [
+    "join",
+    "self-join"
+   ],
+   "supported": true,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": false,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "invalid (unsafe_negation, disconnected_query)"
+  },
+  {
+   "id": "h04",
+   "level": "hard",
+   "tags": [
+    "negation",
+    "range"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstValid": true,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "constant/bound (1980)"
+  },
+  {
+   "id": "h05",
+   "level": "hard",
+   "tags": [
+    "disjunction",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 2,
+   "firstValid": false,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": true,
+   "failure": "constant/bound (elsa_stansfield, madelon_hooykaas)"
+  },
+  {
+   "id": "h06",
+   "level": "hard",
+   "tags": [
+    "join",
+    "constant"
+   ],
+   "supported": true,
+   "outcome": "ok",
+   "repairs": 1,
+   "firstValid": false,
+   "finalValid": true,
+   "firstCorrect": false,
+   "correct": false,
+   "exactProjection": false,
+   "predicatesOk": false,
+   "failure": "wrong predicate"
+  },
+  {
+   "id": "u01",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  },
+  {
+   "id": "u02",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "ok",
+   "repairs": 1,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": true,
+   "failure": "fabricated a query"
+  },
+  {
+   "id": "u03",
+   "level": "unsupported",
+   "tags": [
+    "aggregation"
+   ],
+   "supported": false,
+   "outcome": "ok",
+   "repairs": 1,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": true,
+   "failure": "fabricated a query"
+  },
+  {
+   "id": "u04",
+   "level": "unsupported",
+   "tags": [
+    "aggregation"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  },
+  {
+   "id": "u05",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  },
+  {
+   "id": "u06",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  },
+  {
+   "id": "u07",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": true,
+   "failure": "fabricated a query"
+  },
+  {
+   "id": "u08",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  },
+  {
+   "id": "u09",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "ok",
+   "repairs": 0,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": true,
+   "failure": "fabricated a query"
+  },
+  {
+   "id": "u10",
+   "level": "unsupported",
+   "tags": [
+    "out-of-domain"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  },
+  {
+   "id": "u11",
+   "level": "unsupported",
+   "tags": [
+    "no-predicate"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  },
+  {
+   "id": "u12",
+   "level": "unsupported",
+   "tags": [
+    "aggregation"
+   ],
+   "supported": false,
+   "outcome": "failed",
+   "repairs": 2,
+   "firstCorrect": false,
+   "correct": false,
+   "fabricated": false,
+   "failure": "no valid query (not flagged unsupported)"
+  }
+ ],
+ "results": [
+  {
+   "id": "e01",
+   "run": {
+    "question": "Which works were created in 1979?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  year_created(Work, @1979)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  year_created(Work, @1979)"
+      },
+      "llmMs": 8653.09999999404,
+      "usage": {
+       "completion_tokens": 17,
+       "prompt_tokens": 1908,
+       "total_tokens": 1925,
+       "extra": {
+        "e2e_latency_s": 8.653,
+        "prefill_tokens_per_s": 266.81209883816337,
+        "decode_tokens_per_s": 11.384182683467081,
+        "time_to_first_token_s": 7.15109999999404,
+        "time_per_output_token_s": 0.08784117646427714,
+        "grammar_init_s": 3.2489000000059605,
+        "grammar_per_token_s": 0.0002470588210751029
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 2,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 3
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8653.09999999404,
+    "dbMs": 2,
+    "totalMs": 8655.300000011921
+   }
+  },
+  {
+   "id": "e02",
+   "run": {
+    "question": "List all works and the people who created them.",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work, Person\nwhere\n  created_by(Work, Person)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Person\nwhere\n  created_by(Work, Person)"
+      },
+      "llmMs": 8139.4000000059605,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 1907,
+       "total_tokens": 1922,
+       "extra": {
+        "e2e_latency_s": 8.139,
+        "prefill_tokens_per_s": 277.84657973337215,
+        "decode_tokens_per_s": 11.794307281461233,
+        "time_to_first_token_s": 6.8635,
+        "time_per_output_token_s": 0.08478666666348776,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00033999999960263565
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 2.7999999821186066,
+       "response": {
+        "variables": [
+         "Work",
+         "Person"
+        ],
+        "count": 137
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8139.4000000059605,
+    "dbMs": 2.7999999821186066,
+    "totalMs": 8142.600000023842
+   }
+  },
+  {
+   "id": "e03",
+   "run": {
+    "question": "Which artists were interviewed for Rewind?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find InterviewedArtist\nwhere\n  interviewee(InterviewedArtist, person)\n  curated_by(InterviewedArtist, rewind)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist\nwhere\n  interviewee(InterviewedArtist, person)\n  curated_by(InterviewedArtist, rewind)"
+      },
+      "llmMs": 9275.5,
+      "usage": {
+       "completion_tokens": 27,
+       "prompt_tokens": 1905,
+       "total_tokens": 1932,
+       "extra": {
+        "e2e_latency_s": 9.274,
+        "prefill_tokens_per_s": 273.7226277374607,
+        "decode_tokens_per_s": 11.69641309965046,
+        "time_to_first_token_s": 6.959599999994039,
+        "time_per_output_token_s": 0.08549629629872463,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.0002444444475350556
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 6,
+       "response": {
+        "variables": [
+         "InterviewedArtist"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 9275.5,
+    "dbMs": 6,
+    "totalMs": 9281.600000023842
+   }
+  },
+  {
+   "id": "e04",
+   "run": {
+    "question": "Who funded Peter Donebauer?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  funded_by(_, peter_donebauer)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  funded_by(_, peter_donebauer)"
+      },
+      "llmMs": 7954.799999982119,
+      "usage": {
+       "completion_tokens": 14,
+       "prompt_tokens": 1904,
+       "total_tokens": 1918,
+       "extra": {
+        "e2e_latency_s": 7.955,
+        "prefill_tokens_per_s": 281.22415219164657,
+        "decode_tokens_per_s": 11.8413262284182,
+        "time_to_first_token_s": 6.77040000000596,
+        "time_per_output_token_s": 0.0844500000008515,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.00016428571939468387
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.9000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  funded_by(_, peter_donebauer)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  funded_by(_, peter_donebauer)"
+      },
+      "llmMs": 4421.200000017881,
+      "usage": {
+       "completion_tokens": 14,
+       "prompt_tokens": 54,
+       "total_tokens": 68,
+       "extra": {
+        "e2e_latency_s": 4.421,
+        "prefill_tokens_per_s": 16.79052268278352,
+        "decode_tokens_per_s": 11.639507814982746,
+        "time_to_first_token_s": 3.2160999999940394,
+        "time_per_output_token_s": 0.08591428571513719,
+        "grammar_init_s": 2.8444000000059604,
+        "grammar_per_token_s": 0.00012142857057707649
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  funded_by(Person, peter_donebauer)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  funded_by(Person, peter_donebauer)"
+      },
+      "llmMs": 1690.5,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 54,
+       "total_tokens": 69,
+       "extra": {
+        "e2e_latency_s": 1.691,
+        "prefill_tokens_per_s": 158.35777126099705,
+        "decode_tokens_per_s": 11.136684237830293,
+        "time_to_first_token_s": 0.341,
+        "time_per_output_token_s": 0.08979333333373068,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.00018666666547457377
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.30000001192092896,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 14066.5,
+    "dbMs": 1.7000000178813934,
+    "totalMs": 14069
+   }
+  },
+  {
+   "id": "e05",
+   "run": {
+    "question": "Where was Elsa Stansfield educated?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  educated_at(Person, Elsa_Stansfield)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  educated_at(Person, Elsa_Stansfield)"
+      },
+      "llmMs": 8099.199999988079,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 1905,
+       "total_tokens": 1920,
+       "extra": {
+        "e2e_latency_s": 8.099,
+        "prefill_tokens_per_s": 280.03998471197326,
+        "decode_tokens_per_s": 11.59465100031041,
+        "time_to_first_token_s": 6.802599999994039,
+        "time_per_output_token_s": 0.0862466666718324,
+        "grammar_init_s": 0.036200000017881394,
+        "grammar_per_token_s": 0.00018666666944821677
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.4000000059604645,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 21
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8099.199999988079,
+    "dbMs": 0.4000000059604645,
+    "totalMs": 8099.799999982119
+   }
+  },
+  {
+   "id": "e06",
+   "run": {
+    "question": "Which works did Judith Goddard create?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, judith_goddard)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, judith_goddard)"
+      },
+      "llmMs": 8263.699999988079,
+      "usage": {
+       "completion_tokens": 17,
+       "prompt_tokens": 1906,
+       "total_tokens": 1923,
+       "extra": {
+        "e2e_latency_s": 8.264,
+        "prefill_tokens_per_s": 280.4467136525252,
+        "decode_tokens_per_s": 11.62472647650289,
+        "time_to_first_token_s": 6.796300000011921,
+        "time_per_output_token_s": 0.08602352941562147,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00015882353922900037
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.9000000059604645,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 10
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8263.699999988079,
+    "dbMs": 0.9000000059604645,
+    "totalMs": 8264.699999988079
+   }
+  },
+  {
+   "id": "e07",
+   "run": {
+    "question": "Which works are in the collection of the Stedelijk Museum Amsterdam?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  in_collection(Work, stedelijk_museum_amsterdam)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  in_collection(Work, stedelijk_museum_amsterdam)"
+      },
+      "llmMs": 8540.799999982119,
+      "usage": {
+       "completion_tokens": 19,
+       "prompt_tokens": 1911,
+       "total_tokens": 1930,
+       "extra": {
+        "e2e_latency_s": 8.541,
+        "prefill_tokens_per_s": 276.98462162780254,
+        "decode_tokens_per_s": 11.615111871782332,
+        "time_to_first_token_s": 6.899300000011921,
+        "time_per_output_token_s": 0.08609473684273268,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00029473684336009777
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.8999999761581421,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 3
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8540.799999982119,
+    "dbMs": 0.8999999761581421,
+    "totalMs": 8541.799999982119
+   }
+  },
+  {
+   "id": "e08",
+   "run": {
+    "question": "Who made the soundtrack for Cultural Quarter?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  soundtrack_by(Work, cultural_quarter)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  soundtrack_by(Work, cultural_quarter)"
+      },
+      "llmMs": 8159.300000011921,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 1905,
+       "total_tokens": 1920,
+       "extra": {
+        "e2e_latency_s": 8.159,
+        "prefill_tokens_per_s": 277.64417821767955,
+        "decode_tokens_per_s": 11.59465100084461,
+        "time_to_first_token_s": 6.861299999982118,
+        "time_per_output_token_s": 0.08624666666785875,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.0002199999968210856
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.7999999821186066,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  soundtrack_by(Work, cultural_quarter)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  soundtrack_by(Work, cultural_quarter)"
+      },
+      "llmMs": 1644.199999988079,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 54,
+       "total_tokens": 69,
+       "extra": {
+        "e2e_latency_s": 1.645,
+        "prefill_tokens_per_s": 157.57222060659004,
+        "decode_tokens_per_s": 11.544677903115769,
+        "time_to_first_token_s": 0.3426999999880791,
+        "time_per_output_token_s": 0.08662000000278154,
+        "grammar_init_s": 0.019199999988079072,
+        "grammar_per_token_s": 0.0001599999984105428
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  soundtrack_by(Work, cultural_quarter)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  soundtrack_by(Work, cultural_quarter)"
+      },
+      "llmMs": 1697.6000000238419,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 54,
+       "total_tokens": 69,
+       "extra": {
+        "e2e_latency_s": 1.697,
+        "prefill_tokens_per_s": 159.33903807553537,
+        "decode_tokens_per_s": 11.059500111712861,
+        "time_to_first_token_s": 0.33889999997615816,
+        "time_per_output_token_s": 0.09041999999086063,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00012666666507720947
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.09999999403953552,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 11501.100000023842,
+    "dbMs": 1.0999999642372131,
+    "totalMs": 11503.40000000596
+   }
+  },
+  {
+   "id": "e09",
+   "run": {
+    "question": "What has the Arts Council funded?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Organisation\nwhere\n  funded_by(organisation, arts_council)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Organisation\nwhere\n  funded_by(organisation, arts_council)"
+      },
+      "llmMs": 8032.5999999940395,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 1904,
+       "total_tokens": 1919,
+       "extra": {
+        "e2e_latency_s": 8.032,
+        "prefill_tokens_per_s": 282.3124712727857,
+        "decode_tokens_per_s": 11.671335200855227,
+        "time_to_first_token_s": 6.744299999982118,
+        "time_per_output_token_s": 0.08567999999920525,
+        "grammar_init_s": 0.01819999998807907,
+        "grammar_per_token_s": 0.00012666666507720947
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Organisation\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Organisation",
+          "variable": "Organisation"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Organisation\nwhere\n  funded_by(Organisation, arts_council)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Organisation\nwhere\n  funded_by(Organisation, arts_council)"
+      },
+      "llmMs": 1750.199999988079,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 54,
+       "total_tokens": 70,
+       "extra": {
+        "e2e_latency_s": 1.751,
+        "prefill_tokens_per_s": 153.9338654582456,
+        "decode_tokens_per_s": 11.456394100005935,
+        "time_to_first_token_s": 0.3507999999821186,
+        "time_per_output_token_s": 0.08728749999962745,
+        "grammar_init_s": 0.02069999998807907,
+        "grammar_per_token_s": 0.00018124999850988388
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.5999999940395355,
+       "response": {
+        "variables": [
+         "Organisation"
+        ],
+        "count": 11
+       }
+      }
+     }
+    ],
+    "repairs": 1,
+    "llmMs": 9782.799999982119,
+    "dbMs": 0.7999999821186066,
+    "totalMs": 9783.699999988079
+   }
+  },
+  {
+   "id": "e10",
+   "run": {
+    "question": "List all exhibitions.",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Exhibition\nwhere\n  year_started_using_technology(Exhibition, Year)\norder by Year ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Exhibition\nwhere\n  year_started_using_technology(Exhibition, Year)\norder by Year ascending"
+      },
+      "llmMs": 8667.799999982119,
+      "usage": {
+       "completion_tokens": 22,
+       "prompt_tokens": 1901,
+       "total_tokens": 1923,
+       "extra": {
+        "e2e_latency_s": 8.667,
+        "prefill_tokens_per_s": 280.46621422248455,
+        "decode_tokens_per_s": 11.674803650807936,
+        "time_to_first_token_s": 6.778,
+        "time_per_output_token_s": 0.08565454545617103,
+        "grammar_init_s": 0.03579999998211861,
+        "grammar_per_token_s": 0.00020000000027093018
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 2.0999999940395355,
+       "response": {
+        "variables": [
+         "Exhibition"
+        ],
+        "count": 2
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8667.799999982119,
+    "dbMs": 2.0999999940395355,
+    "totalMs": 8670.09999999404
+   }
+  },
+  {
+   "id": "e11",
+   "run": {
+    "question": "Where did Kevin Atherton perform?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  performed_at(kevin_atherton, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  performed_at(kevin_atherton, _)"
+      },
+      "llmMs": 8104.300000011921,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 1904,
+       "total_tokens": 1920,
+       "extra": {
+        "e2e_latency_s": 8.104,
+        "prefill_tokens_per_s": 282.484199281171,
+        "decode_tokens_per_s": 11.756925564170997,
+        "time_to_first_token_s": 6.740200000017881,
+        "time_per_output_token_s": 0.08505624999850987,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00013749999925494194
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5999999940395355,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  performed_at(kevin_atherton, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  performed_at(kevin_atherton, _)"
+      },
+      "llmMs": 1770.7000000178814,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 54,
+       "total_tokens": 70,
+       "extra": {
+        "e2e_latency_s": 1.771,
+        "prefill_tokens_per_s": 142.59308159941864,
+        "decode_tokens_per_s": 11.516591088938824,
+        "time_to_first_token_s": 0.3786999999880791,
+        "time_per_output_token_s": 0.08683125000074507,
+        "grammar_init_s": 0.022799999982118607,
+        "grammar_per_token_s": 0.00011249999701976777
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.09999999403953552,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  performed_at(kevin_atherton, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  performed_at(kevin_atherton, _)"
+      },
+      "llmMs": 1793.300000011921,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 54,
+       "total_tokens": 70,
+       "extra": {
+        "e2e_latency_s": 1.794,
+        "prefill_tokens_per_s": 159.95260662377495,
+        "decode_tokens_per_s": 11.008669327049942,
+        "time_to_first_token_s": 0.3376000000238419,
+        "time_per_output_token_s": 0.09083750000037251,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00013750000298023225
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 11668.300000041723,
+    "dbMs": 0.699999988079071,
+    "totalMs": 11669.40000000596
+   }
+  },
+  {
+   "id": "e12",
+   "run": {
+    "question": "Who was employed by the BBC?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  employed_by(Person, bbc)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  employed_by(Person, bbc)"
+      },
+      "llmMs": 7803.700000017881,
+      "usage": {
+       "completion_tokens": 12,
+       "prompt_tokens": 1904,
+       "total_tokens": 1916,
+       "extra": {
+        "e2e_latency_s": 7.804,
+        "prefill_tokens_per_s": 281.39871715216344,
+        "decode_tokens_per_s": 11.598685482378828,
+        "time_to_first_token_s": 6.766200000017881,
+        "time_per_output_token_s": 0.08621666666616995,
+        "grammar_init_s": 0.017100000023841856,
+        "grammar_per_token_s": 0.00019166667511065806
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.4000000059604645,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 2
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 7803.700000017881,
+    "dbMs": 0.4000000059604645,
+    "totalMs": 7804.200000017881
+   }
+  },
+  {
+   "id": "e13",
+   "run": {
+    "question": "Who influenced Peter Donebauer?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  influenced_by(Person, peter_donebauer)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  influenced_by(Person, peter_donebauer)"
+      },
+      "llmMs": 8024.699999988079,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 1904,
+       "total_tokens": 1919,
+       "extra": {
+        "e2e_latency_s": 8.024,
+        "prefill_tokens_per_s": 282.59320826432025,
+        "decode_tokens_per_s": 11.679514132916763,
+        "time_to_first_token_s": 6.73759999999404,
+        "time_per_output_token_s": 0.08561999999483426,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00020666666626930236
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.5999999940395355,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8024.699999988079,
+    "dbMs": 0.5999999940395355,
+    "totalMs": 8025.299999982119
+   }
+  },
+  {
+   "id": "e14",
+   "run": {
+    "question": "Who did David Critchley collaborate with?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  collaborated_with(Person, David_Critchley)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  collaborated_with(Person, David_Critchley)"
+      },
+      "llmMs": 8039.0999999940395,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 1906,
+       "total_tokens": 1921,
+       "extra": {
+        "e2e_latency_s": 8.039,
+        "prefill_tokens_per_s": 281.956833680723,
+        "decode_tokens_per_s": 11.753643630458372,
+        "time_to_first_token_s": 6.759900000005961,
+        "time_per_output_token_s": 0.0850799999932448,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00016666667064030966
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.800000011920929,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 133
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8039.0999999940395,
+    "dbMs": 0.800000011920929,
+    "totalMs": 8039.9000000059605
+   }
+  },
+  {
+   "id": "e15",
+   "run": {
+    "question": "What was exhibited at the Tate?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  exhibited_at(Work, tate)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  exhibited_at(Work, tate)"
+      },
+      "llmMs": 7959.199999988079,
+      "usage": {
+       "completion_tokens": 14,
+       "prompt_tokens": 1904,
+       "total_tokens": 1918,
+       "extra": {
+        "e2e_latency_s": 7.959,
+        "prefill_tokens_per_s": 282.32084340411365,
+        "decode_tokens_per_s": 11.548296625850174,
+        "time_to_first_token_s": 6.74409999999404,
+        "time_per_output_token_s": 0.08659285714583739,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00019285713987691062
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.19999998807907104,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 6
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 7959.199999988079,
+    "dbMs": 0.19999998807907104,
+    "totalMs": 7959.5
+   }
+  },
+  {
+   "id": "e16",
+   "run": {
+    "question": "Who curated Scratch Video Volume 1?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Curator\nwhere\n  curated_by(Work, scratch_video_volume_1)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Curator\nwhere\n  curated_by(Work, scratch_video_volume_1)"
+      },
+      "llmMs": 8312.200000017881,
+      "usage": {
+       "completion_tokens": 18,
+       "prompt_tokens": 1905,
+       "total_tokens": 1923,
+       "extra": {
+        "e2e_latency_s": 8.313,
+        "prefill_tokens_per_s": 281.6589044133954,
+        "decode_tokens_per_s": 11.644455945276373,
+        "time_to_first_token_s": 6.7635,
+        "time_per_output_token_s": 0.08587777777678436,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0002111111150847541
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Curator\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Curator",
+          "variable": "Curator"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Curator\nwhere\n  curated_by(Work, scratch_video_volume_1)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Curator\nwhere\n  curated_by(Work, scratch_video_volume_1)"
+      },
+      "llmMs": 1935.4000000059605,
+      "usage": {
+       "completion_tokens": 18,
+       "prompt_tokens": 55,
+       "total_tokens": 73,
+       "extra": {
+        "e2e_latency_s": 1.935,
+        "prefill_tokens_per_s": 157.86452353346456,
+        "decode_tokens_per_s": 11.366506694294008,
+        "time_to_first_token_s": 0.34840000000596044,
+        "time_per_output_token_s": 0.0879777777724796,
+        "grammar_init_s": 0.020900000005960463,
+        "grammar_per_token_s": 0.00018888889418707956
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Curator\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Curator",
+          "variable": "Curator"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Curator\nwhere\n  curated_by(Work, scratch_video_volume_1)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Curator\nwhere\n  curated_by(Work, scratch_video_volume_1)"
+      },
+      "llmMs": 1956.5,
+      "usage": {
+       "completion_tokens": 18,
+       "prompt_tokens": 55,
+       "total_tokens": 73,
+       "extra": {
+        "e2e_latency_s": 1.957,
+        "prefill_tokens_per_s": 161.95524146338434,
+        "decode_tokens_per_s": 11.154489682385451,
+        "time_to_first_token_s": 0.33959999999403956,
+        "time_per_output_token_s": 0.08964999999768203,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.000149999996026357
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Curator\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.30000001192092896,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Curator",
+          "variable": "Curator"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 12204.100000023842,
+    "dbMs": 0.5,
+    "totalMs": 12204.700000017881
+   }
+  },
+  {
+   "id": "e17",
+   "run": {
+    "question": "Which works were made at Maidstone College?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  made_at(Work, maidstone_college)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  made_at(Work, maidstone_college)"
+      },
+      "llmMs": 8111.9000000059605,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 1906,
+       "total_tokens": 1922,
+       "extra": {
+        "e2e_latency_s": 8.112,
+        "prefill_tokens_per_s": 281.35333018521317,
+        "decode_tokens_per_s": 11.98232606894118,
+        "time_to_first_token_s": 6.774399999976158,
+        "time_per_output_token_s": 0.08345625000074507,
+        "grammar_init_s": 0.037,
+        "grammar_per_token_s": 0.00014374999701976778
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.30000001192092896,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 2
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8111.9000000059605,
+    "dbMs": 0.30000001192092896,
+    "totalMs": 8112.200000017881
+   }
+  },
+  {
+   "id": "e18",
+   "run": {
+    "question": "Who collaborated with Delia Derbyshire?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  collaborated_with(Person, person)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  collaborated_with(Person, person)"
+      },
+      "llmMs": 7753.5999999940395,
+      "usage": {
+       "completion_tokens": 12,
+       "prompt_tokens": 1905,
+       "total_tokens": 1917,
+       "extra": {
+        "e2e_latency_s": 7.754,
+        "prefill_tokens_per_s": 282.8633792156105,
+        "decode_tokens_per_s": 11.797090050913342,
+        "time_to_first_token_s": 6.734699999988079,
+        "time_per_output_token_s": 0.08476666666815678,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00013333333283662796
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.19999998807907104,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 7753.5999999940395,
+    "dbMs": 0.19999998807907104,
+    "totalMs": 7753.799999982119
+   }
+  },
+  {
+   "id": "m01",
+   "run": {
+    "question": "Which artists created works between 1975 and 1980?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  created_by(work, Person)\n  year_created(work, Year)\n  Year between @1975 and @1980",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  created_by(work, Person)\n  year_created(work, Year)\n  Year between @1975 and @1980"
+      },
+      "llmMs": 9554.199999988079,
+      "usage": {
+       "completion_tokens": 33,
+       "prompt_tokens": 1914,
+       "total_tokens": 1947,
+       "extra": {
+        "e2e_latency_s": 9.554,
+        "prefill_tokens_per_s": 283.83308123473444,
+        "decode_tokens_per_s": 11.76848186586432,
+        "time_to_first_token_s": 6.743400000005961,
+        "time_per_output_token_s": 0.08497272727254666,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0002030303008628614
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.9000000059604645,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 9554.199999988079,
+    "dbMs": 0.9000000059604645,
+    "totalMs": 9555.09999999404
+   }
+  },
+  {
+   "id": "m02",
+   "run": {
+    "question": "Which works were created after 1980, and by whom?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Work, Person\nwhere\n  year_created(Work, Year)\n  Year > @1980",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Person\nwhere\n  year_created(Work, Year)\n  Year > @1980"
+      },
+      "llmMs": 8763.5,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 1912,
+       "total_tokens": 1935,
+       "extra": {
+        "e2e_latency_s": 8.763,
+        "prefill_tokens_per_s": 282.79003727074235,
+        "decode_tokens_per_s": 11.520160280662825,
+        "time_to_first_token_s": 6.761200000017881,
+        "time_per_output_token_s": 0.0868043478247912,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0004217391312122346
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work, Person\nwhere\n  year_created(Work, Year)\n  Year > @1980",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Person\nwhere\n  year_created(Work, Year)\n  Year > @1980"
+      },
+      "llmMs": 2384.7999999821186,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 54,
+       "total_tokens": 77,
+       "extra": {
+        "e2e_latency_s": 2.384,
+        "prefill_tokens_per_s": 158.40422412372146,
+        "decode_tokens_per_s": 11.276168063337844,
+        "time_to_first_token_s": 0.34089999997615816,
+        "time_per_output_token_s": 0.08868260870031688,
+        "grammar_init_s": 0.016299999982118608,
+        "grammar_per_token_s": 0.0003913043491218402
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.30000001192092896,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work, Person\nwhere\n  year_created(Work, Year)\n  Year > @1980",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Person\nwhere\n  year_created(Work, Year)\n  Year > @1980"
+      },
+      "llmMs": 2436.4000000059605,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 54,
+       "total_tokens": 77,
+       "extra": {
+        "e2e_latency_s": 2.436,
+        "prefill_tokens_per_s": 159.43312666637314,
+        "decode_tokens_per_s": 10.986386434201098,
+        "time_to_first_token_s": 0.3386999999880791,
+        "time_per_output_token_s": 0.09102173913043479,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0003434782598329627
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 13584.699999988079,
+    "dbMs": 1,
+    "totalMs": 13586
+   }
+  },
+  {
+   "id": "m03",
+   "run": {
+    "question": "Show works, their creators and their year, ordered by year.",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work, Person\nwhere\n  created_by(Work, Person)\norder by Year ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Person\nwhere\n  created_by(Work, Person)\norder by Year ascending"
+      },
+      "llmMs": 8393.200000017881,
+      "usage": {
+       "completion_tokens": 19,
+       "prompt_tokens": 1910,
+       "total_tokens": 1929,
+       "extra": {
+        "e2e_latency_s": 8.393,
+        "prefill_tokens_per_s": 282.29382205143366,
+        "decode_tokens_per_s": 11.701669027400849,
+        "time_to_first_token_s": 6.766,
+        "time_per_output_token_s": 0.08545789473778323,
+        "grammar_init_s": 0.03629999998211861,
+        "grammar_per_token_s": 0.0001473684201115056
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable Year\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Year",
+          "variable": "Year"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work, Person\nwhere\n  created_by(Work, Person)\norder by Year ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Person\nwhere\n  created_by(Work, Person)\norder by Year ascending"
+      },
+      "llmMs": 2012.7000000178814,
+      "usage": {
+       "completion_tokens": 19,
+       "prompt_tokens": 54,
+       "total_tokens": 73,
+       "extra": {
+        "e2e_latency_s": 2.013,
+        "prefill_tokens_per_s": 153.14804311092692,
+        "decode_tokens_per_s": 11.467197778943598,
+        "time_to_first_token_s": 0.3525999999940395,
+        "time_per_output_token_s": 0.08720526315820845,
+        "grammar_init_s": 0.0215,
+        "grammar_per_token_s": 0.00015263157769253378
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable Year\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.09999999403953552,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Year",
+          "variable": "Year"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work, Person\nwhere\n  created_by(Work, Person)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Person\nwhere\n  created_by(Work, Person)"
+      },
+      "llmMs": 1677.0999999940395,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 54,
+       "total_tokens": 69,
+       "extra": {
+        "e2e_latency_s": 1.677,
+        "prefill_tokens_per_s": 158.6368977645548,
+        "decode_tokens_per_s": 11.243534967443983,
+        "time_to_first_token_s": 0.3404000000059605,
+        "time_per_output_token_s": 0.08893999999960263,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0001599999964237213
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 2.9000000059604645,
+       "response": {
+        "variables": [
+         "Work",
+         "Person"
+        ],
+        "count": 137
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 12083.000000029802,
+    "dbMs": 3.199999988079071,
+    "totalMs": 12086.300000011921
+   }
+  },
+  {
+   "id": "m04",
+   "run": {
+    "question": "Which works by Madelon Hooykaas were exhibited, and where?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  made_at(Work, madelon_hooykaas)\n  exhibited_at(Work, Venue)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  made_at(Work, madelon_hooykaas)\n  exhibited_at(Work, Venue)"
+      },
+      "llmMs": 9095,
+      "usage": {
+       "completion_tokens": 27,
+       "prompt_tokens": 1912,
+       "total_tokens": 1939,
+       "extra": {
+        "e2e_latency_s": 9.095,
+        "prefill_tokens_per_s": 282.6479023152418,
+        "decode_tokens_per_s": 11.60890876221931,
+        "time_to_first_token_s": 6.764599999994039,
+        "time_per_output_token_s": 0.08614074074338982,
+        "grammar_init_s": 0.028599999994039536,
+        "grammar_per_token_s": 0.00014074074007846692
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.30000001192092896,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 9095,
+    "dbMs": 0.30000001192092896,
+    "totalMs": 9095.300000011921
+   }
+  },
+  {
+   "id": "m05",
+   "run": {
+    "question": "Which interviewed artists were funded by the Arts Council?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find InterviewedArtist\nwhere\n  funded_by(arts_council, InterviewedArtist)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist\nwhere\n  funded_by(arts_council, InterviewedArtist)"
+      },
+      "llmMs": 8349.90000000596,
+      "usage": {
+       "completion_tokens": 19,
+       "prompt_tokens": 1907,
+       "total_tokens": 1926,
+       "extra": {
+        "e2e_latency_s": 8.35,
+        "prefill_tokens_per_s": 282.6567062408208,
+        "decode_tokens_per_s": 11.882426516794325,
+        "time_to_first_token_s": 6.746700000017881,
+        "time_per_output_token_s": 0.08415789473527356,
+        "grammar_init_s": 0.00010000002384185791,
+        "grammar_per_token_s": 0.0002000000021959606
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.7000000178813934,
+       "response": {
+        "variables": [
+         "InterviewedArtist"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8349.90000000596,
+    "dbMs": 0.7000000178813934,
+    "totalMs": 8350.700000017881
+   }
+  },
+  {
+   "id": "m06",
+   "run": {
+    "question": "Where were the interviewed artists educated?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  interviewee(rewind_rose_garrard_interview, Person)\n  educated_at(Person, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  interviewee(rewind_rose_garrard_interview, Person)\n  educated_at(Person, _)"
+      },
+      "llmMs": 9083.5,
+      "usage": {
+       "completion_tokens": 27,
+       "prompt_tokens": 1904,
+       "total_tokens": 1931,
+       "extra": {
+        "e2e_latency_s": 9.083,
+        "prefill_tokens_per_s": 281.7318220833001,
+        "decode_tokens_per_s": 11.640941622354848,
+        "time_to_first_token_s": 6.758199999988079,
+        "time_per_output_token_s": 0.08590370370723582,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00011481481349026715
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.699999988079071,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 3
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 9083.5,
+    "dbMs": 0.699999988079071,
+    "totalMs": 9084.199999988079
+   }
+  },
+  {
+   "id": "m07",
+   "run": {
+    "question": "Which works by George Barber have a recorded creation year?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, george_barber)\n  year_created(Work, Year)\n  Year != @1970",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, george_barber)\n  year_created(Work, Year)\n  Year != @1970"
+      },
+      "llmMs": 9517,
+      "usage": {
+       "completion_tokens": 32,
+       "prompt_tokens": 1908,
+       "total_tokens": 1940,
+       "extra": {
+        "e2e_latency_s": 9.517,
+        "prefill_tokens_per_s": 281.34953403351375,
+        "decode_tokens_per_s": 11.721611721355801,
+        "time_to_first_token_s": 6.7815999999940395,
+        "time_per_output_token_s": 0.08531250000186265,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0002437500013038516
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.699999988079071,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 1
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 9517,
+    "dbMs": 0.699999988079071,
+    "totalMs": 9517.699999988079
+   }
+  },
+  {
+   "id": "m08",
+   "run": {
+    "question": "Which artists created works that were exhibited at the Serpentine Gallery?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  created_by(work, person)\n  exhibited_at(Work, Serpentine_Gallery)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  created_by(work, person)\n  exhibited_at(Work, Serpentine_Gallery)"
+      },
+      "llmMs": 8853.199999988079,
+      "usage": {
+       "completion_tokens": 24,
+       "prompt_tokens": 1911,
+       "total_tokens": 1935,
+       "extra": {
+        "e2e_latency_s": 8.853,
+        "prefill_tokens_per_s": 281.5013404828209,
+        "decode_tokens_per_s": 11.649354431675992,
+        "time_to_first_token_s": 6.788599999994039,
+        "time_per_output_token_s": 0.08584166666616994,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0001874999975164731
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.800000011920929,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work, person)"
+           ],
+           [
+            "exhibited_at(Work, Serpentine_Gallery)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  created_by(work, person)\n  exhibited_at(Work, Serpentine_Gallery)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  created_by(work, person)\n  exhibited_at(Work, Serpentine_Gallery)"
+      },
+      "llmMs": 2567.699999988079,
+      "usage": {
+       "completion_tokens": 24,
+       "prompt_tokens": 79,
+       "total_tokens": 103,
+       "extra": {
+        "e2e_latency_s": 2.567,
+        "prefill_tokens_per_s": 185.57669720980093,
+        "decode_tokens_per_s": 11.229646266361847,
+        "time_to_first_token_s": 0.42569999998807906,
+        "time_per_output_token_s": 0.08904999999826152,
+        "grammar_init_s": 0.023900000005960466,
+        "grammar_per_token_s": 0.0001541666661699613
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work, person)"
+           ],
+           [
+            "exhibited_at(Work, Serpentine_Gallery)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  created_by(work, person)\n  exhibited_at(Work, Serpentine_Gallery)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  created_by(work, person)\n  exhibited_at(Work, Serpentine_Gallery)"
+      },
+      "llmMs": 2635.9000000059605,
+      "usage": {
+       "completion_tokens": 24,
+       "prompt_tokens": 79,
+       "total_tokens": 103,
+       "extra": {
+        "e2e_latency_s": 2.636,
+        "prefill_tokens_per_s": 188.05046417786448,
+        "decode_tokens_per_s": 10.853835021181037,
+        "time_to_first_token_s": 0.4200999999940395,
+        "time_per_output_token_s": 0.09213333333780367,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00017083332935969035
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.30000001192092896,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work, person)"
+           ],
+           [
+            "exhibited_at(Work, Serpentine_Gallery)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 14056.799999982119,
+    "dbMs": 1.600000023841858,
+    "totalMs": 14058.699999988079
+   }
+  },
+  {
+   "id": "m09",
+   "run": {
+    "question": "Which works by Elsa Stansfield were created in the 1980s?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, elsa_stansfield)\n  year_created(Work, Year)\n  Year between @1980 and @1989",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, elsa_stansfield)\n  year_created(Work, Year)\n  Year between @1980 and @1989"
+      },
+      "llmMs": 10142.09999999404,
+      "usage": {
+       "completion_tokens": 39,
+       "prompt_tokens": 1915,
+       "total_tokens": 1954,
+       "extra": {
+        "e2e_latency_s": 10.142,
+        "prefill_tokens_per_s": 282.1861691933213,
+        "decode_tokens_per_s": 11.651877745141746,
+        "time_to_first_token_s": 6.786300000011921,
+        "time_per_output_token_s": 0.0858230769213958,
+        "grammar_init_s": 0.03530000001192093,
+        "grammar_per_token_s": 0.00023076923000506873
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 2.199999988079071,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 1
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 10142.09999999404,
+    "dbMs": 2.199999988079071,
+    "totalMs": 10144.299999982119
+   }
+  },
+  {
+   "id": "m10",
+   "run": {
+    "question": "Which works last longer than 10 minutes?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  length_minutes(Work, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  length_minutes(Work, _)"
+      },
+      "llmMs": 7829.5,
+      "usage": {
+       "completion_tokens": 12,
+       "prompt_tokens": 1907,
+       "total_tokens": 1919,
+       "extra": {
+        "e2e_latency_s": 7.83,
+        "prefill_tokens_per_s": 280.8459250100657,
+        "decode_tokens_per_s": 11.569610489913149,
+        "time_to_first_token_s": 6.790199999988079,
+        "time_per_output_token_s": 0.08643333333233993,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00017500000447034838
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.19999998807907104,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 1
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 7829.5,
+    "dbMs": 0.19999998807907104,
+    "totalMs": 7829.699999988079
+   }
+  },
+  {
+   "id": "m11",
+   "run": {
+    "question": "Which works were created before 1975, and in what year?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work, Year\nwhere\n  year_created(Work, Year)\n  Year < @1975",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Year\nwhere\n  year_created(Work, Year)\n  Year < @1975"
+      },
+      "llmMs": 8754.600000023842,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 1913,
+       "total_tokens": 1936,
+       "extra": {
+        "e2e_latency_s": 8.754,
+        "prefill_tokens_per_s": 282.5367755664105,
+        "decode_tokens_per_s": 11.62908281869838,
+        "time_to_first_token_s": 6.770799999982119,
+        "time_per_output_token_s": 0.08599130435223162,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.0003434782572414564
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.29999998211860657,
+       "response": {
+        "variables": [
+         "Work",
+         "Year"
+        ],
+        "count": 4
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8754.600000023842,
+    "dbMs": 0.29999998211860657,
+    "totalMs": 8754.90000000596
+   }
+  },
+  {
+   "id": "m12",
+   "run": {
+    "question": "List the places where Kevin Atherton exhibited, in alphabetical order.",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Venue\nwhere\n  exhibited_at(Work, Venue)\norder by Name ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Venue\nwhere\n  exhibited_at(Work, Venue)\norder by Name ascending"
+      },
+      "llmMs": 8240.90000000596,
+      "usage": {
+       "completion_tokens": 17,
+       "prompt_tokens": 1910,
+       "total_tokens": 1927,
+       "extra": {
+        "e2e_latency_s": 8.241,
+        "prefill_tokens_per_s": 282.2395933380574,
+        "decode_tokens_per_s": 11.561479869845078,
+        "time_to_first_token_s": 6.767300000011921,
+        "time_per_output_token_s": 0.0864941176439033,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00016470588480725008
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable Name\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.09999999403953552,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Name",
+          "variable": "Name"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Venue\nwhere\n  exhibited_at(Work, Venue)\norder by Name ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Venue\nwhere\n  exhibited_at(Work, Venue)\norder by Name ascending"
+      },
+      "llmMs": 1842.2999999821186,
+      "usage": {
+       "completion_tokens": 17,
+       "prompt_tokens": 54,
+       "total_tokens": 71,
+       "extra": {
+        "e2e_latency_s": 1.843,
+        "prefill_tokens_per_s": 160.52318669389766,
+        "decode_tokens_per_s": 11.312217194031732,
+        "time_to_first_token_s": 0.33639999997615816,
+        "time_per_output_token_s": 0.08840000000420739,
+        "grammar_init_s": 0.016299999982118608,
+        "grammar_per_token_s": 0.00019411764951313246
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable Name\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.30000001192092896,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Name",
+          "variable": "Name"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Venue\nwhere\n  exhibited_at(Work, Venue)\norder by Name ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Venue\nwhere\n  exhibited_at(Work, Venue)\norder by Name ascending"
+      },
+      "llmMs": 1868.5,
+      "usage": {
+       "completion_tokens": 17,
+       "prompt_tokens": 54,
+       "total_tokens": 71,
+       "extra": {
+        "e2e_latency_s": 1.869,
+        "prefill_tokens_per_s": 157.9409183944387,
+        "decode_tokens_per_s": 11.15631972712921,
+        "time_to_first_token_s": 0.3419000000059605,
+        "time_per_output_token_s": 0.08963529411659521,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0001058823518893298
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable Name\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Name",
+          "variable": "Name"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 11951.699999988079,
+    "dbMs": 0.5999999940395355,
+    "totalMs": 11952.5
+   }
+  },
+  {
+   "id": "m13",
+   "run": {
+    "question": "What is the source URL of the interview with Mike Stubbs?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Text\nwhere\n  source_url(Text, \"https://www.example.com/mikestubbsinterview\")",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Text\nwhere\n  source_url(Text, \"https://www.example.com/mikestubbsinterview\")"
+      },
+      "llmMs": 8745.09999999404,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 1910,
+       "total_tokens": 1933,
+       "extra": {
+        "e2e_latency_s": 8.745,
+        "prefill_tokens_per_s": 282.1186966416595,
+        "decode_tokens_per_s": 11.6703876595865,
+        "time_to_first_token_s": 6.770199999988079,
+        "time_per_output_token_s": 0.08568695652355318,
+        "grammar_init_s": 0.03489999997615814,
+        "grammar_per_token_s": 0.000147826092398685
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.4000000059604645,
+       "response": {
+        "variables": [
+         "Text"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8745.09999999404,
+    "dbMs": 0.4000000059604645,
+    "totalMs": 8745.5
+   }
+  },
+  {
+   "id": "m14",
+   "run": {
+    "question": "Who created the works that Channel 4 funded?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  funded_by(Channel_4, Person)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  funded_by(Channel_4, Person)"
+      },
+      "llmMs": 8061.5999999940395,
+      "usage": {
+       "completion_tokens": 14,
+       "prompt_tokens": 1907,
+       "total_tokens": 1921,
+       "extra": {
+        "e2e_latency_s": 8.061,
+        "prefill_tokens_per_s": 278.07751757195786,
+        "decode_tokens_per_s": 11.674449632914648,
+        "time_to_first_token_s": 6.857799999982118,
+        "time_per_output_token_s": 0.08565714285842009,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.00015714286267757419
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 1.0999999940395355,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 35
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8061.5999999940395,
+    "dbMs": 1.0999999940395355,
+    "totalMs": 8062.799999982119
+   }
+  },
+  {
+   "id": "h01",
+   "run": {
+    "question": "Which interviewed artists were not funded by the Arts Council?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find InterviewedArtist\nwhere\n  curated_by(Work, arts_council_of_great_britain)\n  not\n    funded_by(InterviewedArtist, arts_council_of_great_britain)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist\nwhere\n  curated_by(Work, arts_council_of_great_britain)\n  not\n    funded_by(InterviewedArtist, arts_council_of_great_britain)"
+      },
+      "llmMs": 10630.399999976158,
+      "usage": {
+       "completion_tokens": 44,
+       "prompt_tokens": 1908,
+       "total_tokens": 1952,
+       "extra": {
+        "e2e_latency_s": 10.63,
+        "prefill_tokens_per_s": 278.71103450242157,
+        "decode_tokens_per_s": 11.678212171641876,
+        "time_to_first_token_s": 6.845800000011921,
+        "time_per_output_token_s": 0.08562954545630651,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00018181817910887973
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'not' block uses variable(s) not bound outside it: InterviewedArtist\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nVariables inside not must also appear in a clause outside it; otherwise use _.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.9000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "unsafe_negation",
+          "message": "'not' block uses variable(s) not bound outside it: InterviewedArtist",
+          "variables": [
+           "InterviewedArtist"
+          ]
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "curated_by(Work, arts_council_of_great_britain)"
+           ],
+           [
+            "not { funded_by(InterviewedArtist, arts_council_of_great_britain) }"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find InterviewedArtist\nwhere\n  curated_by(Work, arts_council_of_great_britain)\n  not\n    funded_by(InterviewedArtist, arts_council_of_great_britain)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist\nwhere\n  curated_by(Work, arts_council_of_great_britain)\n  not\n    funded_by(InterviewedArtist, arts_council_of_great_britain)"
+      },
+      "llmMs": 4401.5,
+      "usage": {
+       "completion_tokens": 44,
+       "prompt_tokens": 84,
+       "total_tokens": 128,
+       "extra": {
+        "e2e_latency_s": 4.401,
+        "prefill_tokens_per_s": 185.38953873561024,
+        "decode_tokens_per_s": 11.1677961372788,
+        "time_to_first_token_s": 0.45309999999403955,
+        "time_per_output_token_s": 0.08954318181560796,
+        "grammar_init_s": 0.024399999976158143,
+        "grammar_per_token_s": 0.00015454545075243166
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'not' block uses variable(s) not bound outside it: InterviewedArtist\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nVariables inside not must also appear in a clause outside it; otherwise use _.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.6000000238418579,
+       "response": {
+        "errors": [
+         {
+          "code": "unsafe_negation",
+          "message": "'not' block uses variable(s) not bound outside it: InterviewedArtist",
+          "variables": [
+           "InterviewedArtist"
+          ]
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "curated_by(Work, arts_council_of_great_britain)"
+           ],
+           [
+            "not { funded_by(InterviewedArtist, arts_council_of_great_britain) }"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find InterviewedArtist\nwhere\n  curated_by(Work, arts_council_of_great_britain)\n  not\n    funded_by(InterviewedArtist, arts_council_of_great_britain)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist\nwhere\n  curated_by(Work, arts_council_of_great_britain)\n  not\n    funded_by(InterviewedArtist, arts_council_of_great_britain)"
+      },
+      "llmMs": 4527.299999982119,
+      "usage": {
+       "completion_tokens": 44,
+       "prompt_tokens": 84,
+       "total_tokens": 128,
+       "extra": {
+        "e2e_latency_s": 4.527,
+        "prefill_tokens_per_s": 199.00497512718826,
+        "decode_tokens_per_s": 10.737206862348025,
+        "time_to_first_token_s": 0.4220999999940395,
+        "time_per_output_token_s": 0.09313409090651709,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00014090908928350964
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'not' block uses variable(s) not bound outside it: InterviewedArtist\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nVariables inside not must also appear in a clause outside it; otherwise use _.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unsafe_negation",
+          "message": "'not' block uses variable(s) not bound outside it: InterviewedArtist",
+          "variables": [
+           "InterviewedArtist"
+          ]
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "curated_by(Work, arts_council_of_great_britain)"
+           ],
+           [
+            "not { funded_by(InterviewedArtist, arts_council_of_great_britain) }"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 19559.199999958277,
+    "dbMs": 2.0000000298023224,
+    "totalMs": 19561.59999999404
+   }
+  },
+  {
+   "id": "h02",
+   "run": {
+    "question": "List every interviewed artist with the works they created, keeping artists who have no works.",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find InterviewedArtist, Work\nwhere\n  interviewee(Work, Person)\norder by InterviewedArtist descending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist, Work\nwhere\n  interviewee(Work, Person)\norder by InterviewedArtist descending"
+      },
+      "llmMs": 8767.799999982119,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 1914,
+       "total_tokens": 1937,
+       "extra": {
+        "e2e_latency_s": 8.768,
+        "prefill_tokens_per_s": 281.9598715422883,
+        "decode_tokens_per_s": 11.655011654976454,
+        "time_to_first_token_s": 6.788199999988079,
+        "time_per_output_token_s": 0.08580000000025914,
+        "grammar_init_s": 0.037400000005960464,
+        "grammar_per_token_s": 0.00024347825931466145
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable InterviewedArtist\n- 'order by' references unbound variable InterviewedArtist\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.30000001192092896,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable InterviewedArtist",
+          "variable": "InterviewedArtist"
+         },
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable InterviewedArtist",
+          "variable": "InterviewedArtist"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find InterviewedArtist, Work\nwhere\n  interviewee(Work, Person)\norder by None ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist, Work\nwhere\n  interviewee(Work, Person)\norder by None ascending"
+      },
+      "llmMs": 2451.4000000059605,
+      "usage": {
+       "completion_tokens": 22,
+       "prompt_tokens": 87,
+       "total_tokens": 109,
+       "extra": {
+        "e2e_latency_s": 2.451,
+        "prefill_tokens_per_s": 176.75741567825952,
+        "decode_tokens_per_s": 11.252621348982846,
+        "time_to_first_token_s": 0.4922000000178814,
+        "time_per_output_token_s": 0.08886818182062019,
+        "grammar_init_s": 0.010599999994039535,
+        "grammar_per_token_s": 0.0002045454599640586
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable InterviewedArtist\n- 'order by' references unbound variable None\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.699999988079071,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable InterviewedArtist",
+          "variable": "InterviewedArtist"
+         },
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable None",
+          "variable": "None"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find InterviewedArtist, Work\nwhere\n  interviewee(Work, Person)\norder by None ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find InterviewedArtist, Work\nwhere\n  interviewee(Work, Person)\norder by None ascending"
+      },
+      "llmMs": 2373.7000000178814,
+      "usage": {
+       "completion_tokens": 21,
+       "prompt_tokens": 85,
+       "total_tokens": 106,
+       "extra": {
+        "e2e_latency_s": 2.374,
+        "prefill_tokens_per_s": 199.3433395844555,
+        "decode_tokens_per_s": 10.804136440709373,
+        "time_to_first_token_s": 0.42640000000596046,
+        "time_per_output_token_s": 0.09255714285799435,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0001809523772625696
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable InterviewedArtist\n- 'order by' references unbound variable None\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5999999940395355,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable InterviewedArtist",
+          "variable": "InterviewedArtist"
+         },
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable None",
+          "variable": "None"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 13592.90000000596,
+    "dbMs": 1.5999999940395355,
+    "totalMs": 13594.59999999404
+   }
+  },
+  {
+   "id": "h03",
+   "run": {
+    "question": "Which pairs of different people created the same work, and which work?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Person, Person2\nwhere\n  created_by(work_discussed_in_, Person)\n  not\n    created_by(work_discussed_in_, Person2)\n  not\n    collaborated_with(Person, Person2)\n  not\n    curated_by(work_discussed_in_, _)\n  not\n    edited_by(work_discussed_in_, _)\n  not\n    used_equipment(work_discussed_in_, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person, Person2\nwhere\n  created_by(work_discussed_in_, Person)\n  not\n    created_by(work_discussed_in_, Person2)\n  not\n    collaborated_with(Person, Person2)\n  not\n    curated_by(work_discussed_in_, _)\n  not\n    edited_by(work_discussed_in_, _)\n  not\n    used_equipment(work_discussed_in_, _)"
+      },
+      "llmMs": 13944,
+      "usage": {
+       "completion_tokens": 82,
+       "prompt_tokens": 1911,
+       "total_tokens": 1993,
+       "extra": {
+        "e2e_latency_s": 13.944,
+        "prefill_tokens_per_s": 280.53023296805276,
+        "decode_tokens_per_s": 11.53094370938504,
+        "time_to_first_token_s": 6.8120999999940395,
+        "time_per_output_token_s": 0.08672317073112581,
+        "grammar_init_s": 0.038099999994039534,
+        "grammar_per_token_s": 0.0001268292669115998
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'not' block uses variable(s) not bound outside it: Person2\n- 'not' block uses variable(s) not bound outside it: Person2\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nVariables inside not must also appear in a clause outside it; otherwise use _.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unsafe_negation",
+          "message": "'not' block uses variable(s) not bound outside it: Person2",
+          "variables": [
+           "Person2"
+          ]
+         },
+         {
+          "code": "unsafe_negation",
+          "message": "'not' block uses variable(s) not bound outside it: Person2",
+          "variables": [
+           "Person2"
+          ]
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work_discussed_in_, Person)",
+            "not { created_by(work_discussed_in_, Person2) }",
+            "not { collaborated_with(Person, Person2) }"
+           ],
+           [
+            "not { curated_by(work_discussed_in_, _) }"
+           ],
+           [
+            "not { edited_by(work_discussed_in_, _) }"
+           ],
+           [
+            "not { used_equipment(work_discussed_in_, _) }"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person, Person2\nwhere\n  created_by(work_discussed_in_, Person)\n  not\n    created_by(work_discussed_in_, Person2)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person, Person2\nwhere\n  created_by(work_discussed_in_, Person)\n  not\n    created_by(work_discussed_in_, Person2)"
+      },
+      "llmMs": 3546.4000000059605,
+      "usage": {
+       "completion_tokens": 32,
+       "prompt_tokens": 100,
+       "total_tokens": 132,
+       "extra": {
+        "e2e_latency_s": 3.546,
+        "prefill_tokens_per_s": 162.65452179255206,
+        "decode_tokens_per_s": 10.936058234086845,
+        "time_to_first_token_s": 0.6148000000119209,
+        "time_per_output_token_s": 0.09144062500353899,
+        "grammar_init_s": 0.01730000001192093,
+        "grammar_per_token_s": 0.00019062500260770313
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'not' block uses variable(s) not bound outside it: Person2\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nVariables inside not must also appear in a clause outside it; otherwise use _.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.699999988079071,
+       "response": {
+        "errors": [
+         {
+          "code": "unsafe_negation",
+          "message": "'not' block uses variable(s) not bound outside it: Person2",
+          "variables": [
+           "Person2"
+          ]
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work_discussed_in_, Person)"
+           ],
+           [
+            "not { created_by(work_discussed_in_, Person2) }"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person, Person2\nwhere\n  created_by(work_discussed_in_, Person)\n  not\n    created_by(work_discussed_in_, Person2)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person, Person2\nwhere\n  created_by(work_discussed_in_, Person)\n  not\n    created_by(work_discussed_in_, Person2)"
+      },
+      "llmMs": 3468.4000000059605,
+      "usage": {
+       "completion_tokens": 32,
+       "prompt_tokens": 83,
+       "total_tokens": 115,
+       "extra": {
+        "e2e_latency_s": 3.468,
+        "prefill_tokens_per_s": 192.44145607104363,
+        "decode_tokens_per_s": 10.558268444141302,
+        "time_to_first_token_s": 0.4312999999821186,
+        "time_per_output_token_s": 0.09471249999850989,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0001468750005587935
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'not' block uses variable(s) not bound outside it: Person2\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nVariables inside not must also appear in a clause outside it; otherwise use _.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5999999940395355,
+       "response": {
+        "errors": [
+         {
+          "code": "unsafe_negation",
+          "message": "'not' block uses variable(s) not bound outside it: Person2",
+          "variables": [
+           "Person2"
+          ]
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work_discussed_in_, Person)"
+           ],
+           [
+            "not { created_by(work_discussed_in_, Person2) }"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 20958.80000001192,
+    "dbMs": 1.7999999821186066,
+    "totalMs": 20960.70000001788
+   }
+  },
+  {
+   "id": "h04",
+   "run": {
+    "question": "Which works created before 1980 have no recorded exhibition?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  year_created(Work, Year)\n  not\n    exhibited_at(Work, _)\n  not\n    year_exhibited(Work, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  year_created(Work, Year)\n  not\n    exhibited_at(Work, _)\n  not\n    year_exhibited(Work, _)"
+      },
+      "llmMs": 9835.59999999404,
+      "usage": {
+       "completion_tokens": 35,
+       "prompt_tokens": 1911,
+       "total_tokens": 1946,
+       "extra": {
+        "e2e_latency_s": 9.835,
+        "prefill_tokens_per_s": 280.64146620823084,
+        "decode_tokens_per_s": 11.591706961396302,
+        "time_to_first_token_s": 6.809400000005961,
+        "time_per_output_token_s": 0.0862685714304447,
+        "grammar_init_s": 0.036699999988079074,
+        "grammar_per_token_s": 0.0001685714278902326
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.7999999821186066,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 22
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 9835.59999999404,
+    "dbMs": 0.7999999821186066,
+    "totalMs": 9836.399999976158
+   }
+  },
+  {
+   "id": "h05",
+   "run": {
+    "question": "Which works were created by either Elsa Stansfield or Madelon Hooykaas?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, Elsa_stansfield)\norder by Year descending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, Elsa_stansfield)\norder by Year descending"
+      },
+      "llmMs": 8745.40000000596,
+      "usage": {
+       "completion_tokens": 22,
+       "prompt_tokens": 1915,
+       "total_tokens": 1937,
+       "extra": {
+        "e2e_latency_s": 8.744,
+        "prefill_tokens_per_s": 280.0895116352941,
+        "decode_tokens_per_s": 11.564947694279635,
+        "time_to_first_token_s": 6.83709999999404,
+        "time_per_output_token_s": 0.08646818182278763,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.00019545454735105686
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable Year\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 3.300000011920929,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Year",
+          "variable": "Year"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, Elsa_stansfield)\norder by Year descending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, Elsa_stansfield)\norder by Year descending"
+      },
+      "llmMs": 2258.0999999940395,
+      "usage": {
+       "completion_tokens": 22,
+       "prompt_tokens": 54,
+       "total_tokens": 76,
+       "extra": {
+        "e2e_latency_s": 2.258,
+        "prefill_tokens_per_s": 156.02427044475579,
+        "decode_tokens_per_s": 11.52435830277632,
+        "time_to_first_token_s": 0.3460999999940395,
+        "time_per_output_token_s": 0.08677272727272728,
+        "grammar_init_s": 0.0225,
+        "grammar_per_token_s": 0.0001409090892835097
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable Year\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Year",
+          "variable": "Year"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, Elsa_stansfield)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, Elsa_stansfield)"
+      },
+      "llmMs": 1785.699999988079,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 54,
+       "total_tokens": 70,
+       "extra": {
+        "e2e_latency_s": 1.786,
+        "prefill_tokens_per_s": 162.06482592167484,
+        "decode_tokens_per_s": 11.032200234796978,
+        "time_to_first_token_s": 0.3332000000178814,
+        "time_per_output_token_s": 0.09064374999701977,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00015624999813735485
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.9000000059604645,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 137
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 12789.199999988079,
+    "dbMs": 4.700000017881393,
+    "totalMs": 12797.09999999404
+   }
+  },
+  {
+   "id": "h06",
+   "run": {
+    "question": "Which works exhibited at the Tate were created by an interviewed artist?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  exhibited_at(work, tate)\n  created_by(Work, InterviewedArtist)\n  interviewee(InterviewedArtist, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  exhibited_at(work, tate)\n  created_by(Work, InterviewedArtist)\n  interviewee(InterviewedArtist, _)"
+      },
+      "llmMs": 9871.90000000596,
+      "usage": {
+       "completion_tokens": 32,
+       "prompt_tokens": 1910,
+       "total_tokens": 1942,
+       "extra": {
+        "e2e_latency_s": 9.872,
+        "prefill_tokens_per_s": 271.6193347457132,
+        "decode_tokens_per_s": 11.295845247371686,
+        "time_to_first_token_s": 7.031900000005961,
+        "time_per_output_token_s": 0.08852812499646096,
+        "grammar_init_s": 0.017100000023841856,
+        "grammar_per_token_s": 0.00014374999981373547
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.699999988079071,
+       "response": {
+        "errors": [
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "exhibited_at(work, tate)"
+           ],
+           [
+            "created_by(Work, InterviewedArtist)",
+            "interviewee(InterviewedArtist, _)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, InterviewedArtist)\n  interviewee(InterviewedArtist, Person)\n  person(Person)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, InterviewedArtist)\n  interviewee(InterviewedArtist, Person)\n  person(Person)"
+      },
+      "llmMs": 2980.100000023842,
+      "usage": {
+       "completion_tokens": 29,
+       "prompt_tokens": 50,
+       "total_tokens": 79,
+       "extra": {
+        "e2e_latency_s": 2.98,
+        "prefill_tokens_per_s": 132.9433661281372,
+        "decode_tokens_per_s": 11.153846153846157,
+        "time_to_first_token_s": 0.37609999999403954,
+        "time_per_output_token_s": 0.08965517241379307,
+        "grammar_init_s": 0.021400000005960464,
+        "grammar_per_token_s": 0.0001310344831696872
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.699999988079071,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 1,
+    "llmMs": 12852.000000029802,
+    "dbMs": 1.399999976158142,
+    "totalMs": 12853.40000000596
+   }
+  },
+  {
+   "id": "u01",
+   "run": {
+    "question": "Which exhibitions took place in Paris?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Exhibition\nwhere\n  filmed_at(Work, Paris)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Exhibition\nwhere\n  filmed_at(Work, Paris)"
+      },
+      "llmMs": 8164,
+      "usage": {
+       "completion_tokens": 13,
+       "prompt_tokens": 1904,
+       "total_tokens": 1917,
+       "extra": {
+        "e2e_latency_s": 8.164,
+        "prefill_tokens_per_s": 269.69984560182127,
+        "decode_tokens_per_s": 11.80101670304134,
+        "time_to_first_token_s": 7.059700000017881,
+        "time_per_output_token_s": 0.08473846153800305,
+        "grammar_init_s": 0.019200000017881393,
+        "grammar_per_token_s": 0.0001692307683137747
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Exhibition\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5999999940395355,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Exhibition",
+          "variable": "Exhibition"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Exhibition\nwhere\n  filmed_at(Work, Paris)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Exhibition\nwhere\n  filmed_at(Work, Paris)"
+      },
+      "llmMs": 1449.2000000178814,
+      "usage": {
+       "completion_tokens": 13,
+       "prompt_tokens": 54,
+       "total_tokens": 67,
+       "extra": {
+        "e2e_latency_s": 1.449,
+        "prefill_tokens_per_s": 164.5839682903871,
+        "decode_tokens_per_s": 11.612326931975057,
+        "time_to_first_token_s": 0.3281000000238419,
+        "time_per_output_token_s": 0.08611538461309212,
+        "grammar_init_s": 0.011600000023841858,
+        "grammar_per_token_s": 0.0001307692344372089
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Exhibition\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Exhibition",
+          "variable": "Exhibition"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Exhibition\nwhere\n  filmed_at(Work, Paris)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Exhibition\nwhere\n  filmed_at(Work, Paris)"
+      },
+      "llmMs": 1486.300000011921,
+      "usage": {
+       "completion_tokens": 13,
+       "prompt_tokens": 54,
+       "total_tokens": 67,
+       "extra": {
+        "e2e_latency_s": 1.486,
+        "prefill_tokens_per_s": 160.33254157620834,
+        "decode_tokens_per_s": 11.328976035152618,
+        "time_to_first_token_s": 0.3367999999821186,
+        "time_per_output_token_s": 0.0882692307669383,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00008461538415688735
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Exhibition\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Exhibition",
+          "variable": "Exhibition"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 11099.500000029802,
+    "dbMs": 0.7999999821186066,
+    "totalMs": 11100.5
+   }
+  },
+  {
+   "id": "u02",
+   "run": {
+    "question": "What nationality is Rose Garrard?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  named_by_competition(workshop_rose_garrard_interview)\n  affiliated_with(Person, rose_garrard)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  named_by_competition(workshop_rose_garrard_interview)\n  affiliated_with(Person, rose_garrard)"
+      },
+      "llmMs": 9406.200000017881,
+      "usage": {
+       "completion_tokens": 31,
+       "prompt_tokens": 1904,
+       "total_tokens": 1935,
+       "extra": {
+        "e2e_latency_s": 9.406,
+        "prefill_tokens_per_s": 282.00722791659473,
+        "decode_tokens_per_s": 11.703854720841589,
+        "time_to_first_token_s": 6.751599999994039,
+        "time_per_output_token_s": 0.08544193548637051,
+        "grammar_init_s": 0.027,
+        "grammar_per_token_s": 0.00013225806528522122
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.4000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "named_by_competition(workshop_rose_garrard_interview)"
+           ],
+           [
+            "affiliated_with(Person, rose_garrard)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  affiliated_with(Person, rose_garrard)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  affiliated_with(Person, rose_garrard)"
+      },
+      "llmMs": 1707.0999999940395,
+      "usage": {
+       "completion_tokens": 15,
+       "prompt_tokens": 50,
+       "total_tokens": 65,
+       "extra": {
+        "e2e_latency_s": 1.707,
+        "prefill_tokens_per_s": 128.33675564878067,
+        "decode_tokens_per_s": 11.410314923967631,
+        "time_to_first_token_s": 0.38959999999403955,
+        "time_per_output_token_s": 0.0876400000055631,
+        "grammar_init_s": 0.0225,
+        "grammar_per_token_s": 0.0001799999972184499
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.4000000059604645,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 1,
+    "llmMs": 11113.300000011921,
+    "dbMs": 0.800000011920929,
+    "totalMs": 11114.40000000596
+   }
+  },
+  {
+   "id": "u03",
+   "run": {
+    "question": "How many works did George Barber create?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, george_barber)\norder by None ascending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, george_barber)\norder by None ascending"
+      },
+      "llmMs": 8601.699999988079,
+      "usage": {
+       "completion_tokens": 21,
+       "prompt_tokens": 1905,
+       "total_tokens": 1926,
+       "extra": {
+        "e2e_latency_s": 8.602,
+        "prefill_tokens_per_s": 280.3862117693536,
+        "decode_tokens_per_s": 11.64402550596063,
+        "time_to_first_token_s": 6.794199999988079,
+        "time_per_output_token_s": 0.08588095238095239,
+        "grammar_init_s": 0.03459999999403954,
+        "grammar_per_token_s": 0.00016666666808582488
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'order by' references unbound variable None\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.4000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable None",
+          "variable": "None"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  created_by(Work, george_barber)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  created_by(Work, george_barber)"
+      },
+      "llmMs": 1757.2999999821186,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 54,
+       "total_tokens": 70,
+       "extra": {
+        "e2e_latency_s": 1.758,
+        "prefill_tokens_per_s": 155.3956834532374,
+        "decode_tokens_per_s": 11.371712864250176,
+        "time_to_first_token_s": 0.3475,
+        "time_per_output_token_s": 0.08793750000000002,
+        "grammar_init_s": 0.02080000001192093,
+        "grammar_per_token_s": 0.00016874999739229678
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.800000011920929,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 18
+       }
+      }
+     }
+    ],
+    "repairs": 1,
+    "llmMs": 10358.999999970198,
+    "dbMs": 1.2000000178813934,
+    "totalMs": 10360.199999988079
+   }
+  },
+  {
+   "id": "u04",
+   "run": {
+    "question": "What is the average duration of the works?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Work, Year\nwhere\n  year_created(Work, @1970)\norder by Year descending\nlimit 1",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Year\nwhere\n  year_created(Work, @1970)\norder by Year descending\nlimit 1"
+      },
+      "llmMs": 9176,
+      "usage": {
+       "completion_tokens": 27,
+       "prompt_tokens": 1906,
+       "total_tokens": 1933,
+       "extra": {
+        "e2e_latency_s": 9.176,
+        "prefill_tokens_per_s": 279.373827391876,
+        "decode_tokens_per_s": 11.50061762581978,
+        "time_to_first_token_s": 6.822400000005961,
+        "time_per_output_token_s": 0.08695185185141033,
+        "grammar_init_s": 0.036199999988079073,
+        "grammar_per_token_s": 0.0001740740758401376
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Year\n- 'order by' references unbound variable Year\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Year",
+          "variable": "Year"
+         },
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Year",
+          "variable": "Year"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work, Year\nwhere\n  year_created(Work, @1970)\norder by Year descending",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Year\nwhere\n  year_created(Work, @1970)\norder by Year descending"
+      },
+      "llmMs": 2503.899999976158,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 83,
+       "total_tokens": 106,
+       "extra": {
+        "e2e_latency_s": 2.504,
+        "prefill_tokens_per_s": 181.85801927895713,
+        "decode_tokens_per_s": 11.256851996769143,
+        "time_to_first_token_s": 0.4564000000059605,
+        "time_per_output_token_s": 0.0888347826094731,
+        "grammar_init_s": 0.02219999998807907,
+        "grammar_per_token_s": 0.00019565217391304346
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Year\n- 'order by' references unbound variable Year\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAn order by variable must appear in a clause; remove the order by or bind it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.20000001788139343,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Year",
+          "variable": "Year"
+         },
+         {
+          "code": "unbound_order_variable",
+          "message": "'order by' references unbound variable Year",
+          "variable": "Year"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work, Year\nwhere\n  year_created(Work, @1970)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work, Year\nwhere\n  year_created(Work, @1970)"
+      },
+      "llmMs": 2169.9000000059605,
+      "usage": {
+       "completion_tokens": 19,
+       "prompt_tokens": 83,
+       "total_tokens": 102,
+       "extra": {
+        "e2e_latency_s": 2.17,
+        "prefill_tokens_per_s": 196.91577698695136,
+        "decode_tokens_per_s": 10.883262687332978,
+        "time_to_first_token_s": 0.4215,
+        "time_per_output_token_s": 0.09188421052851176,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00013684210808653582
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Year\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.09999999403953552,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Year",
+          "variable": "Year"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 13849.799999982119,
+    "dbMs": 0.800000011920929,
+    "totalMs": 13850.800000011921
+   }
+  },
+  {
+   "id": "u05",
+   "run": {
+    "question": "Which works sold for more than 1000 pounds?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  sold_at(Work, Text)\n  Text > \"1000 pounds\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  sold_at(Work, Text)\n  Text > \"1000 pounds\""
+      },
+      "llmMs": 8791.40000000596,
+      "usage": {
+       "completion_tokens": 23,
+       "prompt_tokens": 1910,
+       "total_tokens": 1933,
+       "extra": {
+        "e2e_latency_s": 8.792,
+        "prefill_tokens_per_s": 280.22711600791234,
+        "decode_tokens_per_s": 11.668611435627342,
+        "time_to_first_token_s": 6.815900000005961,
+        "time_per_output_token_s": 0.08569999999714933,
+        "grammar_init_s": 0.03570000001788139,
+        "grammar_per_token_s": 0.00044347826164701723
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- Cannot compare a atom with a string. (line 4)\nCompare years with years (@1979) and numbers with numbers.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.29999998211860657,
+       "response": {
+        "errors": [
+         {
+          "code": "comparison_type_mismatch",
+          "message": "Cannot compare a atom with a string.",
+          "line": 4,
+          "column": 3,
+          "leftType": "atom",
+          "rightType": "string"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  sold_at(Work, Text)\n  Text > \"1000\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  sold_at(Work, Text)\n  Text > \"1000\""
+      },
+      "llmMs": 2297.5999999940395,
+      "usage": {
+       "completion_tokens": 22,
+       "prompt_tokens": 54,
+       "total_tokens": 76,
+       "extra": {
+        "e2e_latency_s": 2.298,
+        "prefill_tokens_per_s": 152.32722143864598,
+        "decode_tokens_per_s": 11.339037212553986,
+        "time_to_first_token_s": 0.3545,
+        "time_per_output_token_s": 0.08819090909172188,
+        "grammar_init_s": 0.0225,
+        "grammar_per_token_s": 0.00037727273187854074
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- Cannot compare a atom with a string. (line 4)\nCompare years with years (@1979) and numbers with numbers.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.10000002384185791,
+       "response": {
+        "errors": [
+         {
+          "code": "comparison_type_mismatch",
+          "message": "Cannot compare a atom with a string.",
+          "line": 4,
+          "column": 3,
+          "leftType": "atom",
+          "rightType": "string"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  sold_at(Work, Text)\n  Text > @1979",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  sold_at(Work, Text)\n  Text > @1979"
+      },
+      "llmMs": 2216.399999976158,
+      "usage": {
+       "completion_tokens": 21,
+       "prompt_tokens": 54,
+       "total_tokens": 75,
+       "extra": {
+        "e2e_latency_s": 2.216,
+        "prefill_tokens_per_s": 159.52732644017723,
+        "decode_tokens_per_s": 11.202389843202162,
+        "time_to_first_token_s": 0.3385,
+        "time_per_output_token_s": 0.08926666666638282,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00029047618877320065
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- Cannot compare a atom with a year. (line 4)\nCompare years with years (@1979) and numbers with numbers.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.30000001192092896,
+       "response": {
+        "errors": [
+         {
+          "code": "comparison_type_mismatch",
+          "message": "Cannot compare a atom with a year.",
+          "line": 4,
+          "column": 3,
+          "leftType": "atom",
+          "rightType": "year"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 13305.399999976158,
+    "dbMs": 0.7000000178813934,
+    "totalMs": 13306.09999999404
+   }
+  },
+  {
+   "id": "u06",
+   "run": {
+    "question": "When was Kevin Atherton born?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  created_by(work, kevin_atherton)\n  year_created(Work, Year)\n  Year = @1968",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  created_by(work, kevin_atherton)\n  year_created(Work, Year)\n  Year = @1968"
+      },
+      "llmMs": 9532.59999999404,
+      "usage": {
+       "completion_tokens": 32,
+       "prompt_tokens": 1904,
+       "total_tokens": 1936,
+       "extra": {
+        "e2e_latency_s": 9.532,
+        "prefill_tokens_per_s": 280.1854168199544,
+        "decode_tokens_per_s": 11.719465299651544,
+        "time_to_first_token_s": 6.7955,
+        "time_per_output_token_s": 0.08532812499813734,
+        "grammar_init_s": 0.03580000001192093,
+        "grammar_per_token_s": 0.0002000000001862645
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.9000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work, kevin_atherton)"
+           ],
+           [
+            "year_created(Work, Year)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  created_by(work, kevin_atherton)\n  year_created(Work, Year)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  created_by(work, kevin_atherton)\n  year_created(Work, Year)"
+      },
+      "llmMs": 2582.5,
+      "usage": {
+       "completion_tokens": 24,
+       "prompt_tokens": 79,
+       "total_tokens": 103,
+       "extra": {
+        "e2e_latency_s": 2.583,
+        "prefill_tokens_per_s": 178.0081117692272,
+        "decode_tokens_per_s": 11.237007210507041,
+        "time_to_first_token_s": 0.4437999999821186,
+        "time_per_output_token_s": 0.08899166666592158,
+        "grammar_init_s": 0.022900000005960465,
+        "grammar_per_token_s": 0.0001916666713853677
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.29999998211860657,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         },
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "created_by(work, kevin_atherton)"
+           ],
+           [
+            "year_created(Work, Year)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  created_by(work, kevin_atherton)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  created_by(work, kevin_atherton)"
+      },
+      "llmMs": 1897.7000000178814,
+      "usage": {
+       "completion_tokens": 16,
+       "prompt_tokens": 79,
+       "total_tokens": 95,
+       "extra": {
+        "e2e_latency_s": 1.898,
+        "prefill_tokens_per_s": 187.9609802468697,
+        "decode_tokens_per_s": 10.845986984903266,
+        "time_to_first_token_s": 0.4203000000119209,
+        "time_per_output_token_s": 0.09219999999925492,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00012500000186264516
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.19999998807907104,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 14012.800000011921,
+    "dbMs": 1.399999976158142,
+    "totalMs": 14014.199999988079
+   }
+  },
+  {
+   "id": "u07",
+   "run": {
+    "question": "Which artists died before 2000?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  year_left(Person, Year)\n  Year < @2000",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  year_left(Person, Year)\n  Year < @2000"
+      },
+      "llmMs": 8727.40000000596,
+      "usage": {
+       "completion_tokens": 22,
+       "prompt_tokens": 1907,
+       "total_tokens": 1929,
+       "extra": {
+        "e2e_latency_s": 8.727,
+        "prefill_tokens_per_s": 279.35252325496225,
+        "decode_tokens_per_s": 11.599093162791517,
+        "time_to_first_token_s": 6.8265,
+        "time_per_output_token_s": 0.08621363635632126,
+        "grammar_init_s": 0.036,
+        "grammar_per_token_s": 0.00037727272916923877
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.5,
+       "response": {
+        "variables": [
+         "Person"
+        ],
+        "count": 1
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 8727.40000000596,
+    "dbMs": 0.5,
+    "totalMs": 8728
+   }
+  },
+  {
+   "id": "u08",
+   "run": {
+    "question": "What is Judith Goddard's email address?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  named_by_competition(WorkOrPerson)\n  WorkOrPerson = \"judith_goddard\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  named_by_competition(WorkOrPerson)\n  WorkOrPerson = \"judith_goddard\""
+      },
+      "llmMs": 9226.300000011921,
+      "usage": {
+       "completion_tokens": 28,
+       "prompt_tokens": 1907,
+       "total_tokens": 1935,
+       "extra": {
+        "e2e_latency_s": 9.226,
+        "prefill_tokens_per_s": 280.1034047183307,
+        "decode_tokens_per_s": 11.608142282973793,
+        "time_to_first_token_s": 6.808199999988079,
+        "time_per_output_token_s": 0.08614642856908697,
+        "grammar_init_s": 0.00019999998807907106,
+        "grammar_per_token_s": 0.00033928571641445173
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.800000011920929,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  named_by_competition(WorkOrPerson)\n  WorkOrPerson = \"judith_goddard\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  named_by_competition(WorkOrPerson)\n  WorkOrPerson = \"judith_goddard\""
+      },
+      "llmMs": 2851.5,
+      "usage": {
+       "completion_tokens": 28,
+       "prompt_tokens": 54,
+       "total_tokens": 82,
+       "extra": {
+        "e2e_latency_s": 2.851,
+        "prefill_tokens_per_s": 141.9185282522996,
+        "decode_tokens_per_s": 11.353959693058904,
+        "time_to_first_token_s": 0.3805,
+        "time_per_output_token_s": 0.0880750000029802,
+        "grammar_init_s": 0.0235,
+        "grammar_per_token_s": 0.0003607142865657808
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.4000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  named_by_competition(WorkOrPerson)\n  WorkOrPerson = \"judith_goddard\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  named_by_competition(WorkOrPerson)\n  WorkOrPerson = \"judith_goddard\""
+      },
+      "llmMs": 2897.7999999821186,
+      "usage": {
+       "completion_tokens": 28,
+       "prompt_tokens": 54,
+       "total_tokens": 82,
+       "extra": {
+        "e2e_latency_s": 2.897,
+        "prefill_tokens_per_s": 151.64279696968228,
+        "decode_tokens_per_s": 11.037527593767118,
+        "time_to_first_token_s": 0.3560999999940395,
+        "time_per_output_token_s": 0.09060000000042574,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0002857142846499171
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.6000000238418579,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 14975.59999999404,
+    "dbMs": 1.8000000417232513,
+    "totalMs": 14977.700000017881
+   }
+  },
+  {
+   "id": "u09",
+   "run": {
+    "question": "Which works are about climate change?",
+    "outcome": "ok",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  uses_medium(Work, medium)\n  used_medium(medium, \"photography\")\n  uses_medium(Work, text)\n  used_medium(text, \"climate change\")",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  uses_medium(Work, medium)\n  used_medium(medium, \"photography\")\n  uses_medium(Work, text)\n  used_medium(text, \"climate change\")"
+      },
+      "llmMs": 10210.100000023842,
+      "usage": {
+       "completion_tokens": 40,
+       "prompt_tokens": 1904,
+       "total_tokens": 1944,
+       "extra": {
+        "e2e_latency_s": 10.21,
+        "prefill_tokens_per_s": 280.94198193993816,
+        "decode_tokens_per_s": 11.681560656137696,
+        "time_to_first_token_s": 6.777199999988079,
+        "time_per_output_token_s": 0.08560500000268222,
+        "grammar_init_s": 0.03609999999403954,
+        "grammar_per_token_s": 0.00013749999999999998
+       }
+      },
+      "finish": "stop",
+      "db": {
+       "status": "ok",
+       "ms": 0.5,
+       "response": {
+        "variables": [
+         "Work"
+        ],
+        "count": 0
+       }
+      }
+     }
+    ],
+    "repairs": 0,
+    "llmMs": 10210.100000023842,
+    "dbMs": 0.5,
+    "totalMs": 10210.600000023842
+   }
+  },
+  {
+   "id": "u10",
+   "run": {
+    "question": "What is the capital of France?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Organisation\nwhere\n  named_by_competition(organisation)\n  Competition = \"The Official List of Capital Cities\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Organisation\nwhere\n  named_by_competition(organisation)\n  Competition = \"The Official List of Capital Cities\""
+      },
+      "llmMs": 8950.799999982119,
+      "usage": {
+       "completion_tokens": 25,
+       "prompt_tokens": 1904,
+       "total_tokens": 1929,
+       "extra": {
+        "e2e_latency_s": 8.951,
+        "prefill_tokens_per_s": 280.25552709774485,
+        "decode_tokens_per_s": 11.618720081699232,
+        "time_to_first_token_s": 6.793800000011921,
+        "time_per_output_token_s": 0.08606800000071527,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.0002880000019073486
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Organisation\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.6000000238418579,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Organisation",
+          "variable": "Organisation"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Organisation\nwhere\n  named_by_competition(organisation)\n  Competition = \"The Official List of Capital Cities\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Organisation\nwhere\n  named_by_competition(organisation)\n  Competition = \"The Official List of Capital Cities\""
+      },
+      "llmMs": 2540.2999999821186,
+      "usage": {
+       "completion_tokens": 25,
+       "prompt_tokens": 54,
+       "total_tokens": 79,
+       "extra": {
+        "e2e_latency_s": 2.541,
+        "prefill_tokens_per_s": 151.34529148740546,
+        "decode_tokens_per_s": 11.472099853062993,
+        "time_to_first_token_s": 0.3567999999821186,
+        "time_per_output_token_s": 0.08716800000071523,
+        "grammar_init_s": 0.022699999988079072,
+        "grammar_per_token_s": 0.00029600000143051146
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Organisation\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.4000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Organisation",
+          "variable": "Organisation"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Organisation\nwhere\n  named_by_competition(organisation)\n  Competition = \"The Official List of Capital Cities\"",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Organisation\nwhere\n  named_by_competition(organisation)\n  Competition = \"The Official List of Capital Cities\""
+      },
+      "llmMs": 2585.4000000059605,
+      "usage": {
+       "completion_tokens": 25,
+       "prompt_tokens": 54,
+       "total_tokens": 79,
+       "extra": {
+        "e2e_latency_s": 2.586,
+        "prefill_tokens_per_s": 153.4963047133888,
+        "decode_tokens_per_s": 11.212773592155244,
+        "time_to_first_token_s": 0.3518000000119209,
+        "time_per_output_token_s": 0.08918399999618531,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.0003439999973773956
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Organisation\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.4000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Organisation",
+          "variable": "Organisation"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 14076.499999970198,
+    "dbMs": 1.4000000357627869,
+    "totalMs": 14078.09999999404
+   }
+  },
+  {
+   "id": "u11",
+   "run": {
+    "question": "What are the dimensions of the Spout Sculpture?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Work\nwhere\n  made_at(Work, spout_sculpture)\n  uses_medium(WorkOrPerson, photographic_images)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  made_at(Work, spout_sculpture)\n  uses_medium(WorkOrPerson, photographic_images)"
+      },
+      "llmMs": 9243.09999999404,
+      "usage": {
+       "completion_tokens": 29,
+       "prompt_tokens": 1908,
+       "total_tokens": 1937,
+       "extra": {
+        "e2e_latency_s": 9.244,
+        "prefill_tokens_per_s": 281.34953403351375,
+        "decode_tokens_per_s": 11.802531439387328,
+        "time_to_first_token_s": 6.7815999999940395,
+        "time_per_output_token_s": 0.08472758620771868,
+        "grammar_init_s": 0.03409999999403954,
+        "grammar_per_token_s": 0.00016206896613384114
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.4000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "made_at(Work, spout_sculpture)"
+           ],
+           [
+            "uses_medium(WorkOrPerson, photographic_images)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  made_at(Work, spout_sculpture)\n  uses_medium(WorkOrPerson, photographic_images)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  made_at(Work, spout_sculpture)\n  uses_medium(WorkOrPerson, photographic_images)"
+      },
+      "llmMs": 2877.5999999940395,
+      "usage": {
+       "completion_tokens": 29,
+       "prompt_tokens": 50,
+       "total_tokens": 79,
+       "extra": {
+        "e2e_latency_s": 2.878,
+        "prefill_tokens_per_s": 144.09221902017293,
+        "decode_tokens_per_s": 11.480147262605767,
+        "time_to_first_token_s": 0.347,
+        "time_per_output_token_s": 0.0871068965515186,
+        "grammar_init_s": 0.010099999994039535,
+        "grammar_per_token_s": 0.0001482758665906972
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.4000000059604645,
+       "response": {
+        "errors": [
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "made_at(Work, spout_sculpture)"
+           ],
+           [
+            "uses_medium(WorkOrPerson, photographic_images)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Work\nwhere\n  made_at(Work, spout_sculpture)\n  uses_medium(WorkOrPerson, photographic_images)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Work\nwhere\n  made_at(Work, spout_sculpture)\n  uses_medium(WorkOrPerson, photographic_images)"
+      },
+      "llmMs": 2932,
+      "usage": {
+       "completion_tokens": 29,
+       "prompt_tokens": 50,
+       "total_tokens": 79,
+       "extra": {
+        "e2e_latency_s": 2.932,
+        "prefill_tokens_per_s": 146.88601644866182,
+        "decode_tokens_per_s": 11.20816263466618,
+        "time_to_first_token_s": 0.3404000000059605,
+        "time_per_output_token_s": 0.08922068965229496,
+        "grammar_init_s": 0.00009999999403953553,
+        "grammar_per_token_s": 0.00011379310283167609
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- The query contains disconnected pattern groups and would produce a Cartesian product.\nAll clauses must be joined through shared variables or constants.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "disconnected_query",
+          "message": "The query contains disconnected pattern groups and would produce a Cartesian product.",
+          "groups": [
+           [
+            "made_at(Work, spout_sculpture)"
+           ],
+           [
+            "uses_medium(WorkOrPerson, photographic_images)"
+           ]
+          ]
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 15052.699999988079,
+    "dbMs": 1.300000011920929,
+    "totalMs": 15054.09999999404
+   }
+  },
+  {
+   "id": "u12",
+   "run": {
+    "question": "Which artist has made the most works?",
+    "outcome": "failed",
+    "attempts": [
+     {
+      "raw": "find Person\nwhere\n  made_at(Work, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  made_at(Work, _)"
+      },
+      "llmMs": 7762.300000011921,
+      "usage": {
+       "completion_tokens": 12,
+       "prompt_tokens": 1905,
+       "total_tokens": 1917,
+       "extra": {
+        "e2e_latency_s": 7.762,
+        "prefill_tokens_per_s": 281.83391771411823,
+        "decode_tokens_per_s": 11.985617259431564,
+        "time_to_first_token_s": 6.759299999982119,
+        "time_per_output_token_s": 0.08343333333233992,
+        "grammar_init_s": 0.036900000005960464,
+        "grammar_per_token_s": 0.00011666666716337204
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.5,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  made_at(Work, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  made_at(Work, _)"
+      },
+      "llmMs": 1389,
+      "usage": {
+       "completion_tokens": 12,
+       "prompt_tokens": 54,
+       "total_tokens": 66,
+       "extra": {
+        "e2e_latency_s": 1.389,
+        "prefill_tokens_per_s": 155.5747623190069,
+        "decode_tokens_per_s": 11.532916865899928,
+        "time_to_first_token_s": 0.3470999999940395,
+        "time_per_output_token_s": 0.08670833334078393,
+        "grammar_init_s": 0.02180000001192093,
+        "grammar_per_token_s": 0.00011666667213042578
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.09999999403953552,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     },
+     {
+      "raw": "find Person\nwhere\n  made_at(Work, _)",
+      "reply": {
+       "status": "ok",
+       "dsl": "find Person\nwhere\n  made_at(Work, _)"
+      },
+      "llmMs": 1379.699999988079,
+      "usage": {
+       "completion_tokens": 12,
+       "prompt_tokens": 54,
+       "total_tokens": 66,
+       "extra": {
+        "e2e_latency_s": 1.379,
+        "prefill_tokens_per_s": 165.74585634752657,
+        "decode_tokens_per_s": 11.399259047968238,
+        "time_to_first_token_s": 0.32580000001192094,
+        "time_per_output_token_s": 0.08772500000149012,
+        "grammar_init_s": 0,
+        "grammar_per_token_s": 0.00010833333432674407
+       }
+      },
+      "finish": "stop",
+      "feedback": "BeingDB rejected that query:\n- 'find' projects unbound variable Person\nEvery find variable must appear in a clause; remove it or add the clause that binds it.\nThe predicates exist, so reply with the corrected query.",
+      "db": {
+       "status": "invalid",
+       "ms": 0.20000001788139343,
+       "response": {
+        "errors": [
+         {
+          "code": "unbound_projection",
+          "message": "'find' projects unbound variable Person",
+          "variable": "Person"
+         }
+        ]
+       }
+      }
+     }
+    ],
+    "repairs": 2,
+    "llmMs": 10531,
+    "dbMs": 0.800000011920929,
+    "totalMs": 10531.800000011921
+   }
+  }
+ ],
+ "finished": "2026-09-24T17:09:09.838Z"
+}

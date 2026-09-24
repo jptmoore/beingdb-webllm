@@ -1,0 +1,16 @@
+{
+  "name": "beingdb-webllm",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Experiment: a small local WebLLM model as a natural-language interface to BeingDB (via beingdb-wasm).",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "link": "node scripts/link.mjs",
+    "serve": "node scripts/serve.mjs",
+    "check-eval": "node eval/check-references.mjs"
+  },
+  "dependencies": {
+    "@mlc-ai/web-llm": "0.2.85"
+  }
+}

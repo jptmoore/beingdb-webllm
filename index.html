@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BeingDB + WebLLM</title>
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <h1>Ask BeingDB</h1>
+  <p class="note">A small local model (WebLLM, in this tab) translates your question into BeingDB DSL.
+    BeingDB (WASM, in this tab) validates and runs it over the Rewind interview pack.
+    The results below come from BeingDB, not from the model. <a href="eval.html">Evaluation</a></p>
+
+  <pre id="log" class="log"></pre>
+  <p><button id="load" disabled>Load model</button> <progress id="progress" max="1" value="0" hidden></progress> <span id="progress-text"></span></p>
+
+  <label for="question">Question</label>
+  <textarea id="question" rows="2">Which artists created works between 1975 and 1980?</textarea>
+  <p>
+    <select id="samples"><option value="">Sample questions…</option></select>
+    <button id="ask" disabled>Ask BeingDB</button>
+  </p>
+
+  <section id="answer" hidden>
+    <p><b>Model:</b> <span id="model"></span></p>
+    <h2>Generated DSL</h2>
+    <pre id="dsl" class="dsl"></pre>
+    <p id="status"></p>
+    <p id="timing"></p>
+    <details id="attempts-box"><summary>Attempts and BeingDB feedback</summary><div id="attempts"></div></details>
+    <h2>BeingDB results</h2>
+    <div id="results"></div>
+    <details><summary>Raw BeingDB response</summary><pre id="raw"></pre></details>
+  </section>
+
+  <details><summary>Model instructions (built from the live BeingDB schema)</summary><pre id="prompt"></pre></details>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
