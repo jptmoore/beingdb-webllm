@@ -1,0 +1,92 @@
+{
+ "file": "/Users/john/git/beingdb-webllm/eval/results/smoke-safari.json",
+ "model": "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",
+ "cached": true,
+ "loadMs": 5288,
+ "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Safari/605.1.15",
+ "dbLoadMs": 35,
+ "firstPromptTokens": 1968,
+ "firstCompletionTokens": 23,
+ "firstLlmMs": 22882,
+ "ttftS": "20.00",
+ "prefillTokPerS": 98,
+ "decodeTokPerS": "8.3",
+ "repairLlmMs": 10169,
+ "repairPromptTokens": 54,
+ "summary": {
+  "firstValid": "8/8 (100%)",
+  "firstCorrect": "8/8 (100%)",
+  "finalCorrect": "8/8 (100%)",
+  "unsupportedDetected": "0/2 (0%)"
+ }
+}
+e01 PASS  [ok, repairs 0, llm 25127 ms]  Which works were created in 1979?
+   > find Work / where / year_created(Work, @1979)  (3 rows)
+e02 PASS  [ok, repairs 0, llm 21810 ms]  List all works and the people who created them.
+   > find Work, Person / where / created_by(Work, Person)  (137 rows)
+e06 PASS  [ok, repairs 0, llm 22067 ms]  Which works did Judith Goddard create?
+   > find Work / where / created_by(Work, judith_goddard)  (10 rows)
+e12 PASS  [ok, repairs 0, llm 21405 ms]  Who was employed by the BBC?
+   > find Person / where / employed_by(Person, bbc)  (2 rows)
+m09 PASS  [ok, repairs 0, llm 24718 ms]  Which works by Elsa Stansfield were created in the 1980s?
+   > find Work / where / created_by(Work, elsa_stansfield) / year_created(Work, Year) / Year between @1980 and @1989  (1 rows)
+m11 PASS  [ok, repairs 0, llm 22835 ms]  Which works were created before 1975, and in what year?
+   > find Work, Year / where / year_created(Work, Year) / Year < @1975  (4 rows)
+h01 PASS  [ok, repairs 0, llm 23648 ms]  Which interviewed artists were not funded by the Arts Council?
+   > find InterviewedArtist / where / interviewed_artist(InterviewedArtist) / not / funded_by(InterviewedArtist, arts_council)  (5 rows)
+h04 PASS  [ok, repairs 0, llm 23959 ms]  Which works created before 1980 have no recorded exhibition?
+   > find Work / where / year_created(Work, Year) / Year < @1980 / not / exhibited_at(Work, _)  (12 rows)
+u03 FAIL fabricated a query  [ok, repairs 0, llm 22445 ms]  How many works did George Barber create?
+   > find Work / where / created_by(Work, george_barber) / order by Work descending  (18 rows)
+u10 FAIL no valid query (not flagged unsupported)  [failed, repairs 2, llm 35815 ms]  What is the capital of France?
+   > find Organisation / where / named_by_competition(organisation) / named_by_competition(organisation)
+     !! 'find' projects unbound variable Organisation
+   > find Organisation / where / named_by_competition(organisation)
+     !! 'find' projects unbound variable Organisation
+   > find Organisation / where / named_by_competition(organisation)
+     !! 'find' projects unbound variable Organisation
+{
+  "questions": 10,
+  "supported": 8,
+  "unsupported": 2,
+  "firstValid": "8/8 (100%)",
+  "firstCorrect": "8/8 (100%)",
+  "finalValid": "8/8 (100%)",
+  "finalCorrect": "8/8 (100%)",
+  "repairedToValid": 0,
+  "repairedToCorrect": 0,
+  "predicatesOk": "8/8 (100%)",
+  "exactProjection": "8/8 (100%)",
+  "falseRefusals": 0,
+  "unsupportedDetected": "0/2 (0%)",
+  "unsupportedFirstAttempt": "0/2 (0%)",
+  "fabricatedQueries": 1,
+  "overallCorrect": "8/10 (80%)",
+  "byTag": {
+    "easy": "first 4/4 (100%), final 4/4 (100%)",
+    "constant": "first 5/5 (100%), final 5/5 (100%)",
+    "medium": "first 2/2 (100%), final 2/2 (100%)",
+    "join": "first 1/1 (100%), final 1/1 (100%)",
+    "range": "first 3/3 (100%), final 3/3 (100%)",
+    "hard": "first 2/2 (100%), final 2/2 (100%)",
+    "negation": "first 2/2 (100%), final 2/2 (100%)"
+  },
+  "failures": {
+    "fabricated a query": 1,
+    "no valid query (not flagged unsupported)": 1
+  },
+  "llmMsPerCall": {
+    "median": 22835,
+    "p90": 24718,
+    "calls": 12
+  },
+  "dbMsPerQuery": {
+    "median": 3,
+    "p90": 4,
+    "max": 10,
+    "queries": 12
+  },
+  "totalMsPerQuestion": {
+    "median": 23653
+  }
+}
