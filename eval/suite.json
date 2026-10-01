@@ -1,0 +1,8 @@
+{
+  "id": "rewind-nl2dsl-v1",
+  "description": "The original 50-question Rewind NL -> BeingDB DSL evaluation (38 supported with trusted reference queries, 12 unsupported), unchanged since runs 2-8. Any edit to questions.json must become a new suite id with its own hash.",
+  "questions": "questions.json",
+  "questionsSha256": "06cd8ff6eb6cb78960e870dfc9c50381696066bd2852637e5be1c0cc2f479618",
+  "items": 50,
+  "environmentFingerprint": "sha256:c99e9e82d54a50d2eb201a6637d365278f0198a1399036f9104db57104589aec"
+}

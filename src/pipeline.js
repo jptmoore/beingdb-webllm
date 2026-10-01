@@ -9,15 +9,23 @@ export const REPAIR_TEMPERATURE = 0.7;
 
 // generator: { complete(messages, format, { temperature }) -> { text, ms, usage } }
 // db: wrapBeingDB(...) ; schema: buildSchema(...) ; prompt: buildPrompt(schema)
-export async function ask({ question, generator, db, schema, prompt, maxRepairs = MAX_REPAIRS }) {
+export async function ask({ question, generator, db, schema, prompt, maxRepairs = MAX_REPAIRS, temperature = 0, repairTemperature = REPAIR_TEMPERATURE }) {
   const t0 = performance.now();
   const messages = prompt.messages(question);
   const attempts = [];
   let format = prompt.format;
   for (let i = 0; i <= maxRepairs; i++) {
-    const gen = await generator.complete(messages, format, { temperature: i === 0 ? 0 : REPAIR_TEMPERATURE });
+    const grammar = format === prompt.format ? "query_or_unsupported" : "query_only";
+    let gen;
+    try {
+      gen = await generator.complete(messages, format, { temperature: i === 0 ? temperature : repairTemperature });
+    } catch (e) {
+      // Keep the evidence gathered so far for callers that record failures.
+      e.attempts = attempts;
+      throw e;
+    }
     const reply = parseReply(gen.text);
-    const attempt = { raw: gen.text, reply, llmMs: gen.ms, usage: gen.usage, finish: gen.finish };
+    const attempt = { raw: gen.text, reply, llmMs: gen.ms, usage: gen.usage, finish: gen.finish, grammar, request: gen.request };
     attempts.push(attempt);
     if (reply.status === "unsupported") break;
     if (reply.status === "ok") {

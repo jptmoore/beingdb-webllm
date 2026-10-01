@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BeingDB + WebLLM benchmark</title>
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <h1>NL → BeingDB DSL benchmark</h1>
+  <p class="note">Driven by <code>npm run benchmark</code>. Keep this window visible and in the foreground until the
+    command finishes; results are written by the command, not by this page. For interactive use see the
+    <a href="index.html">demo</a> and <a href="eval.html">evaluation page</a>.</p>
+  <p><b id="status">Starting…</b> <span id="visibility" class="bad"></span></p>
+  <p><progress id="progress" max="1" value="0"></progress> <span id="progress-text"></span></p>
+  <pre id="log" class="log"></pre>
+  <table id="table">
+    <tr><th>trial</th><th>id</th><th>question</th><th>outcome</th><th>repairs</th><th>1st valid</th><th>correct</th><th>failure category</th><th>final DSL</th><th>LLM ms</th><th>DB ms</th></tr>
+  </table>
+  <script type="module" src="src/benchmark.js"></script>
+</body>
+</html>

@@ -7,6 +7,8 @@ import { loadBeingDB } from "./node-beingdb.mjs";
 import { EXAMPLES, predicatesIn, buildPrompt } from "../src/prompt.js";
 import { buildSchema } from "../src/schema.js";
 import { scoreItem, summarise, matchColumns } from "../src/score.js";
+import { buildAnalysisContext, classifyAttempt } from "../src/analysis.js";
+import { loadSuite } from "../scripts/lib/suite.mjs";
 
 const { db, summary } = await loadBeingDB();
 const { items, environmentFingerprint } = JSON.parse(readFileSync(new URL("./questions.json", import.meta.url), "utf8"));
@@ -37,6 +39,9 @@ for (const ex of EXAMPLES) {
   assert.ok(!items.some((i) => i.question === ex.q), `example "${ex.q}" duplicates an eval question`);
 }
 buildPrompt(buildSchema(db));
+const schema = buildSchema(db);
+const ctx = buildAnalysisContext(db, schema);
+const suite = loadSuite(); // throws if questions.json no longer matches eval/suite.json
 
 let supported = 0;
 const countMismatches = [];
@@ -59,6 +64,7 @@ for (const item of items) {
   // The scorer must accept the reference itself...
   const self = scoreItem(item, fake(item.reference), db);
   assert.ok(self.correct && self.firstCorrect, `${item.id}: reference not judged correct`);
+  assert.equal(classifyAttempt(item, r.response, fake(item.reference).attempts[0], db, ctx, { final: true }), null, `${item.id}: reference got a failure category`);
   // ...and reject it with a binary pattern's arguments swapped (when that changes the answer).
   const lines = item.reference.split("\n");
   const i = lines.findIndex((l) => /^\s*[a-z_]+\([^,()]+,\s*[^,()]+\)\s*$/.test(l));
@@ -66,10 +72,14 @@ for (const item of items) {
     const m = lines[i].match(/^(\s*)([a-z_]+)\(([^,()]+),\s*([^,()]+)\)/);
     lines[i] = `${m[1]}${m[2]}(${m[4]}, ${m[3]})`;
     const swapped = scoreItem(item, fake(lines.join("\n")), db);
-    if (!swapped.correct && swapped.finalValid)
+    if (!swapped.correct && swapped.finalValid) {
       assert.match(swapped.failure, /argument order/, `${item.id}: swap diagnosed as ${swapped.failure}`);
+      const c = classifyAttempt(item, r.response, fake(lines.join("\n")).attempts[0], db, ctx, { final: true });
+      assert.ok(["wrong_argument_order", "wrong_ordering"].includes(c?.category), `${item.id}: swap categorised as ${c?.category}`);
+    }
   }
   console.log(`${item.id} ok  ${String(distinct).padStart(4)} rows  ${item.question}`);
 }
 assert.deepEqual(countMismatches, [], "expectCount mismatches");
 console.log(`\n${items.length} questions (${supported} supported, ${items.length - supported} unsupported); references, examples and scorer OK`);
+console.log(`suite ${suite.id}, questions.json sha256 ${suite.sha256}`);
