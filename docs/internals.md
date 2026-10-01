@@ -19,6 +19,9 @@ index.html / eval.html
 so another WebLLM model is a URL parameter (`?model=`), and another runtime would
 be a new `generator.js`. BeingDB integration does not depend on the model.
 
+`benchmark.html` (driven by `npm run benchmark`) uses the same modules plus
+`src/analysis.js`; see [benchmarking.md](benchmarking.md).
+
 ## Consuming beingdb-wasm
 
 `npm run link` creates two symlinks (nothing is copied):
@@ -333,6 +336,13 @@ BeingDB itself:
   variable that occurs only once is valid but usually a mistake; a
   `singleton_variable` warning from BeingDB would give the repair loop
   something to act on.
+- The benchmark's grounding evidence shows a second silent case: an atom that
+  never occurs at that argument position (`created_by(work, P)`,
+  `soundtrack_by(Work, cultural_quarter)` where `cultural_quarter` only occurs
+  as the first argument) is valid and returns 0 rows. An "atom not found at this
+  position" warning, with the positions where it does occur, would expose both
+  reversed arguments and role names written as atoms. Not implemented: the
+  benchmark first measures whether these failures persist in larger models.
 
 ## What would help next
 

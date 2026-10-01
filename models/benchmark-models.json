@@ -1,0 +1,8 @@
+[
+  { "id": "Qwen2.5-1.5B-Instruct-q4f16_1-MLC", "label": "Qwen2.5 1.5B (baseline)" },
+  { "id": "Qwen2.5-3B-Instruct-q4f16_1-MLC", "label": "Qwen2.5 3B" },
+  { "id": "Qwen2.5-7B-Instruct-q4f16_1-MLC", "label": "Qwen2.5 7B" },
+  { "id": "Qwen2.5-Coder-7B-Instruct-q4f16_1-MLC", "label": "Qwen2.5 Coder 7B" },
+  { "id": "Llama-3.1-8B-Instruct-q4f16_1-MLC", "label": "Llama 3.1 8B" },
+  { "id": "Qwen3-8B-q4f16_1-MLC", "label": "Qwen3 8B (thinking off)" }
+]

@@ -1,3 +1,4 @@
 node_modules/
 vendor/
 eval/results/*.status.json
+eval/results/export/
