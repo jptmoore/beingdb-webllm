@@ -1,0 +1,1112 @@
+{
+ "schema": "beingdb-webllm-benchmark/v1#summary",
+ "runId": "20261005T153112Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC",
+ "status": "aborted",
+ "model": "Qwen3.5-2B-q4f16_1-MLC",
+ "labels": {
+  "machine": "MacBook Air M1 8GB",
+  "modelLabel": null,
+  "condition": "baseline",
+  "notes": null
+ },
+ "suite": "rewind-nl2dsl-v1",
+ "trials": 1,
+ "counts": {
+  "questions": {
+   "values": [
+    19
+   ],
+   "mean": 19,
+   "min": 19,
+   "max": 19
+  },
+  "supported": {
+   "values": [
+    19
+   ],
+   "mean": 19,
+   "min": 19,
+   "max": 19
+  },
+  "unsupported": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "firstValid": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "finalValid": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "firstCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "finalCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "repairedToValid": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "repairedToCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "predicateSelectionCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "falseRefusals": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "unsupportedDetected": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "unsupportedFirstAttempt": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "fabricated": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "overallCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "runtimeFailures": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "questionsRepaired": {
+   "values": [
+    19
+   ],
+   "mean": 19,
+   "min": 19,
+   "max": 19
+  },
+  "repairAttempts": {
+   "values": [
+    38
+   ],
+   "mean": 38,
+   "min": 38,
+   "max": 38
+  }
+ },
+ "rates": {
+  "firstValid": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "finalValid": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "firstCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "finalCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "predicateSelectionCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "falseRefusals": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "unsupportedDetected": null,
+  "unsupportedFirstAttempt": null,
+  "fabricated": null,
+  "overallCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "runtimeFailures": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  }
+ },
+ "failureCategories": {
+  "syntax_generation": {
+   "values": [
+    19
+   ],
+   "mean": 19,
+   "min": 19,
+   "max": 19
+  }
+ },
+ "timing": {
+  "model": {
+   "msPerCall": {
+    "n": 57,
+    "mean": 11269.19,
+    "median": 12649.3,
+    "min": 1673.5,
+    "max": 22197.7,
+    "p90": 21369.1,
+    "p95": 21546.6
+   },
+   "firstAttemptMs": {
+    "n": 19,
+    "mean": 18732.99,
+    "median": 20905.9,
+    "min": 10726.6,
+    "max": 22197.7,
+    "p90": 21825.8,
+    "p95": 22197.7
+   },
+   "repairAttemptMs": {
+    "n": 38,
+    "mean": 7537.29,
+    "median": 7756.95,
+    "min": 1673.5,
+    "max": 13520.6,
+    "p90": 13030.1,
+    "p95": 13370.8
+   },
+   "msPerQuestion": {
+    "n": 19,
+    "mean": 33807.56,
+    "median": 37723.4,
+    "min": 14109,
+    "max": 47748,
+    "p90": 47580.5,
+    "p95": 47748
+   },
+   "firstAttemptPromptTokens": {
+    "n": 19,
+    "mean": 2013.58,
+    "median": 2013,
+    "min": 2009,
+    "max": 2022,
+    "p90": 2019,
+    "p95": 2022
+   },
+   "repairPromptTokens": {
+    "n": 38,
+    "mean": 33,
+    "median": 33,
+    "min": 33,
+    "max": 33,
+    "p90": 33,
+    "p95": 33
+   },
+   "completionTokens": {
+    "n": 57,
+    "mean": 125.53,
+    "median": 174,
+    "min": 23,
+    "max": 195,
+    "p90": 195,
+    "p95": 195
+   },
+   "firstAttemptTtftMs": {
+    "n": 19,
+    "mean": 9437,
+    "median": 9345.4,
+    "min": 9226.1,
+    "max": 10013.3,
+    "p90": 9907.8,
+    "p95": 10013.3
+   },
+   "firstAttemptPrefillMs": {
+    "n": 19,
+    "mean": 9433.93,
+    "median": 9345.3,
+    "min": 9226.1,
+    "max": 9955.5,
+    "p90": 9907.8,
+    "p95": 9955.5
+   },
+   "decodeMs": {
+    "n": 57,
+    "mean": 7939.26,
+    "median": 10600.4,
+    "min": 1390.1,
+    "max": 13201.7,
+    "p90": 12645.3,
+    "p95": 12752.9
+   },
+   "firstAttemptPrefillTokPerS": {
+    "n": 19,
+    "mean": 213.48,
+    "median": 215.44,
+    "min": 201.33,
+    "max": 218.2,
+    "p90": 217.97,
+    "p95": 218.2
+   },
+   "decodeTokPerS": {
+    "n": 57,
+    "mean": 16.04,
+    "median": 16.14,
+    "min": 14.85,
+    "max": 16.89,
+    "p90": 16.58,
+    "p95": 16.6
+   },
+   "grammarInitMs": {
+    "n": 30,
+    "mean": 2.03,
+    "median": 0.1,
+    "min": 0.1,
+    "max": 57.8,
+    "p90": 0.1,
+    "p95": 0.3
+   },
+   "calls": 57
+  },
+  "beingdb": {
+   "msPerQuery": null,
+   "firstAttemptQueryMs": null,
+   "repairQueryMs": null,
+   "msPerQuestion": {
+    "n": 19,
+    "mean": 0,
+    "median": 0,
+    "min": 0,
+    "max": 0,
+    "p90": 0,
+    "p95": 0
+   },
+   "referenceQueryMs": {
+    "n": 19,
+    "mean": 7.35,
+    "median": 5.7,
+    "min": 0.6,
+    "max": 46,
+    "p90": 12.8,
+    "p95": 46
+   },
+   "queries": 0
+  },
+  "totalMsPerQuestion": {
+   "n": 19,
+   "mean": 33809.29,
+   "median": 37724.3,
+   "min": 14109.3,
+   "max": 47766.9,
+   "p90": 47581.2,
+   "p95": 47766.9
+  },
+  "page": {
+   "hiddenMs": 0,
+   "questionsWhileHidden": 0
+  }
+ },
+ "determinism": {
+  "questions": 19,
+  "identicalAcrossTrials": 19,
+  "differing": []
+ },
+ "perQuestion": [
+  {
+   "id": "e01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e02",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e03",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e04",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e05",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e06",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e07",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e08",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e09",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e10",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e11",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e12",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e13",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e14",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e15",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e16",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e17",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e18",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "syntax_generation": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  }
+ ],
+ "perTrial": [
+  {
+   "counts": {
+    "questions": 19,
+    "supported": 19,
+    "unsupported": 0,
+    "firstValid": 0,
+    "finalValid": 0,
+    "firstCorrect": 0,
+    "finalCorrect": 0,
+    "repairedToValid": 0,
+    "repairedToCorrect": 0,
+    "predicateSelectionCorrect": 0,
+    "falseRefusals": 0,
+    "unsupportedDetected": 0,
+    "unsupportedFirstAttempt": 0,
+    "fabricated": 0,
+    "overallCorrect": 0,
+    "runtimeFailures": 0,
+    "questionsRepaired": 19,
+    "repairAttempts": 38
+   },
+   "rates": {
+    "firstValid": 0,
+    "finalValid": 0,
+    "firstCorrect": 0,
+    "finalCorrect": 0,
+    "predicateSelectionCorrect": 0,
+    "falseRefusals": 0,
+    "unsupportedDetected": null,
+    "unsupportedFirstAttempt": null,
+    "fabricated": null,
+    "overallCorrect": 0,
+    "runtimeFailures": 0
+   },
+   "failureCategories": {
+    "syntax_generation": 19
+   },
+   "firstAttemptFailureCategories": {
+    "syntax_generation": 19
+   },
+   "byLevelAndTag": {
+    "easy": {
+     "n": 18,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "constant": {
+     "n": 15,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "medium": {
+     "n": 1,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "join": {
+     "n": 1,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "range": {
+     "n": 1,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    }
+   },
+   "timing": {
+    "model": {
+     "msPerCall": {
+      "n": 57,
+      "mean": 11269.19,
+      "median": 12649.3,
+      "min": 1673.5,
+      "max": 22197.7,
+      "p90": 21369.1,
+      "p95": 21546.6
+     },
+     "firstAttemptMs": {
+      "n": 19,
+      "mean": 18732.99,
+      "median": 20905.9,
+      "min": 10726.6,
+      "max": 22197.7,
+      "p90": 21825.8,
+      "p95": 22197.7
+     },
+     "repairAttemptMs": {
+      "n": 38,
+      "mean": 7537.29,
+      "median": 7756.95,
+      "min": 1673.5,
+      "max": 13520.6,
+      "p90": 13030.1,
+      "p95": 13370.8
+     },
+     "msPerQuestion": {
+      "n": 19,
+      "mean": 33807.56,
+      "median": 37723.4,
+      "min": 14109,
+      "max": 47748,
+      "p90": 47580.5,
+      "p95": 47748
+     },
+     "firstAttemptPromptTokens": {
+      "n": 19,
+      "mean": 2013.58,
+      "median": 2013,
+      "min": 2009,
+      "max": 2022,
+      "p90": 2019,
+      "p95": 2022
+     },
+     "repairPromptTokens": {
+      "n": 38,
+      "mean": 33,
+      "median": 33,
+      "min": 33,
+      "max": 33,
+      "p90": 33,
+      "p95": 33
+     },
+     "completionTokens": {
+      "n": 57,
+      "mean": 125.53,
+      "median": 174,
+      "min": 23,
+      "max": 195,
+      "p90": 195,
+      "p95": 195
+     },
+     "firstAttemptTtftMs": {
+      "n": 19,
+      "mean": 9437,
+      "median": 9345.4,
+      "min": 9226.1,
+      "max": 10013.3,
+      "p90": 9907.8,
+      "p95": 10013.3
+     },
+     "firstAttemptPrefillMs": {
+      "n": 19,
+      "mean": 9433.93,
+      "median": 9345.3,
+      "min": 9226.1,
+      "max": 9955.5,
+      "p90": 9907.8,
+      "p95": 9955.5
+     },
+     "decodeMs": {
+      "n": 57,
+      "mean": 7939.26,
+      "median": 10600.4,
+      "min": 1390.1,
+      "max": 13201.7,
+      "p90": 12645.3,
+      "p95": 12752.9
+     },
+     "firstAttemptPrefillTokPerS": {
+      "n": 19,
+      "mean": 213.48,
+      "median": 215.44,
+      "min": 201.33,
+      "max": 218.2,
+      "p90": 217.97,
+      "p95": 218.2
+     },
+     "decodeTokPerS": {
+      "n": 57,
+      "mean": 16.04,
+      "median": 16.14,
+      "min": 14.85,
+      "max": 16.89,
+      "p90": 16.58,
+      "p95": 16.6
+     },
+     "grammarInitMs": {
+      "n": 30,
+      "mean": 2.03,
+      "median": 0.1,
+      "min": 0.1,
+      "max": 57.8,
+      "p90": 0.1,
+      "p95": 0.3
+     },
+     "calls": 57
+    },
+    "beingdb": {
+     "msPerQuery": null,
+     "firstAttemptQueryMs": null,
+     "repairQueryMs": null,
+     "msPerQuestion": {
+      "n": 19,
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "max": 0,
+      "p90": 0,
+      "p95": 0
+     },
+     "referenceQueryMs": {
+      "n": 19,
+      "mean": 7.35,
+      "median": 5.7,
+      "min": 0.6,
+      "max": 46,
+      "p90": 12.8,
+      "p95": 46
+     },
+     "queries": 0
+    },
+    "totalMsPerQuestion": {
+     "n": 19,
+     "mean": 33809.29,
+     "median": 37724.3,
+     "min": 14109.3,
+     "max": 47766.9,
+     "p90": 47581.2,
+     "p95": 47766.9
+    },
+    "page": {
+     "hiddenMs": 0,
+     "questionsWhileHidden": 0
+    }
+   },
+   "schema": {
+    "predicateConfusions": {
+     "created_by -> (none)": {
+      "count": 3,
+      "questions": [
+       "e02",
+       "e06",
+       "m01"
+      ]
+     },
+     "collaborated_with -> (none)": {
+      "count": 2,
+      "questions": [
+       "e14",
+       "e18"
+      ]
+     },
+     "funded_by -> (none)": {
+      "count": 2,
+      "questions": [
+       "e04",
+       "e09"
+      ]
+     },
+     "year_created -> (none)": {
+      "count": 2,
+      "questions": [
+       "e01",
+       "m01"
+      ]
+     },
+     "curated_by -> (none)": {
+      "count": 1,
+      "questions": [
+       "e16"
+      ]
+     },
+     "educated_at -> (none)": {
+      "count": 1,
+      "questions": [
+       "e05"
+      ]
+     },
+     "employed_by -> (none)": {
+      "count": 1,
+      "questions": [
+       "e12"
+      ]
+     },
+     "exhibited_at -> (none)": {
+      "count": 1,
+      "questions": [
+       "e15"
+      ]
+     },
+     "exhibition -> (none)": {
+      "count": 1,
+      "questions": [
+       "e10"
+      ]
+     },
+     "in_collection -> (none)": {
+      "count": 1,
+      "questions": [
+       "e07"
+      ]
+     },
+     "influenced_by -> (none)": {
+      "count": 1,
+      "questions": [
+       "e13"
+      ]
+     },
+     "interviewed_artist -> (none)": {
+      "count": 1,
+      "questions": [
+       "e03"
+      ]
+     },
+     "made_at -> (none)": {
+      "count": 1,
+      "questions": [
+       "e17"
+      ]
+     },
+     "performed_at -> (none)": {
+      "count": 1,
+      "questions": [
+       "e11"
+      ]
+     },
+     "soundtrack_by -> (none)": {
+      "count": 1,
+      "questions": [
+       "e08"
+      ]
+     }
+    },
+    "reversedArguments": {},
+    "entityGroundingFailures": [],
+    "unknownAtoms": {},
+    "failedDespiteCorrectPredicates": [],
+    "unsupportedMappedTo": {},
+    "unsupportedMappedQuestions": [],
+    "predicateUsage": {
+     "collaborated_with": {
+      "required": 2,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 133
+     },
+     "created_by": {
+      "required": 3,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 137
+     },
+     "curated_by": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 20
+     },
+     "educated_at": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 21
+     },
+     "employed_by": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 34
+     },
+     "exhibited_at": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 120
+     },
+     "exhibition": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 45
+     },
+     "funded_by": {
+      "required": 2,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 35
+     },
+     "in_collection": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": false,
+      "facts": 3
+     },
+     "influenced_by": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": false,
+      "facts": 3
+     },
+     "interviewed_artist": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 10
+     },
+     "made_at": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 26
+     },
+     "performed_at": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 12
+     },
+     "soundtrack_by": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 7
+     },
+     "year_created": {
+      "required": 2,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 38
+     }
+    }
+   },
+   "legacy": {
+    "questions": 19,
+    "supported": 19,
+    "unsupported": 0,
+    "firstValid": "0/19 (0%)",
+    "firstCorrect": "0/19 (0%)",
+    "finalValid": "0/19 (0%)",
+    "finalCorrect": "0/19 (0%)",
+    "repairedToValid": 0,
+    "repairedToCorrect": 0,
+    "predicatesOk": "0/19 (0%)",
+    "exactProjection": "-",
+    "falseRefusals": 0,
+    "unsupportedDetected": "-",
+    "unsupportedFirstAttempt": "-",
+    "fabricatedQueries": 0,
+    "overallCorrect": "0/19 (0%)",
+    "byTag": {
+     "easy": "first 0/18 (0%), final 0/18 (0%)",
+     "constant": "first 0/15 (0%), final 0/15 (0%)",
+     "medium": "first 0/1 (0%), final 0/1 (0%)",
+     "join": "first 0/1 (0%), final 0/1 (0%)",
+     "range": "first 0/1 (0%), final 0/1 (0%)"
+    },
+    "failures": {
+     "invalid (reply is neither a query nor UNSUPPORTED)": 19
+    },
+    "llmMsPerCall": {
+     "median": 12649,
+     "p90": 21369,
+     "calls": 57
+    },
+    "dbMsPerQuery": {
+     "median": 0,
+     "p90": 0,
+     "max": 0,
+     "queries": 0
+    },
+    "totalMsPerQuestion": {
+     "median": 37724
+    }
+   }
+  }
+ ]
+}

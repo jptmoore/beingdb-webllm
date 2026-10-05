@@ -227,7 +227,58 @@ lower (6/38 correct) at twice the latency.
 
 `npm run benchmark` with default settings reproduces this run exactly (every
 model reply of every attempt identical to run 8, in Chrome 154 instead of VS
-Code's Chromium 150); the report is in `eval/results/benchmarks/`.
+Code's Chromium 150); the report is in
+[`eval/results/benchmarks/20261001T120717Z_…`](eval/results/benchmarks/20261001T120717Z_macbook-air-m1-8gb_Qwen2.5-1.5B-Instruct-q4f16_1-MLC/).
+
+### Other models on the M1 Air
+
+Same machine, prompt, grammar and repair loop; the new models were run with
+`npm run benchmark` and default settings in Chrome 154, one trial each:
+
+| Model | Status | Overall correct | Valid DSL after repair | Unsupported recognised | Model time per call (median) |
+|---|---|---|---|---|---|
+| Qwen2.5-1.5B-Instruct (above) | complete | 14/50 (28%) | 32/38 (84%) | 0/12 | 9.0 s |
+| Llama-3.2-3B-Instruct | complete | 20/50 (40%) | 32/38 (84%) | 7/12 | 15.1 s |
+| Qwen3.5-2B | **aborted** after 19 of 50 questions | not scored | 0/19 completed questions | - | - |
+
+**Llama-3.2-3B-Instruct** (`Llama-3.2-3B-Instruct-q4f16_1-MLC`, ~2.3 GB GPU
+memory). First attempt: 27/38 valid DSL, 13/38 correct. After repair: 32/38
+valid, 13/38 correct (repair made 5 more queries valid, none correct). It
+recognised 7 of the 12 unsupported questions; 3 others got a valid but
+meaningless query. Model time per call 15.1 s median (first attempt 15.8 s,
+repair 3.5 s); BeingDB 2.4 ms median / 61.6 ms max per query. Failures: wrong
+predicate 8, still invalid after repair 6, unsupported not detected 5, wrong
+projection 4, wrong constraint 3, wrong argument order 2, entity grounding 1,
+unclassified 1. This is currently the strongest completed
+M1 result in the repository. The gain over Qwen2.5-1.5B comes from declining
+unsupported questions; on supported questions the two are similar (13/38 vs
+14/38), and Llama is about 1.7x slower per call. This is a single trial.
+
+**Qwen3.5-2B** (`Qwen3.5-2B-q4f16_1-MLC`, ~2.2 GB GPU memory). This is an
+aborted run, not a 0% score. The `--probe` run passed: the model loaded, the
+4,096-token context window fits the prompt, and the smoke generation completed
+(its reply did not match the example query). The benchmark then produced no
+valid BeingDB DSL for any of the 19 questions it completed (`e01`-`e18`,
+`m01`): all 57 attempts, including repairs, were rejected as "neither a query
+nor UNSUPPORTED" (`syntax_generation`). Every reply began with an empty
+`<think></think>` block even though the harness sent `enable_thinking: false`,
+and 25 of the 57 replies hit the 200-token limit. The run was aborted when
+question `m02` timed out after 600 s.
+
+Caveats recorded in these reports: all four runs (two `--probe`, two
+benchmark) warn that the `beingdb-webllm` working tree had uncommitted changes,
+so the results do not correspond exactly to commit `2b1dec9e1b` (the recorded
+change is `package-lock.json`). Both benchmark runs started with heavy swap use
+(7.7 GB for Qwen3.5, 8.6 GB for Llama) that grew during the run, so memory
+pressure may have inflated timings. The Qwen3.5 runs were on battery power. No
+question ran with the page hidden.
+
+Reports in `eval/results/benchmarks/`: Llama-3.2-3B
+[probe](eval/results/benchmarks/20261005T160554Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[benchmark](eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/);
+Qwen3.5-2B
+[probe](eval/results/benchmarks/20261005T152424Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/),
+[aborted benchmark](eval/results/benchmarks/20261005T153112Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/).
 
 ## Limitations
 
