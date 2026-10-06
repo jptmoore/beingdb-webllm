@@ -220,19 +220,21 @@ window.bench = {
     return out;
   },
 
-  async runQuestion(item, { maxRepairs, temperature, repairTemperature, label }) {
+  async runQuestion(item, { maxRepairs, temperature, repairTemperature, dbGuided = false, label }) {
     const { db, schema, prompt, ctx, generator } = state;
     // BeingDB (WasmGC) shares the JS heap with WebLLM and the analysis code. Collecting their
-    // garbage just before each pipeline query keeps GC pauses out of the timed BeingDB call.
+    // garbage just before each pipeline BeingDB call keeps GC pauses out of the timed call.
     // gc() exists only when the browser runs with --js-flags=--expose-gc (the runner sets it).
     const gcBeforeBeingDBQuery = typeof globalThis.gc === "function";
-    const pipelineDb = gcBeforeBeingDBQuery ? { ...db, query: (dsl) => (globalThis.gc(), db.query(dsl)) } : db;
+    const pipelineDb = gcBeforeBeingDBQuery
+      ? { ...db, query: (dsl) => (globalThis.gc(), db.query(dsl)), diagnose: (dsl) => (globalThis.gc(), db.diagnose(dsl)) }
+      : db;
     const h0 = hiddenMs();
     const v0 = visibilityChanges;
     const started = new Date().toISOString();
     let record;
     try {
-      const run = await ask({ question: item.question, generator, db: pipelineDb, schema, prompt, maxRepairs, temperature, repairTemperature });
+      const run = await ask({ question: item.question, generator, db: pipelineDb, schema, prompt, maxRepairs, temperature, repairTemperature, dbGuided });
       record = await analyseQuestion({ item, run, db, schema, ctx });
     } catch (e) {
       log(`${item.id}: ${e.message}`);
@@ -252,7 +254,8 @@ window.bench = {
       "beforeend",
       `<tr><td>${esc(label)}</td><td>${esc(item.id)}</td><td>${esc(item.question)}</td><td>${record.outcome}</td><td>${record.repairs}</td>` +
         `<td>${mark(record.score.firstValid)}</td><td>${mark(record.score.correct)}</td><td>${esc(record.failure?.category || "")}</td>` +
-        `<td><pre>${esc(record.final.dsl || "")}</pre></td><td>${Math.round(record.timing.llmMs)}</td><td>${record.timing.dbMs.toFixed(1)}</td></tr>`,
+        `<td><pre>${esc(record.final.dsl || "")}</pre></td><td>${Math.round(record.timing.llmMs)}</td><td>${record.timing.dbMs.toFixed(1)}</td>` +
+        `<td>${record.efficiency?.calls ? `${record.efficiency.calls.model} / ${record.efficiency.calls.beingdb} / ${record.efficiency.calls.deterministicRepairs}` : ""}</td></tr>`,
     );
     return record;
   },

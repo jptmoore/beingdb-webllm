@@ -12,6 +12,15 @@ export function wrapBeingDB(BeingDB) {
       const status = response.valid === false ? "invalid" : response.error ? "error" : "ok";
       return { status, response, ms };
     },
+    // Validation + BeingDB's data-aware diagnostics and proven repair, without executing.
+    // status: "ok" (valid), "invalid", "error"
+    diagnose(dsl) {
+      const t = performance.now();
+      const response = JSON.parse(BeingDB.diagnose(dsl));
+      const ms = performance.now() - t;
+      const status = response.error ? "error" : response.valid ? "ok" : "invalid";
+      return { status, response, ms };
+    },
   };
 }
 

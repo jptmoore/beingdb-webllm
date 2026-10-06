@@ -444,6 +444,8 @@ async function serialiseAttempt(a, i, item, ref) {
     verdict,
     // The repair message sent back to the model after this attempt (if any).
     feedback: a.feedback ?? null,
+    // db-guided condition: BeingDB diagnoses of this reply and the proven repairs applied to it.
+    guided: a.guided ?? null,
   };
 }
 
@@ -530,6 +532,15 @@ export async function analyseQuestion({ item, run, db, schema, ctx }) {
       dbQueries: run.attempts.filter((a) => a.db).length,
       firstAttemptLlmMs: llm[0],
       repairLlmMs: llm.slice(1).reduce((s, x) => s + x, 0),
+    },
+    // Which calls the question cost: model calls are expensive, BeingDB calls cheap.
+    efficiency: {
+      pipeline: run.pipeline ?? null,
+      calls: run.calls ?? null,
+      beingdbMs: run.beingdbMs ?? null,
+      deterministicRepairs: run.deterministicRepairs ?? [],
+      diagnosticCodes: run.diagnosticCodes ?? [],
+      path: run.path ?? null,
     },
   };
 }

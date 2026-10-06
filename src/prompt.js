@@ -92,7 +92,9 @@ const HINTS = {
 // Feed BeingDB's own validation errors back, plus the signatures of the
 // predicates they mention (or suggest), so the repair is grounded in the schema.
 // Returns the message and whether "unsupported" stays an allowed reply.
-export function repairMessage(response, schema) {
+// Run 10 (db-guided) also passes BeingDB diagnostics; without them the text is
+// exactly run 9's.
+export function repairMessage(response, schema, { diagnostics = [], allowUnsupported = false } = {}) {
   const errors = response.errors || (response.error ? [response.error] : []);
   const lines = errors.map((e) => `- ${e.message}${e.line ? ` (line ${e.line})` : ""}`);
   const hints = [...new Set(errors.map((e) => HINTS[e.code]).filter(Boolean))];
@@ -101,14 +103,53 @@ export function repairMessage(response, schema) {
     for (const s of e.suggestions || []) mentioned.add(s);
     if (e.predicate && schema.names.has(e.predicate)) mentioned.add(e.predicate);
   }
+  for (const p of diagnosticPredicates(diagnostics)) if (schema.names.has(p)) mentioned.add(p);
+  const found = diagnosticLines(diagnostics);
   const sigs = [...mentioned].filter((n) => schema.signatures.has(n)).map((n) => `  ${schema.signatures.get(n)}`);
-  const unknown = errors.some((e) => e.code === "unknown_predicate");
+  const unknown = errors.some((e) => e.code === "unknown_predicate") || allowUnsupported;
   const text =
     `BeingDB rejected that query:\n${lines.join("\n")}\n` +
+    (found.length ? `BeingDB also found:\n${found.join("\n")}\n` : "") +
     (hints.length ? `${hints.join("\n")}\n` : "") +
     (sigs.length ? `Relevant predicates:\n${sigs.join("\n")}\n` : "") +
     (unknown
       ? `Reply with the corrected query, or ${UNSUPPORTED}<reason> if no listed predicate records the needed information.`
       : `The predicates exist, so reply with the corrected query.`);
   return { text, allowUnsupported: unknown };
+}
+
+// ---- Run 10: BeingDB diagnostics (BeingDB.diagnose) in repair messages ----
+
+const MAX_DIAGNOSTIC_LINES = 5;
+
+function diagnosticLines(diagnostics) {
+  return [...new Set(diagnostics.map((d) => `- ${d.message}${d.line ? ` (line ${d.line})` : ""}`))].slice(0, MAX_DIAGNOSTIC_LINES);
+}
+
+function diagnosticPredicates(diagnostics) {
+  return diagnostics.flatMap((d) => [d.predicate, ...(d.evidence?.sites || []).map((s) => s.predicate)]).filter(Boolean);
+}
+
+// BeingDB can show the data cannot answer the query as asked: a constant that
+// is nowhere (or nowhere at that position), or a comparison no stored value can
+// satisfy. The model may then say UNSUPPORTED.
+const DATA_ABSENT = new Set(["unknown_constant", "constant_not_at_position"]);
+const dataAbsent = (response) =>
+  (response.diagnostics || []).some((d) => d.severity === "error" && DATA_ABSENT.has(d.code)) ||
+  (response.errors || []).some((e) => e.code === "comparison_type_mismatch");
+
+// An invalid query, with BeingDB's diagnostics (response from BeingDB.diagnose).
+export function diagnosticRepairMessage(response, schema) {
+  return repairMessage(response, schema, { diagnostics: response.diagnostics || [], allowUnsupported: dataAbsent(response) });
+}
+
+// A valid query that returned no rows, where BeingDB proves why (proofs:
+// error-severity diagnostics). The model may correct it or say UNSUPPORTED.
+export function emptyResultMessage(proofs, schema) {
+  const sigs = [...new Set(diagnosticPredicates(proofs))].filter((n) => schema.signatures.has(n)).map((n) => `  ${schema.signatures.get(n)}`);
+  return (
+    `BeingDB ran that query and it returned no rows, because:\n${diagnosticLines(proofs).join("\n")}\n` +
+    (sigs.length ? `Relevant predicates:\n${sigs.join("\n")}\n` : "") +
+    `Reply with the corrected query, or ${UNSUPPORTED}<reason> if no listed predicate records the needed information.`
+  );
 }

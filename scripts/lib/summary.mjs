@@ -141,6 +141,64 @@ export function schemaSummary(records) {
   };
 }
 
+// Calls one question cost. Records from before the db-guided pipeline (and
+// error records) have no efficiency block: there every attempt is one model call
+// and at most one BeingDB.query, so the counts are derived exactly from attempts.
+export function callsOf(r) {
+  if (r.efficiency?.calls) return r.efficiency.calls;
+  const model = r.attempts.length;
+  const execute = r.attempts.filter((a) => a.beingdb).length;
+  return { model, modelRepair: Math.max(0, model - 1), beingdb: execute, diagnose: 0, execute, deterministicRepairs: 0 };
+}
+
+// Interactive latency budgets (end-to-end per question), fixed in advance.
+const LATENCY_BUDGETS_MS = [30000, 60000];
+
+// Accuracy per expensive model call, and what the cheap BeingDB calls cost.
+export function efficiencySummary(records) {
+  const r2 = (x) => Math.round(x * 1000) / 1000;
+  const sup = records.filter((r) => r.question.supported);
+  const sum = (rs, f) => rs.reduce((s, r) => s + (f(r) || 0), 0);
+  const calls = (rs, k) => sum(rs, (r) => callsOf(r)[k]);
+  const modelCalls = calls(records, "model");
+  const correct = count(records, (r) => r.score.correct);
+  const supportedCorrect = count(sup, (r) => r.score.correct);
+  const detQuestions = records.filter((r) => callsOf(r).deterministicRepairs > 0);
+  const totalMs = stats(records.map((r) => r.timing?.totalMs));
+  return {
+    modelCalls,
+    firstAttemptCalls: count(records, (r) => callsOf(r).model > 0),
+    modelRepairCalls: calls(records, "modelRepair"),
+    modelCallsPerQuestion: records.length ? r2(modelCalls / records.length) : null,
+    modelCallsPerSupportedQuestion: sup.length ? r2(calls(sup, "model") / sup.length) : null,
+    beingdbCalls: calls(records, "beingdb"),
+    diagnoseCalls: calls(records, "diagnose"),
+    executeCalls: calls(records, "execute"),
+    beingdbMsTotal: r2(sum(records, (r) => r.timing?.dbMs)),
+    diagnoseMsTotal: r2(sum(records, (r) => r.efficiency?.beingdbMs?.diagnose)),
+    deterministicRepairs: calls(records, "deterministicRepairs"),
+    questionsRepairedDeterministically: detQuestions.length,
+    questionsRepairedDeterministicallyCorrect: count(detQuestions, (r) => r.score.correct),
+    questionsWithModelRepair: count(records, (r) => callsOf(r).modelRepair > 0),
+    correctWithOneModelCall: count(records, (r) => r.score.correct && callsOf(r).model === 1),
+    rates: {
+      solvedWithOneModelCall: records.length ? r2(count(records, (r) => r.score.correct && callsOf(r).model === 1) / records.length) : null,
+      repairedDeterministically: records.length ? r2(detQuestions.length / records.length) : null,
+      requiringModelRepair: records.length ? r2(count(records, (r) => callsOf(r).modelRepair > 0) / records.length) : null,
+    },
+    correctPerModelCall: modelCalls ? r2(correct / modelCalls) : null,
+    supportedCorrectPerModelCall: calls(sup, "model") ? r2(supportedCorrect / calls(sup, "model")) : null,
+    medianTotalMs: totalMs?.median ?? null,
+    correctWithinBudget: Object.fromEntries(
+      LATENCY_BUDGETS_MS.map((b) => [`${b / 1000}s`, count(records, (r) => r.score.correct && (r.timing?.totalMs ?? Infinity) <= b)]),
+    ),
+    diagnosticCodes: sortTally(tally(records.flatMap((r) => r.efficiency?.diagnosticCodes || []))),
+    deterministicRepairKinds: sortTally(
+      tally(records.flatMap((r) => (r.efficiency?.deterministicRepairs || []).flatMap((d) => d.applied.map((a) => a.kind)))),
+    ),
+  };
+}
+
 // The pre-benchmark eval summary (strings like "14/38 (37%)"), for continuity with runs 2-8.
 function legacySummary(records) {
   const scores = records.map((r) => ({
@@ -201,6 +259,7 @@ export function trialSummary(records) {
     firstAttemptFailureCategories: sortTally(tally(records.filter((r) => r.firstAttemptFailure).map((r) => r.firstAttemptFailure.category))),
     byLevelAndTag: byGroup,
     timing: timingSummary(records),
+    efficiency: efficiencySummary(records),
     schema: schemaSummary(records),
     legacy: legacySummary(records),
   };

@@ -30,6 +30,7 @@ function describe(run) {
     suite: `${m.suite?.id ?? "?"}${m.suite?.partial ? " (partial)" : ""}`,
     suiteSha256: m.suite?.sha256 ?? null,
     condition: m.labels?.condition ?? null,
+    pipeline: m.config?.pipeline?.version ?? "model-repair/run9",
     nonDefault: m.config?.nonDefault ?? null,
     dirty: m.provenance ? Object.entries(m.provenance.repositories).filter(([, r]) => r.dirty).map(([n]) => n) : null,
     agg,
@@ -62,6 +63,20 @@ const timings = [
   ["median decode tok/s", (d) => med(d, (t) => t?.model.decodeTokPerS)],
   ["median BeingDB ms per query", (d) => med(d, (t) => t?.beingdb.msPerQuery)],
   ["median question-to-result ms", (d) => med(d, (t) => t?.totalMsPerQuestion)],
+];
+// Cost per question: expensive model calls vs cheap BeingDB calls (trial 1).
+const eff = (d, k) => d.agg?.perTrial[0]?.efficiency?.[k] ?? null;
+const efficiency = [
+  ["model calls (total)", (d) => eff(d, "modelCalls")],
+  ["model repair calls", (d) => eff(d, "modelRepairCalls")],
+  ["model calls per supported question", (d) => eff(d, "modelCallsPerSupportedQuestion")],
+  ["BeingDB calls (total)", (d) => eff(d, "beingdbCalls")],
+  ["BeingDB diagnose calls", (d) => eff(d, "diagnoseCalls")],
+  ["BeingDB ms (total)", (d) => eff(d, "beingdbMsTotal")],
+  ["proven (deterministic) repairs", (d) => eff(d, "deterministicRepairs")],
+  ["correct with one model call", (d) => eff(d, "correctWithOneModelCall")],
+  ["correct answers per model call", (d) => eff(d, "correctPerModelCall")],
+  ["median ms per question", (d) => eff(d, "medianTotalMs")],
 ];
 const cats = [...new Set([A, B].flatMap((d) => Object.keys(d.agg?.failureCategories || {})))].sort();
 
@@ -103,6 +118,7 @@ if (values.json) {
         caveats,
         metrics: Object.fromEntries(metrics.map(([n, f]) => [n, { a: f(A), b: f(B) }])),
         timings: Object.fromEntries(timings.map(([n, f]) => [n, { a: f(A), b: f(B) }])),
+        efficiency: Object.fromEntries(efficiency.map(([n, f]) => [n, { a: f(A), b: f(B) }])),
         failureCategories: Object.fromEntries(cats.map((c) => [c, { a: A.agg?.failureCategories[c]?.mean ?? 0, b: B.agg?.failureCategories[c]?.mean ?? 0 }])),
         trial: trialNo,
         questions: groups,
@@ -122,7 +138,7 @@ const col = (s) => {
   return (t.length > cw - 2 ? `${t.slice(0, cw - 3)}…` : t).padEnd(cw);
 };
 console.log(`${"".padEnd(w)}${col("A")}B`);
-for (const k of ["runId", "model", "machine", "host", "browser", "gpu", "suite", "condition", "status"]) console.log(`${k.padEnd(w)}${col(A[k])}${B[k] ?? "-"}`);
+for (const k of ["runId", "model", "machine", "host", "browser", "gpu", "suite", "condition", "pipeline", "status"]) console.log(`${k.padEnd(w)}${col(A[k])}${B[k] ?? "-"}`);
 console.log(`${"trials".padEnd(w)}${col(A.agg?.trials)}${B.agg?.trials ?? "-"}`);
 console.log("");
 for (const [n, f] of metrics) console.log(`${n.padEnd(w)}${col(fmtCount(f(A)))}${fmtCount(f(B))}`);
@@ -131,6 +147,12 @@ for (const [n, f] of timings) {
   const a = f(A);
   const b = f(B);
   console.log(`${n.padEnd(w)}${col(a === null ? "-" : Math.round(a * 100) / 100)}${b === null ? "-" : Math.round(b * 100) / 100}`);
+}
+console.log("\ncost (trial 1)");
+for (const [n, f] of efficiency) {
+  const a = f(A);
+  const b = f(B);
+  console.log(`  ${n.padEnd(w - 2)}${col(a === null ? "-" : Math.round(a * 1000) / 1000)}${b === null ? "-" : Math.round(b * 1000) / 1000}`);
 }
 console.log("\nfailure categories (mean per trial)");
 for (const c of cats) console.log(`  ${c.padEnd(w - 2)}${col(A.agg?.failureCategories[c]?.mean ?? 0)}${B.agg?.failureCategories[c]?.mean ?? 0}`);

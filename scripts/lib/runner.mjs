@@ -15,6 +15,7 @@ import { aggregate } from "./summary.mjs";
 import { RESULT_SCHEMA, RESULTS_DIR, groupByTrial } from "./runs.mjs";
 import { modelSpecificRequest } from "../../src/generator.js";
 import { ANALYSIS_VERSION } from "../../src/analysis.js";
+import { PIPELINE_VERSIONS, MAX_DETERMINISTIC_PASSES } from "../../src/pipeline.js";
 
 // Defaults reproduce the final experiment configuration (run 8).
 export const DEFAULTS = {
@@ -28,6 +29,8 @@ export const DEFAULTS = {
   maxTokens: 200,
   repetitionPenalty: 1.0,
   repairAttempts: 2,
+  // Run 10 condition: BeingDB diagnoses replies and applies proven repairs before any model repair.
+  dbGuidedRepair: false,
   warmup: false,
   headless: false,
   cold: false,
@@ -42,6 +45,8 @@ export const DEFAULTS = {
 
 // Settings that change what the model is asked or how it decodes.
 const GENERATION_KEYS = ["seed", "temperature", "repairTemperature", "topP", "maxTokens", "repetitionPenalty", "repairAttempts", "questions", "ids"];
+// Settings that change how replies are checked and repaired (not the prompt or decoding).
+const PIPELINE_KEYS = ["dbGuidedRepair"];
 
 const CHANNELS = { chrome: "chrome", "chrome-beta": "chrome-beta", "chrome-canary": "chrome-canary", edge: "msedge", "edge-beta": "msedge-beta", chromium: undefined };
 
@@ -153,6 +158,7 @@ function headline(agg) {
     medianModelMsPerCall: t.model.msPerCall?.median ?? null,
     medianFirstAttemptModelMs: t.model.firstAttemptMs?.median ?? null,
     medianBeingdbMsPerQuery: t.beingdb.msPerQuery?.median ?? null,
+    efficiency: Object.fromEntries(Object.entries(agg.perTrial[0]?.efficiency ?? {}).filter(([, v]) => typeof v === "number")),
     failureCategories: Object.fromEntries(Object.entries(agg.failureCategories).map(([k, v]) => [k, v.mean])),
   };
 }
@@ -174,6 +180,14 @@ export function printSummary(agg, log = console.log) {
   const tm = agg.timing;
   log(`Model ms per call (median):    ${fmt(tm.model.msPerCall?.median)}  first attempt ${fmt(tm.model.firstAttemptMs?.median)}, repair ${fmt(tm.model.repairAttemptMs?.median)}`);
   log(`BeingDB ms per query (median): ${fmt(tm.beingdb.msPerQuery?.median, 2)}  (max ${fmt(tm.beingdb.msPerQuery?.max, 2)})`);
+  const e = t0.efficiency;
+  if (e) {
+    log(`Model calls:                   ${e.modelCalls} (${e.firstAttemptCalls} first attempts, ${e.modelRepairCalls} repairs); ${e.modelCallsPerQuestion} per question, ${e.modelCallsPerSupportedQuestion} per supported question`);
+    log(`BeingDB calls:                 ${e.beingdbCalls} (${e.diagnoseCalls} diagnose, ${e.executeCalls} query/execute), ${fmt(e.beingdbMsTotal, 1)} ms in total`);
+    log(`Proven (deterministic) repairs: ${e.deterministicRepairs} in ${e.questionsRepairedDeterministically} questions (${e.questionsRepairedDeterministicallyCorrect} then correct)`);
+    log(`Solved with one model call:    ${e.correctWithOneModelCall}/${S + U}; questions needing a model repair: ${e.questionsWithModelRepair}`);
+    log(`Correct answers per model call: ${fmt(e.correctPerModelCall, 3)}; end-to-end per question (median): ${fmt(e.medianTotalMs / 1000, 1)} s`);
+  }
   log(`Failure categories: ${Object.entries(agg.failureCategories).map(([k, v]) => `${k} ${v.mean}`).join(", ") || "none"}`);
   if (agg.trials > 1) log(`Identical replies across trials: ${agg.determinism.identicalAcrossTrials}/${agg.determinism.questions}`);
 }
@@ -207,7 +221,7 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
   writeFileSync(questionsFile, "");
   const browserLog = createWriteStream(path.join(dir, "browser.log"));
 
-  const nonDefault = GENERATION_KEYS.filter((k) => o[k] !== DEFAULTS[k] && !(k === "questions" && path.resolve(o[k]) === DEFAULT_QUESTIONS));
+  const nonDefault = [...GENERATION_KEYS, ...PIPELINE_KEYS].filter((k) => o[k] !== DEFAULTS[k] && !(k === "questions" && path.resolve(o[k]) === DEFAULT_QUESTIONS));
   const warnings = [];
   const meta = {
     schema: RESULT_SCHEMA,
@@ -250,6 +264,15 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
         mechanism: "WebLLM response_format {type: 'grammar'} (xgrammar EBNF generated from BeingDB.predicates())",
         firstAttempt: "query_or_unsupported",
         repairAfterValidationError: "query_only (when every predicate exists), else query_or_unsupported",
+      },
+      // The repair loop. db-guided-repair/1 adds BeingDB.diagnose before execution, applies
+      // BeingDB-proven repairs without a model call, and adds BeingDB diagnostics to model repair
+      // messages; the initial prompt (config.prompt) is unchanged.
+      pipeline: {
+        version: o.dbGuidedRepair ? PIPELINE_VERSIONS.dbGuided : PIPELINE_VERSIONS.modelRepair,
+        dbGuidedRepair: !!o.dbGuidedRepair,
+        maxModelRepairs: o.repairAttempts,
+        maxDeterministicPasses: o.dbGuidedRepair ? MAX_DETERMINISTIC_PASSES : 0,
       },
       prompt: null,
       analysisVersion: ANALYSIS_VERSION,
@@ -396,7 +419,7 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
           rec = await withTimeout(
             page.evaluate(([it, opts]) => window.bench.runQuestion(it, opts), [
               item,
-              { maxRepairs: o.repairAttempts, temperature: o.temperature, repairTemperature: o.repairTemperature, label },
+              { maxRepairs: o.repairAttempts, temperature: o.temperature, repairTemperature: o.repairTemperature, dbGuided: !!o.dbGuidedRepair, label },
             ]),
             o.questionTimeout * 1000,
             `question ${item.id}`,
@@ -412,6 +435,8 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
         log(
           `[${label}] ${String(index + 1).padStart(2)}/${items.length} ${item.id}  ${verdict.padEnd(34)} ` +
             `repairs ${rec.repairs}  model ${fmt(rec.timing.llmMs / 1000, 1)} s  BeingDB ${fmt(rec.timing.dbMs, 1)} ms` +
+            (rec.efficiency?.calls ? `  calls ${rec.efficiency.calls.model}/${rec.efficiency.calls.beingdb}` : "") +
+            (rec.efficiency?.calls?.deterministicRepairs ? `  proven repairs ${rec.efficiency.calls.deterministicRepairs}` : "") +
             (rec.page?.hiddenMs > 0 ? `  (page hidden ${fmt(rec.page.hiddenMs / 1000, 1)} s)` : ""),
         );
         consecutiveErrors = rec.outcome === "error" ? consecutiveErrors + 1 : 0;
