@@ -15,7 +15,7 @@ import { aggregate } from "./summary.mjs";
 import { RESULT_SCHEMA, RESULTS_DIR, groupByTrial } from "./runs.mjs";
 import { modelSpecificRequest } from "../../src/generator.js";
 import { ANALYSIS_VERSION } from "../../src/analysis.js";
-import { PIPELINE_VERSIONS, MAX_DETERMINISTIC_PASSES } from "../../src/pipeline.js";
+import { REPAIR_POLICIES, MAX_DETERMINISTIC_PASSES, resolveRepairPolicy } from "../../src/pipeline.js";
 
 // Defaults reproduce the final experiment configuration (run 8).
 export const DEFAULTS = {
@@ -29,8 +29,8 @@ export const DEFAULTS = {
   maxTokens: 200,
   repetitionPenalty: 1.0,
   repairAttempts: 2,
-  // Run 10 condition: BeingDB diagnoses replies and applies proven repairs before any model repair.
-  dbGuidedRepair: false,
+  // How replies are repaired: "model" (run 9), "db-guided" (run 10) or "proven-only" (run 11).
+  repairPolicy: "model",
   warmup: false,
   headless: false,
   cold: false,
@@ -46,7 +46,7 @@ export const DEFAULTS = {
 // Settings that change what the model is asked or how it decodes.
 const GENERATION_KEYS = ["seed", "temperature", "repairTemperature", "topP", "maxTokens", "repetitionPenalty", "repairAttempts", "questions", "ids"];
 // Settings that change how replies are checked and repaired (not the prompt or decoding).
-const PIPELINE_KEYS = ["dbGuidedRepair"];
+const PIPELINE_KEYS = ["repairPolicy"];
 
 const CHANNELS = { chrome: "chrome", "chrome-beta": "chrome-beta", "chrome-canary": "chrome-canary", edge: "msedge", "edge-beta": "msedge-beta", chromium: undefined };
 
@@ -182,6 +182,7 @@ export function printSummary(agg, log = console.log) {
   log(`BeingDB ms per query (median): ${fmt(tm.beingdb.msPerQuery?.median, 2)}  (max ${fmt(tm.beingdb.msPerQuery?.max, 2)})`);
   const e = t0.efficiency;
   if (e) {
+    log(`Repair policy:                 ${Object.keys(e.repairPolicies).join(", ")}`);
     log(`Model calls:                   ${e.modelCalls} (${e.firstAttemptCalls} first attempts, ${e.modelRepairCalls} repairs); ${e.modelCallsPerQuestion} per question, ${e.modelCallsPerSupportedQuestion} per supported question`);
     log(`BeingDB calls:                 ${e.beingdbCalls} (${e.diagnoseCalls} diagnose, ${e.executeCalls} query/execute), ${fmt(e.beingdbMsTotal, 1)} ms in total`);
     log(`Proven (deterministic) repairs: ${e.deterministicRepairs} in ${e.questionsRepairedDeterministically} questions (${e.questionsRepairedDeterministicallyCorrect} then correct)`);
@@ -192,8 +193,33 @@ export function printSummary(agg, log = console.log) {
   if (agg.trials > 1) log(`Identical replies across trials: ${agg.determinism.identicalAcrossTrials}/${agg.determinism.questions}`);
 }
 
+// The repair loop, recorded as config.pipeline. Only the repair policy differs
+// between runs 9, 10 and 11; the initial prompt (config.prompt) and decoding do not.
+export function pipelineConfig(o) {
+  const policy = o.repairPolicy;
+  return {
+    version: REPAIR_POLICIES[policy],
+    repairPolicy: policy,
+    dbGuidedRepair: policy === "db-guided",
+    maxModelRepairs: o.repairAttempts,
+    maxDeterministicPasses: policy === "model" ? 0 : MAX_DETERMINISTIC_PASSES,
+    description: {
+      model: "BeingDB.query; any validation error goes back to the model (run 9).",
+      "db-guided":
+        "BeingDB.diagnose first; proven repairs applied without a model call; the model repairs invalid queries (with diagnostics) and empty results BeingDB proves wrong (run 10).",
+      "proven-only":
+        "BeingDB.diagnose first; proven repairs applied without a model call; then run 9's path (BeingDB.query, run 9 repair messages). An empty result never triggers a model call (run 11).",
+    }[policy],
+  };
+}
+
 export async function runBenchmark(options, { log = console.log, signal } = {}) {
   const o = { ...DEFAULTS, ...Object.fromEntries(Object.entries(options).filter(([, v]) => v !== undefined)) };
+  try {
+    o.repairPolicy = resolveRepairPolicy({ repairPolicy: options.repairPolicy, dbGuided: options.dbGuidedRepair });
+  } catch (e) {
+    throw new BenchmarkError("setup_failed", e.message);
+  }
   if (!o.model) throw new BenchmarkError("setup_failed", "--model <WebLLM model id> is required (list them with: npm run models)");
   if (!(o.browser in CHANNELS)) throw new BenchmarkError("setup_failed", `--browser must be one of ${Object.keys(CHANNELS).join(", ")}`);
   const record = await modelRecord(o.model);
@@ -265,15 +291,7 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
         firstAttempt: "query_or_unsupported",
         repairAfterValidationError: "query_only (when every predicate exists), else query_or_unsupported",
       },
-      // The repair loop. db-guided-repair/1 adds BeingDB.diagnose before execution, applies
-      // BeingDB-proven repairs without a model call, and adds BeingDB diagnostics to model repair
-      // messages; the initial prompt (config.prompt) is unchanged.
-      pipeline: {
-        version: o.dbGuidedRepair ? PIPELINE_VERSIONS.dbGuided : PIPELINE_VERSIONS.modelRepair,
-        dbGuidedRepair: !!o.dbGuidedRepair,
-        maxModelRepairs: o.repairAttempts,
-        maxDeterministicPasses: o.dbGuidedRepair ? MAX_DETERMINISTIC_PASSES : 0,
-      },
+      pipeline: pipelineConfig(o),
       prompt: null,
       analysisVersion: ANALYSIS_VERSION,
       nonDefault,
@@ -419,7 +437,7 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
           rec = await withTimeout(
             page.evaluate(([it, opts]) => window.bench.runQuestion(it, opts), [
               item,
-              { maxRepairs: o.repairAttempts, temperature: o.temperature, repairTemperature: o.repairTemperature, dbGuided: !!o.dbGuidedRepair, label },
+              { maxRepairs: o.repairAttempts, temperature: o.temperature, repairTemperature: o.repairTemperature, repairPolicy: o.repairPolicy, label },
             ]),
             o.questionTimeout * 1000,
             `question ${item.id}`,
@@ -461,7 +479,7 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
       meta.summary = headline(agg);
       writeFileSync(
         path.join(dir, "summary.json"),
-        JSON.stringify({ schema: `${RESULT_SCHEMA}#summary`, runId, status: meta.status, model: o.model, labels: meta.labels, suite: meta.suite.id, ...agg }, null, 1),
+        JSON.stringify({ schema: `${RESULT_SCHEMA}#summary`, runId, status: meta.status, model: o.model, labels: meta.labels, suite: meta.suite.id, pipeline: meta.config.pipeline, ...agg }, null, 1),
       );
       printSummary(agg, log);
     }

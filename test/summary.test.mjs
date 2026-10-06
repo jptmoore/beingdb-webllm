@@ -50,3 +50,37 @@ test("records from before run 10 derive their calls from attempts", () => {
   assert.equal(e.modelCalls, records.reduce((n, r) => n + r.timing.llmCalls, 0));
   assert.equal(e.executeCalls, records.reduce((n, r) => n + r.timing.dbQueries, 0));
 });
+
+test("the repair policy is resolved from the CLI and recorded in run.json and summaries", async () => {
+  const { toOptions } = await import("../scripts/benchmark.mjs");
+  const { pipelineConfig, DEFAULTS } = await import("../scripts/lib/runner.mjs");
+  const { policyOf } = await import("../scripts/lib/summary.mjs");
+  assert.equal(toOptions({}).repairPolicy, undefined);
+  assert.equal(DEFAULTS.repairPolicy, "model");
+  assert.equal(toOptions({ "db-guided-repair": true }).repairPolicy, "db-guided");
+  assert.equal(toOptions({ "repair-policy": "proven-only" }).repairPolicy, "proven-only");
+  assert.equal(toOptions({ "repair-policy": "db-guided", "db-guided-repair": true }).repairPolicy, "db-guided");
+  assert.throws(() => toOptions({ "repair-policy": "proven-only", "db-guided-repair": true }), /conflicting/);
+  assert.throws(() => toOptions({ "repair-policy": "nope" }), /unknown repair policy/);
+
+  const cfg = (repairPolicy) => pipelineConfig({ repairPolicy, repairAttempts: 2 });
+  assert.deepEqual(
+    Object.fromEntries(["model", "db-guided", "proven-only"].map((p) => [p, [cfg(p).version, cfg(p).repairPolicy, cfg(p).dbGuidedRepair, cfg(p).maxDeterministicPasses]])),
+    {
+      model: ["model-repair/run9", "model", false, 0],
+      "db-guided": ["db-guided-repair/1", "db-guided", true, 2],
+      "proven-only": ["proven-repairs-only/1", "proven-only", false, 2],
+    },
+  );
+  // Run 10's recorded config.pipeline is what db-guided records today (plus the new fields).
+  const run10 = JSON.parse(readFileSync(`eval/results/benchmarks/${readdirSync("eval/results/benchmarks").find((d) => d.startsWith("20261006T164839Z"))}/run.json`, "utf8"));
+  for (const [k, v] of Object.entries(run10.config.pipeline)) assert.deepEqual(cfg("db-guided")[k], v, k);
+
+  const load = (prefix) => {
+    const dir = readdirSync("eval/results/benchmarks").find((d) => d.startsWith(prefix));
+    return readFileSync(`eval/results/benchmarks/${dir}/questions.jsonl`, "utf8").trim().split("\n").map(JSON.parse);
+  };
+  assert.deepEqual(efficiencySummary(load("20261006T135634Z")).repairPolicies, { model: 50 });
+  assert.deepEqual(efficiencySummary(load("20261006T164839Z")).repairPolicies, { "db-guided": 50 });
+  assert.equal(policyOf({ efficiency: { pipeline: { version: "proven-repairs-only/1", repairPolicy: "proven-only" } } }), "proven-only");
+});

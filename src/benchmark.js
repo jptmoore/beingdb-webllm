@@ -220,7 +220,7 @@ window.bench = {
     return out;
   },
 
-  async runQuestion(item, { maxRepairs, temperature, repairTemperature, dbGuided = false, label }) {
+  async runQuestion(item, { maxRepairs, temperature, repairTemperature, repairPolicy = "model", label }) {
     const { db, schema, prompt, ctx, generator } = state;
     // BeingDB (WasmGC) shares the JS heap with WebLLM and the analysis code. Collecting their
     // garbage just before each pipeline BeingDB call keeps GC pauses out of the timed call.
@@ -234,7 +234,7 @@ window.bench = {
     const started = new Date().toISOString();
     let record;
     try {
-      const run = await ask({ question: item.question, generator, db: pipelineDb, schema, prompt, maxRepairs, temperature, repairTemperature, dbGuided });
+      const run = await ask({ question: item.question, generator, db: pipelineDb, schema, prompt, maxRepairs, temperature, repairTemperature, repairPolicy });
       record = await analyseQuestion({ item, run, db, schema, ctx });
     } catch (e) {
       log(`${item.id}: ${e.message}`);

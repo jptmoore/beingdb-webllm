@@ -151,6 +151,10 @@ export function callsOf(r) {
   return { model, modelRepair: Math.max(0, model - 1), beingdb: execute, diagnose: 0, execute, deterministicRepairs: 0 };
 }
 
+// The repair policy a record ran under (records before run 11 carry only the version).
+const POLICY_OF_VERSION = { "model-repair/run9": "model", "db-guided-repair/1": "db-guided", "proven-repairs-only/1": "proven-only" };
+export const policyOf = (r) => r.efficiency?.pipeline?.repairPolicy ?? POLICY_OF_VERSION[r.efficiency?.pipeline?.version] ?? "model";
+
 // Interactive latency budgets (end-to-end per question), fixed in advance.
 const LATENCY_BUDGETS_MS = [30000, 60000];
 
@@ -166,6 +170,7 @@ export function efficiencySummary(records) {
   const detQuestions = records.filter((r) => callsOf(r).deterministicRepairs > 0);
   const totalMs = stats(records.map((r) => r.timing?.totalMs));
   return {
+    repairPolicies: sortTally(tally(records.map(policyOf))),
     modelCalls,
     firstAttemptCalls: count(records, (r) => callsOf(r).model > 0),
     modelRepairCalls: calls(records, "modelRepair"),

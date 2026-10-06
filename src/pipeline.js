@@ -1,13 +1,17 @@
 // Question -> model -> DSL -> BeingDB, with a bounded repair loop driven by
 // BeingDB's own validation errors. The model never sees or alters result rows.
 //
-// Two conditions share this loop:
-// - default (run 9): every model reply goes straight to BeingDB.query; any
-//   validation error is sent back to the model (at most maxRepairs times).
-// - dbGuided (run 10): BeingDB first diagnoses the reply; repairs BeingDB can
+// Three repair policies share this loop (the prompt and decoding are the same):
+// - "model" (default, run 9): every model reply goes straight to BeingDB.query;
+//   any validation error is sent back to the model (at most maxRepairs times).
+// - "db-guided" (run 10): BeingDB first diagnoses the reply; repairs BeingDB can
 //   prove are applied without a model call (at most MAX_DETERMINISTIC_PASSES),
-//   valid queries are executed, and the model is asked again only when the
-//   query is invalid or BeingDB proves an empty result.
+//   valid queries are executed, and the model is asked again when the query is
+//   invalid (with BeingDB's diagnostics) or BeingDB proves an empty result.
+// - "proven-only" (run 11): BeingDB diagnoses the reply and its proven repairs
+//   are applied as in run 10; the resulting query then follows run 9's path
+//   exactly (BeingDB.query, run 9 repair messages). An empty result never
+//   triggers a model call by itself.
 import { parseReply, repairMessage, diagnosticRepairMessage, emptyResultMessage } from "./prompt.js";
 
 export const MAX_REPAIRS = 2;
@@ -17,7 +21,20 @@ export const REPAIR_TEMPERATURE = 0.7;
 // Proven BeingDB repairs applied to one model reply before giving up on them.
 export const MAX_DETERMINISTIC_PASSES = 2;
 
-export const PIPELINE_VERSIONS = { modelRepair: "model-repair/run9", dbGuided: "db-guided-repair/1" };
+export const REPAIR_POLICIES = {
+  model: "model-repair/run9",
+  "db-guided": "db-guided-repair/1",
+  "proven-only": "proven-repairs-only/1",
+};
+
+// The policy from ask()/CLI options; `dbGuided: true` is the run 10 spelling of "db-guided".
+export function resolveRepairPolicy({ repairPolicy, dbGuided } = {}) {
+  if (dbGuided && repairPolicy !== undefined && repairPolicy !== "db-guided")
+    throw new Error(`conflicting repair policies: db-guided and ${repairPolicy}`);
+  const policy = repairPolicy ?? (dbGuided ? "db-guided" : "model");
+  if (!(policy in REPAIR_POLICIES)) throw new Error(`unknown repair policy '${policy}' (expected ${Object.keys(REPAIR_POLICIES).join(", ")})`);
+  return policy;
+}
 
 // BeingDB diagnostics that prove a query empty for a reason only the model can fix.
 const EMPTY_PROOFS = new Set(["unknown_constant", "constant_not_at_position", "disjoint_join", "contradictory_negation"]);
@@ -33,9 +50,11 @@ export async function ask({
   maxRepairs = MAX_REPAIRS,
   temperature = 0,
   repairTemperature = REPAIR_TEMPERATURE,
+  repairPolicy,
   dbGuided = false,
   maxDeterministicPasses = MAX_DETERMINISTIC_PASSES,
 }) {
+  const policy = resolveRepairPolicy({ repairPolicy, dbGuided });
   const t0 = performance.now();
   const messages = prompt.messages(question);
   const attempts = [];
@@ -57,23 +76,32 @@ export async function ask({
     const attempt = { raw: gen.text, reply, llmMs: gen.ms, usage: gen.usage, finish: gen.finish, grammar, request: gen.request };
     attempts.push(attempt);
     if (reply.status === "unsupported") break;
+    // Run 9's step: BeingDB.query validates and executes; any error goes back to
+    // the model with run 9's message. Returns the next grammar, or null when done.
+    const modelRepairStep = (dsl) => {
+      attempt.db = db.query(dsl);
+      steps.push({ kind: "query", ms: attempt.db.ms, status: attempt.db.status });
+      if (attempt.db.status === "ok") return null;
+      const repair = repairMessage(attempt.db.response, schema);
+      attempt.feedback = repair.text;
+      return repair.allowUnsupported ? prompt.format : prompt.fixFormat;
+    };
     let next;
     if (reply.status !== "ok") {
       attempt.feedback = `Your reply was not usable: ${reply.error}. Reply with only the query.`;
       next = prompt.format;
-    } else if (!dbGuided) {
-      attempt.db = db.query(reply.dsl);
-      steps.push({ kind: "query", ms: attempt.db.ms, status: attempt.db.status });
-      if (attempt.db.status === "ok") break;
-      const repair = repairMessage(attempt.db.response, schema);
-      attempt.feedback = repair.text;
-      next = repair.allowUnsupported ? prompt.format : prompt.fixFormat;
+    } else if (policy === "model") {
+      next = modelRepairStep(reply.dsl);
+      if (next === null) break;
     } else {
       const guided = guide(reply.dsl, db, maxDeterministicPasses, steps);
       attempt.guided = guided.record;
       if (guided.dsl !== reply.dsl) attempt.reply = { ...reply, dsl: guided.dsl, modelDsl: reply.dsl };
       const diag = guided.diagnosis;
-      if (diag.status !== "ok") {
+      if (policy === "proven-only") {
+        next = modelRepairStep(guided.dsl);
+        if (next === null) break;
+      } else if (diag.status !== "ok") {
         // Invalid: the validation response stands in for the query result.
         attempt.db = { status: diag.status === "error" ? "error" : "invalid", response: diag.response, ms: diag.ms };
         const repair = diagnosticRepairMessage(diag.response, schema);
@@ -113,7 +141,13 @@ export async function ask({
     llmMs: sum((a) => a.llmMs),
     dbMs: msOf("query", "diagnose", "execute"),
     totalMs: performance.now() - t0,
-    pipeline: { version: dbGuided ? PIPELINE_VERSIONS.dbGuided : PIPELINE_VERSIONS.modelRepair, dbGuided, maxRepairs, maxDeterministicPasses: dbGuided ? maxDeterministicPasses : 0 },
+    pipeline: {
+      version: REPAIR_POLICIES[policy],
+      repairPolicy: policy,
+      dbGuided: policy === "db-guided",
+      maxRepairs,
+      maxDeterministicPasses: policy === "model" ? 0 : maxDeterministicPasses,
+    },
     calls: {
       model: ofKind("model", "model_repair").length,
       modelRepair: ofKind("model_repair").length,

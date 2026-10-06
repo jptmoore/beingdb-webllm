@@ -2,6 +2,7 @@
 import { parseArgs } from "node:util";
 import { pathToFileURL } from "node:url";
 import { runBenchmark, DEFAULTS } from "./lib/runner.mjs";
+import { resolveRepairPolicy } from "../src/pipeline.js";
 
 export const OPTIONS = {
   model: { type: "string" },
@@ -21,6 +22,7 @@ export const OPTIONS = {
   "max-tokens": { type: "string" },
   "repetition-penalty": { type: "string" },
   "repair-attempts": { type: "string" },
+  "repair-policy": { type: "string" },
   "db-guided-repair": { type: "boolean" },
   "question-timeout": { type: "string" },
   machine: { type: "string" },
@@ -56,9 +58,13 @@ export const HELP = `Options (defaults reproduce the run-8 baseline configuratio
   --max-tokens <n>          [${DEFAULTS.maxTokens}]
   --repetition-penalty <x>  [${DEFAULTS.repetitionPenalty}]
   --repair-attempts <n>     [${DEFAULTS.repairAttempts}]
-  --db-guided-repair        run 10 condition: BeingDB diagnoses each reply, applies repairs it can prove
-                            without a model call, and the model repairs only invalid or provably empty
-                            queries (same prompt, model and decoding) [off: run 9 behaviour]
+  --repair-policy <p>       how replies are repaired (same prompt, model and decoding) [${DEFAULTS.repairPolicy}]
+                              model        BeingDB.query; errors go back to the model (run 9)
+                              db-guided    BeingDB.diagnose + proven repairs; the model repairs invalid
+                                           queries and empty results BeingDB proves wrong (run 10)
+                              proven-only  BeingDB.diagnose + proven repairs, then run 9's path; an
+                                           empty result never triggers a model call (run 11)
+  --db-guided-repair        same as --repair-policy db-guided
   --question-timeout <s>    abort the run if one question takes longer [${DEFAULTS.questionTimeout}]
   --warmup                  compile both grammars and run 2 example questions before timing
   --cold                    delete this model from the browser cache first (measures a cold download)
@@ -88,7 +94,10 @@ export function toOptions(values) {
     maxTokens: num(values["max-tokens"]),
     repetitionPenalty: num(values["repetition-penalty"]),
     repairAttempts: num(values["repair-attempts"]),
-    dbGuidedRepair: values["db-guided-repair"],
+    repairPolicy:
+      values["repair-policy"] === undefined && !values["db-guided-repair"]
+        ? undefined
+        : resolveRepairPolicy({ repairPolicy: values["repair-policy"], dbGuided: values["db-guided-repair"] }),
     questionTimeout: num(values["question-timeout"]),
     machine: values.machine,
     notes: values.notes,
