@@ -139,8 +139,9 @@ config        { runs, repairAttempts, questionTimeoutS, warmup, coldCache,
                 generation { firstAttemptTemperature, repairTemperature, seed, topP, topPSource, maxTokens,
                              repetitionPenalty, modelSpecificRequest, resolvedModelDefaults },
                 grammar { constrained, mechanism, firstAttempt, repairAfterValidationError },
-                pipeline { version (model-repair/run9 | db-guided-repair/1), dbGuidedRepair,
-                           maxModelRepairs, maxDeterministicPasses },
+                pipeline { version (model-repair/run9 | db-guided-repair/1 | proven-repairs-only/1),
+                           repairPolicy (model | db-guided | proven-only), dbGuidedRepair,
+                           maxModelRepairs, maxDeterministicPasses, description },
                 prompt { version, chars, fewShotExamples, sha256 {rules, examples, schemaText, systemPrompt,
                          messages, grammar, fixGrammar}, schemaStats, text {system, examples, grammar, fixGrammar} },
                 nonDefault [...], determinism }
@@ -214,12 +215,21 @@ prefix and should keep reading v1.
 
 ## Pipeline conditions and cost metrics
 
-`--db-guided-repair` (Run 10) changes only the repair loop, not the prompt or
-decoding: BeingDB diagnoses each reply (`BeingDB.diagnose`), repairs it can
-prove are applied without a model call, and the model is asked again only
-for invalid queries or for empty results BeingDB proves wrong (see
-[internals](internals.md#beingdb-guided-repair---db-guided-repair-run-10)).
-The condition is recorded in `config.pipeline` and in `nonDefault`.
+`--repair-policy` changes only the repair loop, never the prompt or decoding:
+
+- `model` (default, Run 9): `BeingDB.query`; validation errors go back to the model.
+- `db-guided` (Run 10, also `--db-guided-repair`): BeingDB diagnoses each reply
+  (`BeingDB.diagnose`), repairs it can prove are applied without a model call,
+  and the model is asked again for invalid queries (with diagnostics) and for
+  empty results BeingDB proves wrong.
+- `proven-only` (Run 11): the same proven repairs, then exactly Run 9's path;
+  an empty result never triggers a model call.
+
+See [internals](internals.md#beingdb-guided-repair---db-guided-repair-run-10).
+The policy is recorded in `config.pipeline` (`repairPolicy`, `version`,
+`description`), in `nonDefault`, in `summary.json` (`pipeline`, and
+`perTrial[].efficiency.repairPolicies`) and per question
+(`efficiency.pipeline`).
 
 With repair the question becomes what each correct answer costs, so
 `summary.json` (`perTrial[].efficiency`), the run's console summary and

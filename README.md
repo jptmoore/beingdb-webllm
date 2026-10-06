@@ -160,8 +160,9 @@ fingerprint). With the default `eval/questions.json` the run stops as
   (`nl2dsl-prompt/run9` adds the pack's declared roles and descriptions to
   run 8) and every report records its hashes. Changing `--seed`,
   `--temperature`, `--max-tokens`, `--repair-attempts` etc. is recorded as a
-  non-default condition, as is `--db-guided-repair` (Run 10's BeingDB-guided
-  repair loop, off by default; recorded under `config.pipeline`).
+  non-default condition, as is a `--repair-policy` other than `model`
+  (`db-guided` = Run 10, also spelled `--db-guided-repair`; `proven-only` =
+  Run 11; recorded under `config.pipeline`).
   `--runs N` repeats the evaluation with the model loaded once. `--warmup`
   also compiles the repair grammar beforehand, so no timed call includes
   one-off grammar compilation (the main grammar is always compiled by the
@@ -215,9 +216,12 @@ Details (checks, schema, metrics, failure taxonomy): [docs/benchmarking.md](docs
 4. **Validate and run.** BeingDB validates and executes the query.
 5. **Bounded repair.** If BeingDB rejects it, its error messages (with
    suggestions and the relevant predicate signatures) go back to the model, at
-   most twice. With `--db-guided-repair` (Run 10), BeingDB first diagnoses the
-   query and applies repairs it can prove without asking the model; see
-   [BeingDB-guided repair](#beingdb-guided-repair-run-10).
+   most twice. With `--repair-policy proven-only` (Run 11), BeingDB first
+   diagnoses the query and applies repairs it can prove without asking the
+   model; `--repair-policy db-guided` (Run 10) also sends BeingDB's diagnostics
+   and proofs of empty results to the model. See
+   [BeingDB-guided repair](#beingdb-guided-repair-run-10) and
+   [Run 11](#proven-beingdb-repairs-only-run-11).
 
 Details and the experiment log: [docs/internals.md](docs/internals.md).
 
@@ -493,10 +497,10 @@ can correct a small model's mistakes. The proven repairs added 5 correct
 answers with no extra model calls, in milliseconds. Asking the model again
 when BeingDB proves an empty result did not pay off for this model: 17 more
 calls bought one correct answer, so accuracy per model call fell slightly
-overall. A condition that applies only the proven repairs is the obvious next
-measurement; it was not run here. One model, one trial and 50 questions: this
-is not statistically conclusive. Timings were measured with about 10 GB of
-swap in use.
+overall. A condition that applies only the proven repairs was the obvious next
+measurement; see [Run 11](#proven-beingdb-repairs-only-run-11). One model, one
+trial and 50 questions: this is not statistically conclusive. Timings were
+measured with about 10 GB of swap in use.
 
 ```sh
 npm run benchmark -- \
@@ -513,6 +517,76 @@ Reports in `eval/results/benchmarks/`:
 [run 10](eval/results/benchmarks/20261006T164839Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
 Both runs were recorded from clean commits (`beingdb-webllm` 7ad5506 and
 17f39ef, `beingdb-wasm` d613e8c, `beingdb` 7c23845).
+
+### Proven BeingDB repairs only (Run 11)
+
+Run 10 combined two mechanisms. Run 11 keeps the first and drops the second,
+to measure the value of the deterministic repairs on their own:
+
+| Repair policy (`--repair-policy`) | Run | What happens to a model reply |
+|---|---|---|
+| `model` (default) | 9 | `BeingDB.query`; a validation error goes back to the model with run 9's message |
+| `db-guided` (= `--db-guided-repair`) | 10 | `BeingDB.diagnose`; proven repairs applied without a model call; the model repairs invalid queries (with BeingDB's diagnostics) **and** valid queries BeingDB proves empty |
+| `proven-only` | 11 | `BeingDB.diagnose`; proven repairs applied (and re-diagnosed) without a model call; then exactly run 9's path. An empty result never causes a model call |
+
+The question, model, prompt, grammar, seed, temperatures and token limit are
+the same in all three. `run.json` records the policy in
+`config.pipeline.repairPolicy` (with its version and a description).
+
+**Result.** One trial each, clean commits. Run 9 was rerun on the Run 11
+code and its replies matched the original Run 9 for all 50 questions.
+
+| | Run 9 (`model`) | Run 10 (`db-guided`) | Run 11 (`proven-only`) |
+|---|---|---|---|
+| Overall correct | 23/50 (46%) | 28/50 (56%) | **28/50 (56%)** |
+| Supported correct | 17/38 | 22/38 | **22/38** |
+| Unsupported recognised | 6/12 | 6/12 | 6/12 |
+| False refusals / fabricated | 0 / 5 | 1 / 4 | 0 / 5 |
+| Model calls (repairs) | 60 (10) | 78 (28) | **60 (10)** |
+| Model calls per supported question | 1.18 | 1.50 | 1.18 |
+| Proven BeingDB repairs (then correct) | 0 | 5 (5) | 5 (5) |
+| BeingDB calls: diagnose / query | 0 / 54 | 76 / 54 | 59 / 54 |
+| BeingDB time, total | 429 ms | 277 ms | 269 ms |
+| Correct with one model call | 22 | 27 | 27 |
+| **Correct answers per model call** | 0.383 | 0.359 | **0.467** |
+| Median model time per call | 24.0 s | 26.2 s | 27.3 s |
+| Median time per question | 25.4 s | 28.4 s | 28.0 s |
+
+**Where the gains come from.**
+
+- Run 11's model replies and repair messages are byte-identical to Run 9's
+  for all 50 questions. Its only differences from Run 9 are the 5 questions
+  BeingDB repaired (3 argument swaps, 2 names written as variables), and all
+  5 became correct.
+- Run 10 reached the same 28/50 by a different mix, at 18 more model calls. Its
+  empty-result retries fixed `m10` (still wrong in Runs 9 and 11). Its changed
+  repair text lost `m08` (correct in Runs 9 and 11).
+
+**Interpretation.** In this initial result, BeingDB-proven repairs improved
+accuracy without any extra model inference: +5 correct answers (46% to 56%)
+for 59 extra BeingDB calls (about 3.9 ms of BeingDB time per question). Run 11
+saves 18 model calls (23%) against Run 10 at equal accuracy. It also gives up
+Run 10's one extra unsupported fabrication avoided and its one false refusal.
+The longer median times in Runs 10 and 11 come from model time per call, not
+BeingDB. The machine had about 10 GB of swap in use, and in Run 11 the model
+produced the same replies as in Run 9. One model, one trial and 50 questions:
+this suggests the deterministic layer is the valuable part of Run 10, but it
+is not statistically conclusive.
+
+```sh
+npm run benchmark -- \
+  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "MacBook Air M1 8GB" \
+  --questions eval/questions-annotated.json \
+  --repair-policy proven-only \
+  --condition annotated-predicates-proven-repairs-run11
+```
+
+Reports in `eval/results/benchmarks/`:
+[run 9 reproduced](eval/results/benchmarks/20261006T174738Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 11](eval/results/benchmarks/20261006T181140Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
+(clean commits: `beingdb-webllm` 7729741 and e2f50d8, `beingdb-wasm`
+d376be1, `beingdb` dd8c4fe).
 
 ## Limitations
 

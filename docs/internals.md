@@ -186,6 +186,26 @@ Each question record gains `efficiency` (calls, BeingDB time, proven repairs,
 diagnostic codes and the path taken), and each attempt gains `guided` (every
 diagnose result and repair).
 
+### Proven repairs only (`--repair-policy proven-only`, Run 11)
+
+```
+model reply -> BeingDB.diagnose
+                 | proven repair -> apply, diagnose again (at most 2 passes; no model call)
+              -> run 9's path on the resulting query:
+                 BeingDB.query | ok (any number of rows) -> done
+                               | invalid -> run 9 repair message -> model repair
+```
+
+Run 11 isolates the first of Run 10's two mechanisms. BeingDB's diagnostics
+are used only to find proven repairs: they are not shown to the model, and an
+empty result is accepted like any other. Where BeingDB proves no repair, the
+behaviour is exactly run 9's. `test/pipeline.test.mjs` replays Run 9's
+recorded replies to check this, and pins Run 10 by replaying its replies.
+
+The three policies are one option, `--repair-policy model|db-guided|proven-only`
+(`ask({ repairPolicy })`); `--db-guided-repair` remains an alias of
+`db-guided`, and conflicting options are rejected.
+
 ## Evaluation method
 
 `eval/questions.json`: 50 questions. Each supported item has a reference query
@@ -257,10 +277,11 @@ are unchanged (identical hashes).
 | run 9 | Llama-3.2-3B | + declared roles and descriptions (main predicates) | 33/38 | 16/38 | 36/38 | 17/38 | 6/12 | 5 |
 | run 9 | Llama-3.2-3B | run 9 reproduced on the run-10 code (replies identical) | 33/38 | 16/38 | 36/38 | 17/38 | 6/12 | 5 |
 | run 9 | Llama-3.2-3B | **run 10**: + BeingDB-guided repair (`db-guided-repair/1`) | 33/38 | 21/38 | 34/38 | 22/38 | 6/12 | 4 |
+| run 9 | Llama-3.2-3B | **run 11**: + proven BeingDB repairs only (`proven-repairs-only/1`) | 33/38 | 21/38 | 36/38 | 22/38 | 6/12 | 5 |
 
-Run 10 counts a question's first attempt *after* any proven BeingDB repair
-(still one model call). Run 10 used 78 model calls against Run 9's 60, and
-made 5 proven repairs; see the
+Runs 10 and 11 count a question's first attempt *after* any proven BeingDB
+repair (still one model call). Run 10 used 78 model calls, Run 11 the same 60
+as Run 9; both made 5 proven repairs. See the
 [README](../README.md#beingdb-guided-repair-run-10) for the cost comparison.
 
 Run `20261006T131109Z`, labelled `annotated-predicates`, is not in the table:
