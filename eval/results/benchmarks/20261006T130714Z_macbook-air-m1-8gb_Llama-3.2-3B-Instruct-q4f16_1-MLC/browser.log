@@ -1,0 +1,3 @@
+[log] [bench] Loading BeingDB WASM and Rewind data…
+[error] Failed to load resource: the server responded with a status of 404 (Not Found)
+[log] [bench] BeingDB ready: 168 predicates / 1842 facts (wasm 54 ms, fetch 24 ms, load 29 ms, schema 28 ms; prompt 6838 chars)

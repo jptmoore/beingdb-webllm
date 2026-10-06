@@ -9,6 +9,7 @@
     "link": "node scripts/link.mjs",
     "serve": "node scripts/serve.mjs",
     "check-eval": "node eval/check-references.mjs",
+    "test": "node --test test/*.test.mjs",
     "benchmark": "node scripts/benchmark.mjs",
     "benchmark:matrix": "node scripts/benchmark-matrix.mjs",
     "models": "node scripts/models.mjs",

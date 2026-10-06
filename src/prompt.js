@@ -4,8 +4,9 @@ import { buildGrammar } from "./grammar.js";
 
 const UNSUPPORTED = "UNSUPPORTED: ";
 
-// Bump when RULES, EXAMPLES, the grammar or the repair message change (benchmarks also record hashes).
-export const PROMPT_VERSION = "nl2dsl-prompt/run8";
+// Bump when RULES, EXAMPLES, the schema text, the grammar or the repair message change (benchmarks also record hashes).
+// run9: declared argument roles and descriptions from the pack (BeingDB annotations).
+export const PROMPT_VERSION = "nl2dsl-prompt/run9";
 
 export const RULES = `You translate questions about a BeingDB database into BeingDB queries.
 BeingDB runs your query and returns the answer, so never answer from your own knowledge.

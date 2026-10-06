@@ -1,6 +1,6 @@
 // Link the sibling beingdb-wasm browser build into vendor/ (no copying).
 // Build it first with: (cd ../beingdb-wasm && dune build --profile release)
-import { existsSync, mkdirSync, readdirSync, rmSync, symlinkSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, readdirSync, symlinkSync, unlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -26,7 +26,8 @@ const links = {
   "web-llm": "../node_modules/@mlc-ai/web-llm/lib",
 };
 for (const [name, target] of Object.entries(links)) {
-  rmSync(path.join(vendor, name), { force: true, recursive: false });
+  // unlink, not rmSync: Node 23's rmSync refuses a symlink to a directory (EISDIR).
+  if (lstatSync(path.join(vendor, name), { throwIfNoEntry: false })) unlinkSync(path.join(vendor, name));
   symlinkSync(target, path.join(vendor, name));
   console.log(`vendor/${name} -> ${target}`);
 }

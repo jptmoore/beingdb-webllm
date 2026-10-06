@@ -53,17 +53,24 @@ Built at startup from BeingDB only (about 10-30 ms in the browser):
 - **Classes**: unary atom predicates with at least 20 facts (`person`, `work`,
   `venue`, `organisation`, `exhibition`), with their members fetched by query.
 - **Main predicates** (at least 5 facts, 31 of 168): name, a role name per
-  argument, and the first example fact from `predicates()`. A role is the
-  class that at least 80% of that position's values belong to (`Work`,
-  `Person`), two classes for mixed columns (`WorkOrPerson`), `Thing` otherwise,
-  or the literal type (`Year`, `Text`, `Number`). Roles are written as
-  variables so the model can copy them: `created_by(Work, Person)  e.g.
-  created_by(static_acceleration, david_critchley)`.
+  argument, the declared description (if any) and the first example fact from
+  `predicates()`. A role is the one declared in the pack (`role` in
+  `predicates()`); for undeclared arguments it is inferred: the class that at
+  least 80% of that position's values belong to (`Work`, `Person`), two classes
+  for mixed columns (`WorkOrPerson`), `Thing` otherwise, or the literal type
+  (`Year`, `Text`, `Number`). Roles are written as variables so the model can
+  copy them: `created_by(Work, Artist): Relates a work to the artist or artist
+  group who made it.  e.g. created_by(static_acceleration, david_critchley)`.
 - **Other predicates** (137 with fewer than 5 facts): names grouped by argument
-  shape, e.g. `(Thing, Year): began_in, started_by, ...`.
+  shape, e.g. `(Thing, Year): began_in, started_by, ...`. Their declared roles
+  and descriptions are not listed here (that would add ~9,400 chars); they
+  appear in repair messages, whose signatures carry declared roles and
+  descriptions for every predicate.
 
 Change the pack and the context, grammar and signatures change with it. The
-`environmentFingerprint` is checked against `eval/questions.json`.
+`environmentFingerprint` is checked against `eval/questions.json` (or the file
+given with `--questions`; `eval/questions-annotated.json` holds the same
+questions for the annotated pack's fingerprint).
 
 Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 
@@ -72,7 +79,7 @@ Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 System message: short rules (below) followed by the schema. Then nine example
 question/answer pairs as chat turns (six queries, three `UNSUPPORTED`), all
 over real Rewind data and checked by `npm run check-eval`; none is an
-evaluation question. About 1,970 prompt tokens in total.
+evaluation question. About 2,520 prompt tokens in total (Llama 3.2 3B tokenizer; 1,940 in prompt run 8, before the pack declared roles and descriptions).
 
 ```
 You translate questions about a BeingDB database into BeingDB queries.

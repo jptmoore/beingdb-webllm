@@ -1,7 +1,10 @@
 // Model-free checks, in Node against the same beingdb-wasm build:
 //   node eval/check-references.mjs              validate references, examples and the scorer
 //   node eval/check-references.mjs run.json     re-score a run exported from eval.html
+//   --questions <path>                          question file [eval/questions.json]
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
 import assert from "node:assert/strict";
 import { loadBeingDB } from "./node-beingdb.mjs";
 import { EXAMPLES, predicatesIn, buildPrompt } from "../src/prompt.js";
@@ -10,9 +13,13 @@ import { scoreItem, summarise, matchColumns } from "../src/score.js";
 import { buildAnalysisContext, classifyAttempt } from "../src/analysis.js";
 import { loadSuite } from "../scripts/lib/suite.mjs";
 
+const { values: opts, positionals } = parseArgs({
+  options: { questions: { type: "string", default: fileURLToPath(new URL("./questions.json", import.meta.url)) } },
+  allowPositionals: true,
+});
 const { db, summary } = await loadBeingDB();
-const { items, environmentFingerprint } = JSON.parse(readFileSync(new URL("./questions.json", import.meta.url), "utf8"));
-assert.equal(summary.environmentFingerprint, environmentFingerprint, "dataset changed since questions were written");
+const { items, environmentFingerprint } = JSON.parse(readFileSync(opts.questions, "utf8"));
+assert.equal(summary.environmentFingerprint, environmentFingerprint, `dataset changed since ${opts.questions} was written`);
 
 const fake = (dsl, status = "ok") => {
   const reply = status === "ok" ? { status, dsl } : { status, reason: "" };
@@ -20,8 +27,8 @@ const fake = (dsl, status = "ok") => {
   return { attempts: [attempt], repairs: 0, outcome: status === "ok" ? (attempt.db.status === "ok" ? "ok" : "failed") : status };
 };
 
-if (process.argv[2]) {
-  const run = JSON.parse(readFileSync(process.argv[2], "utf8"));
+if (positionals[0]) {
+  const run = JSON.parse(readFileSync(positionals[0], "utf8"));
   const byId = new Map(items.map((i) => [i.id, i]));
   // Saved runs omit result rows; BeingDB re-derives them from the recorded DSL.
   for (const { run: r } of run.results)
@@ -41,7 +48,7 @@ for (const ex of EXAMPLES) {
 buildPrompt(buildSchema(db));
 const schema = buildSchema(db);
 const ctx = buildAnalysisContext(db, schema);
-const suite = loadSuite(); // throws if questions.json no longer matches eval/suite.json
+const suite = loadSuite(opts.questions); // throws if questions.json no longer matches eval/suite.json
 
 let supported = 0;
 const countMismatches = [];
@@ -82,4 +89,4 @@ for (const item of items) {
 }
 assert.deepEqual(countMismatches, [], "expectCount mismatches");
 console.log(`\n${items.length} questions (${supported} supported, ${items.length - supported} unsupported); references, examples and scorer OK`);
-console.log(`suite ${suite.id}, questions.json sha256 ${suite.sha256}`);
+console.log(`suite ${suite.id}, ${suite.file} sha256 ${suite.sha256}`);

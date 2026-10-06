@@ -95,6 +95,9 @@ Open <http://localhost:8010/eval.html> and press **Run evaluation** (about
 
 ```sh
 npm run check-eval                                  # model-free: references, examples, scorer
+npm run check-eval -- --questions eval/questions-annotated.json  # same, for the annotated pack's fingerprint
+npm test                                            # schema/prompt tests (incl. the linked WASM build)
+node eval/diagnose-annotations.mjs [--run <dir>]    # do the pack's predicate declarations reach the prompt?
 node eval/check-references.mjs eval/results/X.json  # re-score a saved run with BeingDB in Node
 node eval/show-run.mjs eval/results/X.json          # every question, attempt and error
 ```
@@ -187,10 +190,13 @@ Details (checks, schema, metrics, failure taxonomy): [docs/benchmarking.md](docs
 
 1. **Schema from BeingDB.** At startup the app calls `BeingDB.predicates()` and
    a few BeingDB queries, and builds the model context from them: every
-   predicate with its arity, argument roles (`created_by(Work, Person)`) and a
-   real example fact. Nothing about the dataset is hard-coded.
+   predicate with its arity, argument roles and, for the main predicates, the
+   description declared in the pack and a real example fact
+   (`created_by(Work, Artist): Relates a work to the artist or artist group who
+   made it.  e.g. ...`). Nothing about the dataset is hard-coded.
 2. **Prompt.** Short DSL rules, the schema, and nine example questions over the
-   real data (as chat turns). About 2,000 tokens.
+   real data (as chat turns). About 2,500 tokens (about 2,000 before the pack
+   declared roles and descriptions, prompt run 8).
 3. **Constrained output.** The model's reply is constrained by a grammar
    generated from the same predicate list: it must be either a DSL query using
    real predicate names with the right number of arguments, or
