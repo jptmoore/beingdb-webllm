@@ -128,6 +128,13 @@ npm run compare -- eval/results/benchmarks/<runA> eval/results/benchmarks/<runB>
 npm run export-results -- --format csv
 ```
 
+The linked Rewind pack now carries predicate annotations, which changes its
+data fingerprint, so add `--questions eval/questions-annotated.json` to
+`benchmark` and `benchmark:matrix` (the same 50 questions with the new
+fingerprint). With the default `eval/questions.json` the run stops as
+`incompatible`. See
+[semantic predicate metadata](#semantic-predicate-metadata-llama-32-3b).
+
 - **Browser.** Google Chrome by default (`--browser edge|chromium|chrome-canary`
   or `--executable-path`), launched with a visible window. **Leave the window in
   the foreground until the command finishes**: browsers throttle hidden pages,
@@ -147,10 +154,13 @@ npm run export-results -- --format csv
   (`~/.cache/beingdb-webllm/browser-profiles/`) and are reused by later runs;
   keep the default port so the cache is found. `--cold` deletes the model from
   the cache first to measure a real download.
-- **Defaults reproduce the experiment** (run 8: greedy first attempt, repairs
-  at temperature 0.7 with seed 1, 200 max tokens, 2 repairs, same prompt and
-  grammar for every model). Changing `--seed`, `--temperature`, `--max-tokens`,
-  `--repair-attempts` etc. is recorded as a non-default condition.
+- **Defaults reproduce the experiment's settings** (greedy first attempt,
+  repairs at temperature 0.7 with seed 1, 200 max tokens, 2 repairs, same
+  prompt and grammar for every model). The prompt is versioned
+  (`nl2dsl-prompt/run9` adds the pack's declared roles and descriptions to
+  run 8) and every report records its hashes. Changing `--seed`,
+  `--temperature`, `--max-tokens`, `--repair-attempts` etc. is recorded as a
+  non-default condition.
   `--runs N` repeats the evaluation with the model loaded once. `--warmup`
   also compiles the repair grammar beforehand, so no timed call includes
   one-off grammar compilation (the main grammar is always compiled by the
@@ -231,10 +241,13 @@ unsupported questions. The repair loop turns some rejected queries into valid
 ones but has not yet turned a wrong answer into a right one. Qwen2.5-3B scored
 lower (6/38 correct) at twice the latency.
 
-`npm run benchmark` with default settings reproduces this run exactly (every
+`npm run benchmark` with default settings reproduced this run exactly (every
 model reply of every attempt identical to run 8, in Chrome 154 instead of VS
-Code's Chromium 150); the report is in
+Code's Chromium 150), using the pre-annotation pack (`beingdb-wasm` 41c0d8d)
+and prompt run 8 (the prompt up to `beingdb-webllm` c15963d). The report is in
 [`eval/results/benchmarks/20261001T120717Z_…`](eval/results/benchmarks/20261001T120717Z_macbook-air-m1-8gb_Qwen2.5-1.5B-Instruct-q4f16_1-MLC/).
+The current code uses prompt run 9 with the annotated pack, so it no longer
+reproduces these replies.
 
 ### Other models on the M1 Air
 
@@ -255,8 +268,9 @@ meaningless query. Model time per call 15.1 s median (first attempt 15.8 s,
 repair 3.5 s); BeingDB 2.4 ms median / 61.6 ms max per query. Failures: wrong
 predicate 8, still invalid after repair 6, unsupported not detected 5, wrong
 projection 4, wrong constraint 3, wrong argument order 2, entity grounding 1,
-unclassified 1. This is currently the strongest completed
-M1 result in the repository. The gain over Qwen2.5-1.5B comes from declining
+unclassified 1. This was the strongest completed M1 result with the run-8
+prompt (see [semantic predicate metadata](#semantic-predicate-metadata-llama-32-3b)
+for the annotated run). The gain over Qwen2.5-1.5B comes from declining
 unsupported questions; on supported questions the two are similar (13/38 vs
 14/38), and Llama is about 1.7x slower per call. This is a single trial.
 
@@ -285,6 +299,116 @@ Reports in `eval/results/benchmarks/`: Llama-3.2-3B
 Qwen3.5-2B
 [probe](eval/results/benchmarks/20261005T152424Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/),
 [aborted benchmark](eval/results/benchmarks/20261005T153112Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/).
+
+### Semantic predicate metadata (Llama 3.2 3B)
+
+**What changed.** BeingDB predicate declarations can now give a predicate a
+natural-language description, argument roles and semantic types, e.g.
+`created_by(Work, Artist)`: "Relates a work to the artist or artist group who
+made it." They are compiled into the pack with the facts.
+
+- `beingdb-wasm` carries them through the browser runtime. `BeingDB.predicates()`
+  returns `description`, plus `role` and `semanticType` for each argument (the
+  same JSON as the native `GET /predicates?detailed=true`).
+- `beingdb-webllm` uses the declared roles instead of inferred ones, and adds the
+  descriptions to the schema context given to the model (see
+  [How it works](#how-it-works)).
+- The demo, evaluation page, benchmark and repair messages are all built from
+  the same schema, so they all receive the annotations.
+
+**Why it matters.** The model no longer has to guess what a predicate means, or
+which argument is which, from its name, argument types and one example. The
+metadata stays in BeingDB next to the data, not in application-specific prompt
+text: load a different annotated pack and the context changes with no code
+change.
+
+**Controlled comparison.** Both runs used:
+
+- the same 50 questions (`eval/questions-annotated.json` is `questions.json`
+  with only the data fingerprint updated);
+- the same model and settings (greedy first attempt, repairs at temperature
+  0.7, seed 1, 200 max tokens, at most 2 repairs);
+- identical rules, few-shot examples and grammar (same hashes in both reports).
+
+Only the model-facing predicate metadata changed: prompt `nl2dsl-prompt/run8`
+became `run9`. One trial each on the 8 GB M1 MacBook Air in Chrome 154:
+
+| | Run 8 baseline | Run 9 annotated predicates |
+|---|---|---|
+| Overall correct | 20/50 (40%) | 23/50 (46%) |
+| Supported correct after repair | 13/38 (~34%) | 17/38 (~45%) |
+| Valid DSL after repair | 32/38 | 36/38 |
+| Unsupported recognised | 7/12 | 6/12 |
+| `wrong_predicate` | 8 | 5 |
+| `validation_repair_failed` | 6 | 2 |
+| `wrong_projection` | 4 | 2 |
+
+An earlier run labelled `annotated-predicates` (`20261006T131109Z`, 20/50) is
+**not** a valid annotation experiment. At that point `beingdb-wasm` dropped the
+annotations, so the model received the run-8 prompt byte for byte and gave
+identical replies.
+
+**Interpretation.** This initial benchmark result suggests a measurable
+improvement:
+
+- Overall correctness rose from 40% to 46%, and supported-query correctness
+  from 13/38 to 17/38.
+- Wrong-predicate failures fell from 8 to 5, and queries still invalid after
+  repair from 6 to 2.
+- Unsupported-question recognition declined slightly, from 7/12 to 6/12; five
+  unsupported questions got a valid but meaningless query, against three
+  before.
+
+This is one model, one trial and 50 questions, so it should not be read as
+statistically conclusive.
+
+**Example: `m02`**, "Which works were created after 1980, and by whom?"
+
+- Run 8: `wrong_predicate`. The model used only `year_created` and left out
+  `created_by`.
+- Run 9: the model added `created_by(Work, Artist)` (the declared role name),
+  but still failed with `wrong_projection` because `Artist` was missing from
+  `find`.
+
+The answer is still wrong, but the semantic metadata changed which predicates
+the model chose.
+
+**Prompt size.** Descriptions are included only for the 31 main predicates
+(at least 5 facts) to control context size. The other 137 stay in the compact
+grouped list, although repair messages show their declared roles and
+descriptions.
+
+| | Run 8 | Run 9 |
+|---|---|---|
+| System prompt | 5,929 chars | 8,718 chars |
+| Llama prompt tokens for `m02` | 1,944 | 2,524 |
+
+The model's context window is 4,096 tokens, and repair turns add to the prompt.
+Run 9's model time per call was higher, but do not read that as a reliable
+performance difference. Both runs started with more than 8 GB of swap in use,
+and it grew during the runs (by 1.9 GB in run 9).
+
+**Reproduce.** Rebuild `beingdb-wasm` from the annotated pack, run
+`npm run link`, then:
+
+```sh
+npm run benchmark -- \
+  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "MacBook Air M1 8GB" \
+  --questions eval/questions-annotated.json \
+  --condition annotated-predicates-run9
+```
+
+With the annotated pack, `--questions eval/questions-annotated.json` is
+required: the default `eval/questions.json` carries the pre-annotation data
+fingerprint and the benchmark rejects it. `node eval/diagnose-annotations.mjs
+--run <run dir>` checks that a run's recorded prompt contains the annotations.
+
+Reports in `eval/results/benchmarks/`:
+[run 8 baseline](eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 9 annotated](eval/results/benchmarks/20261006T135634Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
+Run 9 was recorded from clean commits (`beingdb-webllm` d54a43d,
+`beingdb-wasm` d88657a, `beingdb` ccccfbc).
 
 ## Limitations
 

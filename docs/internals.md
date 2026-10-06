@@ -35,8 +35,11 @@ The browser API used is exactly the one `beingdb-wasm` documents:
 `window.onBeingDBReady`, `BeingDB.load(text)`, `BeingDB.query(dsl)`,
 `BeingDB.predicates()`. It was sufficient:
 
-- `predicates()` already returns name, arity, per-position observed types, fact
-  counts and example facts (the same shape as native `GET /predicates?detailed=true`).
+- `predicates()` returns name, arity, per-position observed types, fact
+  counts and example facts, plus any author declarations from the pack:
+  `description`, and `role`/`semanticType` per argument (the same JSON as native
+  `GET /predicates?detailed=true`). Before `beingdb-wasm` d88657a the browser
+  runtime dropped the declarations, so they never reached the prompt.
 - There is no separate validate call, and none is needed: `query()` returns
   `{"valid": false, "errors": [...]}` (with codes, line numbers and, for unknown
   predicates, ranked suggestions) before executing anything, and executing a
@@ -213,6 +216,23 @@ Generation is deterministic (greedy first attempt, seeded repairs): run 8 gave
 the same replies as run 6 for every question, and the Chrome smoke test the
 same replies as the integrated browser.
 
+### Later runs (`npm run benchmark`, Chrome 154)
+
+Same machine, 50 questions, settings and repair loop. Llama-3.2-3B-Instruct, one
+trial each. Only the model-facing predicate metadata changed: prompt run 9 adds
+the pack's declared argument roles and descriptions. Rules, examples and grammar
+are unchanged (identical hashes).
+
+| Prompt | Model | Change | 1st valid | 1st correct | Final valid | Final correct | Unsupported detected | Fabricated |
+|---|---|---|---|---|---|---|---|---|
+| run 8 | Llama-3.2-3B | as run 8 | 27/38 | 13/38 | 32/38 | 13/38 | 7/12 | 3 |
+| run 9 | Llama-3.2-3B | + declared roles and descriptions (main predicates) | 33/38 | 16/38 | 36/38 | 17/38 | 6/12 | 5 |
+
+Run `20261006T131109Z`, labelled `annotated-predicates`, is not in the table:
+the annotations had not reached the model yet, so it was an exact repeat of the
+run-8 baseline. Results and caveats:
+[README](../README.md#semantic-predicate-metadata-llama-32-3b).
+
 ### Final run (run 8) in detail
 
 By tag (first attempt / after repair, correct answers):
@@ -332,9 +352,18 @@ background windows heavily; keep the evaluation tab visible.
 
 ## Observations about BeingDB
 
-No BeingDB change was needed. Two things surfaced that may be worth a look in
-BeingDB itself:
+No BeingDB change was needed for the first milestones. Predicate declarations
+(descriptions, argument roles, semantic types) were added to BeingDB later and
+are used by prompt run 9; carrying them to the browser needed a one-line
+`beingdb-wasm` change (`Session.predicates` now uses BeingDB's own
+`Query_environment.to_json`). Other things that surfaced and may be worth a
+look in BeingDB itself:
 
+- The `environmentFingerprint` covers declarations, so annotating predicates
+  changes it even when no fact changes. Question sets pinned to a fingerprint
+  then need a new copy (`eval/questions-annotated.json`). That is correct
+  for provenance, but a fingerprint was not evidence that the annotations
+  reached the model: the runtime dropped them while the fingerprint changed.
 - `Y = 1979` against a year-typed argument silently returns no rows (integer
   vs year equality is false), while `Y >= 1970` and `Y between 1975 and 1980`
   work through integer-to-year promotion. Validation does not flag the
@@ -354,8 +383,13 @@ BeingDB itself:
 ## What would help next
 
 - A different model family first, rather than a bigger Qwen: the 3B model was
-  worse and twice as slow. Candidates on WebLLM: Llama-3.2-3B, Qwen2.5-Coder-3B,
+  worse and twice as slow. Llama-3.2-3B has since been run (20/50 overall, 23/50
+  with predicate annotations). Remaining candidates on WebLLM: Qwen2.5-Coder-3B,
   Qwen3-1.7B/4B (with thinking disabled), Phi-3.5-mini.
+- Predicate annotations for more of the schema: descriptions are shown only for
+  the 31 main predicates. Describing the other 137 would add about 9,400 chars,
+  which is tight in a 4,096-token context. Selecting descriptions relevant to
+  the question would need a retrieval step.
 - Entity grounding: most constant errors are names the model cannot map to
   atoms. An exact-match lookup of question words against atoms in the pack
   would help, but is a retrieval step and was left out of this milestone.

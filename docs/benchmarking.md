@@ -87,6 +87,31 @@ page hidden during questions, model-specific request fields.
 
 `--probe` stops after these checks and the smoke generation.
 
+## Question sets, data fingerprints and prompt versions
+
+A question file is pinned to one BeingDB `environmentFingerprint`. The
+fingerprint covers predicate names, arities, observed types and any declared
+roles, semantic types and descriptions. Annotating predicates therefore
+changes it even when no fact changes.
+
+- `eval/questions.json` (suite `rewind-nl2dsl-v1`, registered in
+  `eval/suite.json`) is the pre-annotation fingerprint and is never edited.
+- `eval/questions-annotated.json` has the same 50 items (same `itemsSha256`)
+  with the annotated pack's fingerprint. Pass it with `--questions`. It is
+  recorded as suite `custom:questions-annotated.json` and as a non-default
+  setting.
+- `npm run check-eval -- --questions <file>` checks references, examples and
+  the scorer against the linked build for either file.
+
+A data fingerprint shows which pack was loaded, not what the model saw. To
+attribute a change to the prompt, compare `config.prompt.version` and
+`config.prompt.sha256` (`schemaText`, `systemPrompt`) between runs. The first
+`annotated-predicates` run had a new fingerprint but the run-8
+`systemPrompt` hash, because the runtime dropped the annotations.
+`node eval/diagnose-annotations.mjs --run <run dir>` checks that declarations
+reach the WASM runtime, the schema text and repair signatures. It also checks
+that the run recorded this prompt and that the prompt differs from run 8.
+
 ## Result files and schema `beingdb-webllm-benchmark/v1`
 
 `eval/results/benchmarks/<runId>/` with `runId = <UTC stamp>_<machine slug>_<model id>`:
@@ -253,7 +278,8 @@ automatic one.
 
 For each question: required/reference predicates, first and final generated
 predicates, missing and extra ones, each predicate's signature as shown to the
-model, arity, fact count, whether the prompt showed an example fact, the
+model in repair messages (with declared roles and description, when the pack
+has them), arity, fact count, whether the prompt showed an example fact, the
 reference and generated constants, per-argument grounding of every generated
 atom against the pack (exists? at this position? only at the other position of
 the same predicate = reversed-role evidence? is it a role name?), and argument
