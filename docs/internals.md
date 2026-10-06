@@ -158,6 +158,34 @@ Repairs continue the same conversation, so WebLLM reuses the KV cache and
 only prefills the ~55 new tokens: a repair costs about 2 s versus 9 s for a new
 question.
 
+### BeingDB-guided repair (`--db-guided-repair`, Run 10)
+
+```
+model reply -> BeingDB.diagnose
+                 | proven repair -> apply, diagnose again (at most 2 passes; no model call)
+                 | invalid       -> errors + diagnostics -> model repair
+                 | valid         -> BeingDB.query
+                                     | rows, or no rows without proof -> done
+                                     | no rows + BeingDB proof        -> model repair (UNSUPPORTED allowed)
+```
+
+`src/pipeline.js` holds the loop and `src/prompt.js` the two extra message
+forms (`diagnosticRepairMessage`, `emptyResultMessage`). All diagnostic logic
+is in BeingDB (`Query_diagnostics`, exposed by beingdb-wasm as
+`BeingDB.diagnose`); this layer only decides when to call the model.
+
+- When a proven repair is applied, the conversation shows the model the
+  query BeingDB judged.
+- UNSUPPORTED stays allowed when BeingDB shows the data cannot hold the
+  answer: an unknown constant, a constant not at its argument, or a
+  comparison no stored value can satisfy.
+- Without the flag, `repairMessage` produces run 9's text byte for byte.
+  `test/pipeline.test.mjs` replays Run 9's recorded replies to check this.
+
+Each question record gains `efficiency` (calls, BeingDB time, proven repairs,
+diagnostic codes and the path taken), and each attempt gains `guided` (every
+diagnose result and repair).
+
 ## Evaluation method
 
 `eval/questions.json`: 50 questions. Each supported item has a reference query
@@ -227,6 +255,13 @@ are unchanged (identical hashes).
 |---|---|---|---|---|---|---|---|---|
 | run 8 | Llama-3.2-3B | as run 8 | 27/38 | 13/38 | 32/38 | 13/38 | 7/12 | 3 |
 | run 9 | Llama-3.2-3B | + declared roles and descriptions (main predicates) | 33/38 | 16/38 | 36/38 | 17/38 | 6/12 | 5 |
+| run 9 | Llama-3.2-3B | run 9 reproduced on the run-10 code (replies identical) | 33/38 | 16/38 | 36/38 | 17/38 | 6/12 | 5 |
+| run 9 | Llama-3.2-3B | **run 10**: + BeingDB-guided repair (`db-guided-repair/1`) | 33/38 | 21/38 | 34/38 | 22/38 | 6/12 | 4 |
+
+Run 10 counts a question's first attempt *after* any proven BeingDB repair
+(still one model call). Run 10 used 78 model calls against Run 9's 60, and
+made 5 proven repairs; see the
+[README](../README.md#beingdb-guided-repair-run-10) for the cost comparison.
 
 Run `20261006T131109Z`, labelled `annotated-predicates`, is not in the table:
 the annotations had not reached the model yet, so it was an exact repeat of the

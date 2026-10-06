@@ -160,7 +160,8 @@ fingerprint). With the default `eval/questions.json` the run stops as
   (`nl2dsl-prompt/run9` adds the pack's declared roles and descriptions to
   run 8) and every report records its hashes. Changing `--seed`,
   `--temperature`, `--max-tokens`, `--repair-attempts` etc. is recorded as a
-  non-default condition.
+  non-default condition, as is `--db-guided-repair` (Run 10's BeingDB-guided
+  repair loop, off by default; recorded under `config.pipeline`).
   `--runs N` repeats the evaluation with the model loaded once. `--warmup`
   also compiles the repair grammar beforehand, so no timed call includes
   one-off grammar compilation (the main grammar is always compiled by the
@@ -214,7 +215,9 @@ Details (checks, schema, metrics, failure taxonomy): [docs/benchmarking.md](docs
 4. **Validate and run.** BeingDB validates and executes the query.
 5. **Bounded repair.** If BeingDB rejects it, its error messages (with
    suggestions and the relevant predicate signatures) go back to the model, at
-   most twice.
+   most twice. With `--db-guided-repair` (Run 10), BeingDB first diagnoses the
+   query and applies repairs it can prove without asking the model; see
+   [BeingDB-guided repair](#beingdb-guided-repair-run-10).
 
 Details and the experiment log: [docs/internals.md](docs/internals.md).
 
@@ -409,6 +412,107 @@ Reports in `eval/results/benchmarks/`:
 [run 9 annotated](eval/results/benchmarks/20261006T135634Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
 Run 9 was recorded from clean commits (`beingdb-webllm` d54a43d,
 `beingdb-wasm` d88657a, `beingdb` ccccfbc).
+
+### BeingDB-guided repair (Run 10)
+
+Principle: **spend BeingDB operations freely, spend model calls sparingly.**
+A BeingDB check takes milliseconds; a model call takes about 25 s on this
+machine. Run 10 asks whether BeingDB can fix or diagnose a candidate query
+between model calls.
+
+**BeingDB** (`diagnose` action; `BeingDB.diagnose(dsl)` in the browser)
+checks a candidate query against the facts and the predicate declarations,
+without running it. It reports only what it can establish exactly:
+
+- a constant that occurs in no fact (`unknown_constant`), or not at that
+  argument (`constant_not_at_position`, with where it does occur);
+- a join between arguments that share no value (`disjoint_join`);
+- a `not` block that repeats positive clauses (`contradictory_negation`);
+- a named variable used once (`singleton_variable`);
+- a variable named after another argument's declared role (`role_name_mismatch`).
+
+It also says whether the query provably returns no rows. It proposes a repair
+only when it can prove it:
+
+- swap two arguments when that is the only swap that makes every constant
+  match (`performed_at(Venue, kevin_atherton)` -> `performed_at(kevin_atherton, Venue)`);
+- replace a singleton variable with the atom its name spells, when that atom
+  occurs at exactly that argument (`employed_by(Person, BBC)` -> `bbc`).
+
+The same BeingDB code serves the native server, the REPL, MCP (through
+`POST /query`) and the browser; the WASM output equals the native server's.
+
+**beingdb-webllm** (`npm run benchmark -- --db-guided-repair`; off by
+default) uses it as follows:
+
+1. Each model reply is diagnosed. A proven repair is applied and re-diagnosed,
+   at most twice, with no model call.
+2. A valid query is executed and accepted, unless it returns no rows *and*
+   BeingDB proves why. Then the model is asked again, with BeingDB's reasons,
+   and may reply `UNSUPPORTED`.
+3. An invalid query goes back to the model as before, now with BeingDB's
+   diagnostics added.
+
+There are at most 2 model repairs, as in Run 9. The prompt, model and decoding
+are unchanged. With the flag off, the code reproduces Run 9 exactly: a test
+replays Run 9's recorded replies, and a full rerun gave identical replies for
+all 50 questions.
+
+**Controlled comparison.** The same 50 questions, model, prompt
+(`nl2dsl-prompt/run9`, same hashes), grammar, seed and temperatures. Both runs
+were made on the same codebase, from clean commits, one trial each:
+
+| | Run 9 (reproduced, flag off) | Run 10 (`--db-guided-repair`) |
+|---|---|---|
+| Overall correct | 23/50 (46%) | 28/50 (56%) |
+| Supported correct | 17/38 (45%) | 22/38 (58%) |
+| Unsupported recognised | 6/12 | 6/12 |
+| False refusals / fabricated queries | 0 / 5 | 1 / 4 |
+| Model calls (total) | 60 | 78 |
+| Model repair calls | 10 | 28 |
+| Proven BeingDB repairs | 0 | 5 (all then correct) |
+| BeingDB calls | 54 | 130 (76 diagnose) |
+| Correct with one model call | 22 | 27 |
+| Correct answers per model call | 0.383 | 0.359 |
+| Median model time per call | 25.1 s | 26.2 s |
+| Median BeingDB time per question | 3.0 ms | 3.7 ms |
+| Median time per question | 26.1 s | 28.4 s |
+| Correct within 30 s per question | 21 | 26 |
+
+All 50 first replies were identical, so every difference comes from the
+repair stage. The two mechanisms behave very differently:
+
+| Mechanism | Questions | Extra model calls | Effect |
+|---|---|---|---|
+| Proven BeingDB repairs | 5 (3 argument swaps, 2 names written as variables) | 0 | +5 correct |
+| Model repair after BeingDB proves an empty result | 9 | +17 (15 after the proof, 2 follow-on repairs of invalid replies) | +1 correct (`m10`); 1 false refusal (a question already wrong in Run 9); no unsupported question newly recognised |
+| BeingDB diagnostics added to invalid-query repairs | 7 others | +1 | −1 (`m08`, correct in Run 9: a sampled repair went differently) |
+
+**Interpretation.** This initial result suggests that a fast symbolic store
+can correct a small model's mistakes. The proven repairs added 5 correct
+answers with no extra model calls, in milliseconds. Asking the model again
+when BeingDB proves an empty result did not pay off for this model: 17 more
+calls bought one correct answer, so accuracy per model call fell slightly
+overall. A condition that applies only the proven repairs is the obvious next
+measurement; it was not run here. One model, one trial and 50 questions: this
+is not statistically conclusive. Timings were measured with about 10 GB of
+swap in use.
+
+```sh
+npm run benchmark -- \
+  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "MacBook Air M1 8GB" \
+  --questions eval/questions-annotated.json \
+  --db-guided-repair \
+  --condition annotated-predicates-db-guided-run10
+npm run compare -- eval/results/benchmarks/<run 9 dir> eval/results/benchmarks/<run 10 dir>
+```
+
+Reports in `eval/results/benchmarks/`:
+[run 9 reproduced](eval/results/benchmarks/20261006T162508Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 10](eval/results/benchmarks/20261006T164839Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
+Both runs were recorded from clean commits (`beingdb-webllm` 7ad5506 and
+17f39ef, `beingdb-wasm` d613e8c, `beingdb` 7c23845).
 
 ## Limitations
 

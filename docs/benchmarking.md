@@ -139,6 +139,8 @@ config        { runs, repairAttempts, questionTimeoutS, warmup, coldCache,
                 generation { firstAttemptTemperature, repairTemperature, seed, topP, topPSource, maxTokens,
                              repetitionPenalty, modelSpecificRequest, resolvedModelDefaults },
                 grammar { constrained, mechanism, firstAttempt, repairAfterValidationError },
+                pipeline { version (model-repair/run9 | db-guided-repair/1), dbGuidedRepair,
+                           maxModelRepairs, maxDeterministicPasses },
                 prompt { version, chars, fewShotExamples, sha256 {rules, examples, schemaText, systemPrompt,
                          messages, grammar, fixGrammar}, schemaStats, text {system, examples, grammar, fixGrammar} },
                 nonDefault [...], determinism }
@@ -175,7 +177,9 @@ attempts [ { n, grammar (query_or_unsupported | query_only), request {temperatur
              beingdb { status, ms, count, variables, errors, warnings, error, rowsSha256,
                        rows (first 200), rowsTruncated } | null,
              verdict { correct, orderWrong, exactProjection, matchedColumns } | null,
-             feedback (the repair message sent after this attempt) | null } ]
+             feedback (the repair message sent after this attempt) | null,
+             guided { diagnoses [ {dsl, ms, valid, provablyEmpty, errors, diagnostics} ],
+                      repairs [ {from, to, applied} ], codes } | null } ]   (--db-guided-repair only)
 final         { attempt, reply, dsl, valid, rowsSha256 }
 score         { supported, firstValid, finalValid, firstCorrect, correct, exactProjection,
                 predicatesOk, fabricated, falseRefusal, legacyFailure }
@@ -190,6 +194,9 @@ schemaEvidence { requiredPredicates, referencePredicates, firstAttemptPredicates
                  argumentOrder [ {predicate, status same|reversed|not_comparable, evidence} ],
                  argumentOrderCorrect }
 timing        { llmMs, dbMs, totalMs, otherMs, llmCalls, dbQueries, firstAttemptLlmMs, repairLlmMs }
+efficiency    { pipeline, calls { model, modelRepair, beingdb, diagnose, execute, deterministicRepairs },
+                beingdbMs { diagnose, execute }, deterministicRepairs [...], diagnosticCodes,
+                path [model | model_repair | query | diagnose | deterministic_repair | execute] }
 page          { started, hiddenMs, visibilityChanges, visibilityState, hasFocus, jsHeapMB }
 ```
 
@@ -204,6 +211,36 @@ ignored) so runs can be compared without storing large result sets; the first
 
 Future versions of the schema will change the `/v1` suffix; tools check the
 prefix and should keep reading v1.
+
+## Pipeline conditions and cost metrics
+
+`--db-guided-repair` (Run 10) changes only the repair loop, not the prompt or
+decoding: BeingDB diagnoses each reply (`BeingDB.diagnose`), repairs it can
+prove are applied without a model call, and the model is asked again only
+for invalid queries or for empty results BeingDB proves wrong (see
+[internals](internals.md#beingdb-guided-repair---db-guided-repair-run-10)).
+The condition is recorded in `config.pipeline` and in `nonDefault`.
+
+With repair the question becomes what each correct answer costs, so
+`summary.json` (`perTrial[].efficiency`), the run's console summary and
+`npm run compare` report:
+
+- model calls (first attempts and repairs), per question and per supported
+  question;
+- BeingDB calls (diagnose and query/execute) and total BeingDB time;
+- proven repairs, the questions they changed, and how many of those ended
+  correct;
+- questions solved with one model call, and questions needing a model repair;
+- correct answers per model call (overall and supported);
+- the median end-to-end time per question, and correct answers within 30 s
+  and 60 s per question (budgets fixed in advance);
+- the tally of diagnostic codes seen.
+
+Records from before Run 10 have no `efficiency` block. For them the counts
+are derived from the attempts (one model call and at most one
+`BeingDB.query` per attempt), which is exact for those runs, so older runs
+compare directly. In Run 10 a "first attempt" is the first model reply
+after any proven BeingDB repair (still one model call).
 
 ## Timing metrics
 
