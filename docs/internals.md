@@ -233,6 +233,8 @@ real rows, but for a question that was not asked).
 
 Scoring runs in the browser and, from a saved report, in Node against the same
 WASM build (`node eval/check-references.mjs report.json`); both agree.
+`node eval/show-run.mjs report.json` prints every question, attempt and
+BeingDB error of an `eval.html` report.
 
 ## Experiment log
 
@@ -368,7 +370,7 @@ Air: among WebLLM's 1-3B models it combines a small footprint (869 MB download,
 ~1.6 GB GPU memory; WebLLM marks it `low_resource_required`) with good
 instruction following for its size. Sub-1B models were not tried. The
 benchmark experiments have since moved to Llama-3.2-3B as the reference model
-(see the [README](../README.md#current-reference-model)).
+(see the [README](../README.md#reference-model-and-reference-condition)).
 
 Run 8 characterised the 1.5B model as follows. It reliably handles
 single-predicate lookups, simple year ranges and a negation pattern it has
@@ -650,7 +652,7 @@ come from model time per call, not BeingDB; the machine had about 10 GB of
 swap in use, and in Run 11 the model produced the same replies as in Run 9.
 This suggests the deterministic layer is the valuable part of Run 10, but one
 model, one trial and 50 questions are not statistically conclusive. This
-condition became the [reference condition](../README.md#current-reference-model).
+condition became the [reference condition](../README.md#reference-model-and-reference-condition).
 
 ```sh
 npm run benchmark -- \

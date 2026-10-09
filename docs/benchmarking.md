@@ -225,7 +225,32 @@ prefix and should keep reading v1.
 - `proven-only` (Run 11): the same proven repairs, then exactly Run 9's path;
   an empty result never triggers a model call.
 
-See [internals](internals.md#beingdb-guided-repair---db-guided-repair-run-10).
+| Policy | Proven BeingDB repairs | Model repair of invalid queries | Model asked again when BeingDB proves a valid query empty | Model sees BeingDB diagnostics |
+|---|---|---|---|---|
+| `model` (default) | no | yes (run 9 message) | no | no |
+| `proven-only` | yes | yes (run 9 message, unchanged) | no | no |
+| `db-guided` | yes | yes (with diagnostics) | yes (`UNSUPPORTED` allowed) | yes |
+
+**Model repair** sends BeingDB's validation errors back to the model: one
+model call each, sampled at temperature 0.7 with seed 1, at most
+`--repair-attempts` (2) per question. A **proven repair** is a rewrite that
+BeingDB's `diagnose` proposes only when it can prove it. There are two kinds:
+
+- swap two arguments, when that is the only swap that makes every constant
+  match;
+- replace a single-use variable with the atom its name spells, when that atom
+  occurs at exactly that argument.
+
+Proven repairs are applied without a model call, at most
+`MAX_DETERMINISTIC_PASSES` (2) per model reply, and recorded per attempt
+under `guided`. Under `proven-only` the model's side of the loop is
+byte-identical to `model`. Scores therefore include BeingDB's proven fixes,
+which help some models' typical mistakes more than others, so keep the policy
+fixed when comparing models. To measure a model without them, run it again
+with `--repair-policy model`.
+
+Mechanism and message formats:
+[internals](internals.md#validation-and-repair).
 The policy is recorded in `config.pipeline` (`repairPolicy`, `version`,
 `description`), in `nonDefault`, in `summary.json` (`pipeline`, and
 `perTrial[].efficiency.repairPolicies`) and per question
@@ -249,8 +274,40 @@ With repair the question becomes what each correct answer costs, so
 Records from before Run 10 have no `efficiency` block. For them the counts
 are derived from the attempts (one model call and at most one
 `BeingDB.query` per attempt), which is exact for those runs, so older runs
-compare directly. In Run 10 a "first attempt" is the first model reply
-after any proven BeingDB repair (still one model call).
+compare directly. Under `db-guided` and `proven-only` a "first attempt" is
+the first model reply after any proven BeingDB repair (still one model call).
+
+### Conditions in the saved results
+
+A condition is the question file and pack, schema metadata, prompt, grammar,
+repair policy, decoding settings, WebLLM version and harness code. Only the
+model and machine should vary within one. `--condition` is a free-text label
+and changes no setting. Compare `suite.sha256`,
+`beingdb.environmentFingerprint`, `config.prompt.sha256`, `config.pipeline`
+and `config.nonDefault` rather than the label.
+
+| Condition | Questions | Prompt | Repair policy | Role |
+|---|---|---|---|---|
+| Baseline (defaults) | `eval/questions.json` | `nl2dsl-prompt/run8` | `model` | historical; needs the pre-annotation pack (`beingdb-wasm` 41c0d8d) |
+| Annotated predicates (Run 9) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `model` | ablation |
+| Annotated + BeingDB-guided repair (Run 10) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `db-guided` | ablation |
+| Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | reference condition |
+
+Saved runs of the reference condition carry the labels
+`annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`, with
+identical settings and hashes. Results per condition:
+[experiment log](internals.md#later-runs-npm-run-benchmark-chrome-154155).
+
+### Timing caveats
+
+Timings depend on the GPU, memory bandwidth and unified memory size. They are
+inflated by memory pressure: the report warns when more than 1 GB of swap is
+in use at the start or swap grows during the run. Battery power, Low Power
+Mode, thermal state and hidden windows also affect them. Almost all
+end-to-end time is prompt prefill; BeingDB takes milliseconds per question.
+For example, the reference condition gave identical replies on the M1 Air in
+Run 11 and in its Chrome 155 rerun, with medians of 28.0 s and 22.1 s per
+question.
 
 ## Timing metrics
 
