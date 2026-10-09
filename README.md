@@ -8,7 +8,7 @@ WebLLM models, machines and settings on a fixed 50-question task.
 |---|---|
 | **Reference model** | `Llama-3.2-3B-Instruct-q4f16_1-MLC` |
 | **Reference condition** | annotated question set + current pack, prompt `nl2dsl-prompt/run9`, `--repair-policy proven-only`, default decoding ([details](#reference-model-and-reference-condition)) |
-| **Reference result** | 28/50 correct (one trial; [hardware](#hardware-provenance-and-caveats)) |
+| **Reference result** | 28/50 questions translated to a correct query (query-generation accuracy, one trial; [hardware](#hardware-provenance-and-caveats)) |
 | **Runtime that executes queries** | `beingdb-wasm` (BeingDB compiled to WebAssembly), in the browser |
 | **Detailed docs** | [docs/benchmarking.md](docs/benchmarking.md), [docs/internals.md](docs/internals.md) |
 
@@ -31,8 +31,18 @@ over the Rewind dataset: 38 answerable and 12 deliberately unsupported.
   for the generated query as for a trusted reference query.
 - An unsupported question is correct if the model replies `UNSUPPORTED`.
 
-See [evaluation method](docs/internals.md#evaluation-method). Accuracy is
-still far too low for unsupervised use.
+See [evaluation method](docs/internals.md#evaluation-method). The score is
+**query-generation accuracy**: one step in a larger workflow, not end-to-end
+answer accuracy. BeingDB is meant to be the grounded retrieval and execution
+component of an iterative LLM/RAG loop. It validates a query, returns
+diagnostics or facts actually in its store, and lets the wider system repair,
+reformulate, rerun or extend retrieval before an LLM writes the final answer.
+The benchmark runs only a bounded part of that loop (proven repairs plus at
+most two model repairs). So 28/50 means 28 questions were turned into the
+right query under this condition, not that BeingDB answers 56% of questions
+correctly. Models do still write valid but wrong queries, which is what the
+benchmark measures, and further iteration can recover some of these but does
+not guarantee correctness.
 
 Everything runs locally. The only network access is the one-off download of
 model weights, which the browser caches.

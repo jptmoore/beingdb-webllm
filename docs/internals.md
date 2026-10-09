@@ -220,6 +220,12 @@ key columns. Variable names, column order, extra columns and `distinct` do not
 matter; values and types do. With `orderBy`, the generated rows must also be in
 the reference order on that column. Syntactically valid but wrong queries fail.
 
+These scores measure **query generation** within a bounded repair loop. Two
+related things are not measured. **Grounding**: an accepted query returns only
+facts in the store, whatever the model intended. **End-to-end RAG behaviour**:
+a wider workflow may inspect results, use diagnostics, reformulate, retrieve
+again and synthesise an answer.
+
 Failures are classified automatically: refused, invalid (BeingDB error codes),
 wrong predicate (a required predicate missing), argument order (swapping the
 arguments of one pattern makes it correct, checked by re-running it through
