@@ -1,600 +1,482 @@
 # beingdb-webllm
 
 An experiment: can a **small local browser LLM** act as a natural-language
-interface to [BeingDB](../beingdb)?
-
-```
-question  ->  local WebLLM model  ->  BeingDB DSL  ->  beingdb-wasm  ->  real Rewind results
-```
-
-The model only translates the question into a BeingDB query. BeingDB (compiled
-to WebAssembly by [beingdb-wasm](../beingdb-wasm)) validates and runs it, and
-the rows you see come straight from BeingDB. The model never sees, edits or
-summarises the results, and it does not contain or check the Rewind data.
-
-**The LLM interprets language. BeingDB determines the answer.**
-
-## Relationship to the other projects
-
-```
-beingdb        database, DSL parser/validator/planner/evaluator
-   |
-beingdb-wasm   the same runtime in the browser + the Rewind export
-   |
-beingdb-webllm this repo: WebLLM model + prompt + validation/repair loop + evaluation
-```
-
-Nothing from BeingDB is copied or changed here. The app loads the
-`beingdb-wasm` release build and data through a symlink and uses its public
-browser API (`BeingDB.load`, `BeingDB.query`, `BeingDB.predicates`). No changes
-to `beingdb` or `beingdb-wasm` were needed.
-
-## Model
-
-Default: **`Qwen2.5-1.5B-Instruct-q4f16_1-MLC`** (WebLLM 0.2.85 prebuilt).
-
-- 869 MB download (once, cached by the browser); ~1.6 GB GPU memory.
-- Chosen for an 8 GB M1 MacBook Air: among WebLLM's 1-3B models it combines a
-  small footprint (WebLLM marks it `low_resource_required`) with good
-  instruction following and structured output for its size. Sub-1B models were
-  not tried; larger ones leave little memory headroom on 8 GB.
-- `Qwen2.5-3B-Instruct-q4f16_1-MLC` was also tested; it was twice as slow and
-  less accurate on this task (see [Results](#results)).
-
-Any other WebLLM prebuilt model can be tried with `?model=<id>` on either page.
-
-## Requirements
-
-- A browser with **WebGPU** (and `shader-f16` for the default q4f16 model).
-- About 2 GB of free memory for the model plus the page.
-- Node >= 22 (for the local server and model-free checks) and a
-  **release** build of `../beingdb-wasm` (single WASM module, needed by Safari).
-- For `npm run benchmark`: Google Chrome, Edge or another Chromium-based browser.
-
-Tested on an 8 GB M1 MacBook Air (macOS 27):
-
-| Browser | BeingDB | Model | Time per question |
-|---|---|---|---|
-| Chrome 153 / Chromium 150 | yes | yes | ~10 s |
-| Safari 27 | yes | yes | ~23 s |
-| Firefox 156 | yes | no: WebLLM needs 10 storage buffers per shader stage, Firefox allows 9 | - |
-
-Details: [docs/internals.md](docs/internals.md#browser-support).
-
-## Everything runs locally
-
-Static files + WebLLM + BeingDB WASM + the exported Rewind pack. There is no
-remote model API, API key, telemetry, embeddings or vector store, and no
-server-side logic (the optional dev server only serves files and saves eval
-reports). The only network access is the one-off download of the model weights
-(Hugging Face) and WebLLM's model library (GitHub), which the browser caches.
-
-## Run the demo
-
-```sh
-cd ../beingdb-wasm && dune build --profile release && cd -
-npm install
-npm run link          # vendor/ -> ../beingdb-wasm build + WebLLM
-npm run serve         # http://localhost:8010/
-```
-
-Open <http://localhost:8010/>, click **Load model** (first time only; later
-visits load from the browser cache), type a question and press **Ask BeingDB**.
-The page shows the generated DSL, whether BeingDB accepted it, any repair
-attempts with BeingDB's error messages, model and BeingDB timings, and the raw
-BeingDB rows. The full model instructions are shown at the bottom of the page.
-
-Any static server works for the demo (`python3 -m http.server 8010`);
-`npm run serve` additionally lets the evaluation page save its report.
-
-## Run the evaluation
-
-Open <http://localhost:8010/eval.html> and press **Run evaluation** (about
-10-12 minutes for 50 questions on an M1 Air in Chrome; keep the tab visible). The report is saved to
-`eval/results/` (with `npm run serve`) or can be downloaded.
-
-```sh
-npm run check-eval                                  # model-free: references, examples, scorer
-npm run check-eval -- --questions eval/questions-annotated.json  # same, for the annotated pack's fingerprint
-npm test                                            # schema/prompt tests (incl. the linked WASM build)
-node eval/diagnose-annotations.mjs [--run <dir>]    # do the pack's predicate declarations reach the prompt?
-node eval/check-references.mjs eval/results/X.json  # re-score a saved run with BeingDB in Node
-node eval/show-run.mjs eval/results/X.json          # every question, attempt and error
-```
-
-The evaluation set ([eval/questions.json](eval/questions.json)) has 50 questions
-over the real Rewind predicates: 18 easy, 14 medium and 6 hard supported
-questions, each with a trusted reference query, and 12 deliberately
-unsupported ones. A generated query counts as correct only if BeingDB returns
-the same answer rows for it as for the reference query.
-
-## Reproducible benchmarking
-
-One command runs the full 50-question evaluation for a model in a real browser
-(WebGPU + WebLLM, the same code as the pages above) and writes a complete,
-machine-readable report. No manual steps: the command starts the server,
-launches the browser, loads the model, runs every question, scores it and saves
-the results.
-
-```sh
-git pull && (cd ../beingdb-wasm && git pull && dune build --profile release)
-npm install
-npm run link
-
-npm run benchmark -- --model Qwen2.5-1.5B-Instruct-q4f16_1-MLC --machine "MacBook Air M1 8GB"
-npm run benchmark -- --model Llama-3.1-8B-Instruct-q4f16_1-MLC --runs 3 --machine "MacBook Pro M4 Max 64GB"
-npm run benchmark:matrix -- --models models/benchmark-models.json --machine "MacBook Pro M4 Max 64GB"
-npm run compare -- eval/results/benchmarks/<runA> eval/results/benchmarks/<runB>
-npm run export-results -- --format csv
-```
-
-The linked Rewind pack now carries predicate annotations, which changes its
-data fingerprint, so add `--questions eval/questions-annotated.json` to
-`benchmark` and `benchmark:matrix` (the same 50 questions with the new
-fingerprint). With the default `eval/questions.json` the run stops as
-`incompatible`. See
-[semantic predicate metadata](#semantic-predicate-metadata-llama-32-3b).
-
-- **Browser.** Google Chrome by default (`--browser edge|chromium|chrome-canary`
-  or `--executable-path`), launched with a visible window. **Leave the window in
-  the foreground until the command finishes**: browsers throttle hidden pages,
-  and the report flags any question that ran while the page was hidden. Safari
-  and Firefox are not automated; test them by hand with `eval.html`.
-- **Models.** `npm run models` lists the models in the installed WebLLM
-  version with their memory estimates; `npm run models -- --validate
-  models/benchmark-models.json` checks a matrix file. Larger models just need a
-  machine with enough GPU memory, e.g. `--model Qwen2.5-7B-Instruct-q4f16_1-MLC`.
-  Use `--probe` first to check that a model loads and fits without running the
-  questions.
-- **Fails early.** Before any question the command checks WebGPU, the adapter
-  (a software renderer is rejected), `shader-f16`, the WebGPU limits WebLLM
-  needs, the model's context window, and that the model loads and generates.
-  An unusable model/machine stops with a report saying why (exit code 2).
-- **Cache.** Weights download once into a dedicated browser profile
-  (`~/.cache/beingdb-webllm/browser-profiles/`) and are reused by later runs;
-  keep the default port so the cache is found. `--cold` deletes the model from
-  the cache first to measure a real download.
-- **Defaults reproduce the experiment's settings** (greedy first attempt,
-  repairs at temperature 0.7 with seed 1, 200 max tokens, 2 repairs, same
-  prompt and grammar for every model). The prompt is versioned
-  (`nl2dsl-prompt/run9` adds the pack's declared roles and descriptions to
-  run 8) and every report records its hashes. Changing `--seed`,
-  `--temperature`, `--max-tokens`, `--repair-attempts` etc. is recorded as a
-  non-default condition, as is a `--repair-policy` other than `model`
-  (`db-guided` = Run 10, also spelled `--db-guided-repair`; `proven-only` =
-  Run 11; recorded under `config.pipeline`).
-  `--runs N` repeats the evaluation with the model loaded once. `--warmup`
-  also compiles the repair grammar beforehand, so no timed call includes
-  one-off grammar compilation (the main grammar is always compiled by the
-  pre-run smoke check). `npm run benchmark -- --help` lists every option.
-- **Machine labels.** The report records what the OS and browser expose (OS,
-  CPU, RAM, hardware model, power source, browser version, WebGPU adapter,
-  features and limits, `chrome://gpu` status). Browsers hide some details, so
-  add your own description with `--machine "..."` (and `--notes`); labels are
-  stored separately from what was observed.
-- **Provenance.** Git commit and uncommitted changes of `beingdb-webllm`,
-  `beingdb-wasm` and `beingdb`, hashes of the WASM build and data, the WebLLM
-  version, the question-set suite id (`rewind-nl2dsl-v1`) and its sha256, and
-  hashes of the prompt and grammars. A dirty working tree is reported, never
-  hidden.
-- **Results** go to `eval/results/benchmarks/<time>_<machine>_<model>/`:
-  `run.json` (configuration, environment, provenance, model loading),
-  `questions.jsonl` (every question and attempt: DSL, BeingDB errors, repair
-  messages, model and BeingDB timings, failure category, predicate evidence),
-  `summary.json` (accuracy counts, timing medians/means/percentiles, failure
-  categories, predicate confusions) and `browser.log`. Schema:
-  `beingdb-webllm-benchmark/v1`.
-- **Comparing and analysing.** `compare` prints the two runs' accuracy,
-  latency and failure categories side by side and lists the questions one got
-  right and the other wrong; it also accepts the older `eval/results/run*.json`
-  reports. `export-results` writes one CSV/JSONL row per run x question to
-  `eval/results/export/` for pandas or R.
-- **Caveats.** Timings depend on power mode, thermal state and other load;
-  benchmark on mains power with other GPU-heavy apps closed. Replies repeat
-  exactly on the same machine and browser, but WebGPU numerics may differ
-  between GPUs, drivers and browsers. Failure categories are deterministic
-  rules, not ground truth; hand-coded categories can be added in an
-  `annotations.jsonl` beside a run without touching the data.
-
-Details (checks, schema, metrics, failure taxonomy): [docs/benchmarking.md](docs/benchmarking.md).
-
-## How it works
-
-1. **Schema from BeingDB.** At startup the app calls `BeingDB.predicates()` and
-   a few BeingDB queries, and builds the model context from them: every
-   predicate with its arity, argument roles and, for the main predicates, the
-   description declared in the pack and a real example fact
-   (`created_by(Work, Artist): Relates a work to the artist or artist group who
-   made it.  e.g. ...`). Nothing about the dataset is hard-coded.
-2. **Prompt.** Short DSL rules, the schema, and nine example questions over the
-   real data (as chat turns). About 2,500 tokens (about 2,000 before the pack
-   declared roles and descriptions, prompt run 8).
-3. **Constrained output.** The model's reply is constrained by a grammar
-   generated from the same predicate list: it must be either a DSL query using
-   real predicate names with the right number of arguments, or
-   `UNSUPPORTED: <reason>`.
-4. **Validate and run.** BeingDB validates and executes the query.
-5. **Bounded repair.** If BeingDB rejects it, its error messages (with
-   suggestions and the relevant predicate signatures) go back to the model, at
-   most twice. With `--repair-policy proven-only` (Run 11), BeingDB first
-   diagnoses the query and applies repairs it can prove without asking the
-   model; `--repair-policy db-guided` (Run 10) also sends BeingDB's diagnostics
-   and proofs of empty results to the model. See
-   [BeingDB-guided repair](#beingdb-guided-repair-run-10) and
-   [Run 11](#proven-beingdb-repairs-only-run-11).
-
-Details and the experiment log: [docs/internals.md](docs/internals.md).
-
-## Results
-
-Final configuration, Qwen2.5-1.5B, 50 questions, 8 GB M1 MacBook Air:
+interface to [BeingDB](../beingdb)? This repository holds the demo and a
+benchmark harness that compares WebLLM models, machines and pipeline settings
+on a fixed 50-question task.
 
 | | |
 |---|---|
-| Valid DSL, first attempt | 29/38 (76%) |
-| Correct answer, first attempt | 14/38 (37%) |
-| Valid DSL after repair | 32/38 (84%) |
-| Correct answer after repair | 14/38 (37%) |
-| Unsupported questions recognised | 0/12 (6 got a valid but meaningless query) |
-| Overall correct | 14/50 (28%) |
-| Model time per call (median) | 9.0 s (about 2,000 prompt tokens at ~250 tokens/s) |
-| BeingDB time per query (median / max) | 0.6 ms / 11 ms |
-| Model load | 30 s first time (download), 2.5-9 s from cache |
+| **Current reference model** | `Llama-3.2-3B-Instruct-q4f16_1-MLC` |
+| **Reference condition** | annotated predicates + proven BeingDB repairs ([command](#run-the-reference-condition)) |
+| **Reference result** | 28/50 correct, one trial on a MacBook Air M1 8 GB ([details](#current-reference-model)) |
+| **Detailed docs** | [docs/benchmarking.md](docs/benchmarking.md) (harness, result schema, metrics) and [docs/internals.md](docs/internals.md) (pipeline, prompt, repair, experiment log) |
 
-The model reliably handles single-predicate lookups, simple year ranges and a
-negation pattern it has seen, but it often picks the wrong predicate, swaps
-arguments, writes names as variables (`Elsa_Stansfield`), and never declines
-unsupported questions. The repair loop turns some rejected queries into valid
-ones but has not yet turned a wrong answer into a right one. Qwen2.5-3B scored
-lower (6/38 correct) at twice the latency.
+## What it does
 
-`npm run benchmark` with default settings reproduced this run exactly (every
-model reply of every attempt identical to run 8, in Chrome 154 instead of VS
-Code's Chromium 150), using the pre-annotation pack (`beingdb-wasm` 41c0d8d)
-and prompt run 8 (the prompt up to `beingdb-webllm` c15963d). The report is in
-[`eval/results/benchmarks/20261001T120717Z_…`](eval/results/benchmarks/20261001T120717Z_macbook-air-m1-8gb_Qwen2.5-1.5B-Instruct-q4f16_1-MLC/).
-The current code uses prompt run 9 with the annotated pack, so it no longer
-reproduces these replies.
-
-### Other models on the M1 Air
-
-Same machine, prompt, grammar and repair loop; the new models were run with
-`npm run benchmark` and default settings in Chrome 154, one trial each:
-
-| Model | Status | Overall correct | Valid DSL after repair | Unsupported recognised | Model time per call (median) |
-|---|---|---|---|---|---|
-| Qwen2.5-1.5B-Instruct (above) | complete | 14/50 (28%) | 32/38 (84%) | 0/12 | 9.0 s |
-| Llama-3.2-3B-Instruct | complete | 20/50 (40%) | 32/38 (84%) | 7/12 | 15.1 s |
-| Qwen3.5-2B | **aborted** after 19 of 50 questions | not scored | 0/19 completed questions | - | - |
-
-**Llama-3.2-3B-Instruct** (`Llama-3.2-3B-Instruct-q4f16_1-MLC`, ~2.3 GB GPU
-memory). First attempt: 27/38 valid DSL, 13/38 correct. After repair: 32/38
-valid, 13/38 correct (repair made 5 more queries valid, none correct). It
-recognised 7 of the 12 unsupported questions; 3 others got a valid but
-meaningless query. Model time per call 15.1 s median (first attempt 15.8 s,
-repair 3.5 s); BeingDB 2.4 ms median / 61.6 ms max per query. Failures: wrong
-predicate 8, still invalid after repair 6, unsupported not detected 5, wrong
-projection 4, wrong constraint 3, wrong argument order 2, entity grounding 1,
-unclassified 1. This was the strongest completed M1 result with the run-8
-prompt (see [semantic predicate metadata](#semantic-predicate-metadata-llama-32-3b)
-for the annotated run). The gain over Qwen2.5-1.5B comes from declining
-unsupported questions; on supported questions the two are similar (13/38 vs
-14/38), and Llama is about 1.7x slower per call. This is a single trial.
-
-**Qwen3.5-2B** (`Qwen3.5-2B-q4f16_1-MLC`, ~2.2 GB GPU memory). This is an
-aborted run, not a 0% score. The `--probe` run passed: the model loaded, the
-4,096-token context window fits the prompt, and the smoke generation completed
-(its reply did not match the example query). The benchmark then produced no
-valid BeingDB DSL for any of the 19 questions it completed (`e01`-`e18`,
-`m01`): all 57 attempts, including repairs, were rejected as "neither a query
-nor UNSUPPORTED" (`syntax_generation`). Every reply began with an empty
-`<think></think>` block even though the harness sent `enable_thinking: false`,
-and 25 of the 57 replies hit the 200-token limit. The run was aborted when
-question `m02` timed out after 600 s.
-
-Caveats recorded in these reports: all four runs (two `--probe`, two
-benchmark) warn that the `beingdb-webllm` working tree had uncommitted changes,
-so the results do not correspond exactly to commit `2b1dec9e1b` (the recorded
-change is `package-lock.json`). Both benchmark runs started with heavy swap use
-(7.7 GB for Qwen3.5, 8.6 GB for Llama) that grew during the run, so memory
-pressure may have inflated timings. The Qwen3.5 runs were on battery power. No
-question ran with the page hidden.
-
-Reports in `eval/results/benchmarks/`: Llama-3.2-3B
-[probe](eval/results/benchmarks/20261005T160554Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[benchmark](eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/);
-Qwen3.5-2B
-[probe](eval/results/benchmarks/20261005T152424Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/),
-[aborted benchmark](eval/results/benchmarks/20261005T153112Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/).
-
-### Semantic predicate metadata (Llama 3.2 3B)
-
-**What changed.** BeingDB predicate declarations can now give a predicate a
-natural-language description, argument roles and semantic types, e.g.
-`created_by(Work, Artist)`: "Relates a work to the artist or artist group who
-made it." They are compiled into the pack with the facts.
-
-- `beingdb-wasm` carries them through the browser runtime. `BeingDB.predicates()`
-  returns `description`, plus `role` and `semanticType` for each argument (the
-  same JSON as the native `GET /predicates?detailed=true`).
-- `beingdb-webllm` uses the declared roles instead of inferred ones, and adds the
-  descriptions to the schema context given to the model (see
-  [How it works](#how-it-works)).
-- The demo, evaluation page, benchmark and repair messages are all built from
-  the same schema, so they all receive the annotations.
-
-**Why it matters.** The model no longer has to guess what a predicate means, or
-which argument is which, from its name, argument types and one example. The
-metadata stays in BeingDB next to the data, not in application-specific prompt
-text: load a different annotated pack and the context changes with no code
-change.
-
-**Controlled comparison.** Both runs used:
-
-- the same 50 questions (`eval/questions-annotated.json` is `questions.json`
-  with only the data fingerprint updated);
-- the same model and settings (greedy first attempt, repairs at temperature
-  0.7, seed 1, 200 max tokens, at most 2 repairs);
-- identical rules, few-shot examples and grammar (same hashes in both reports).
-
-Only the model-facing predicate metadata changed: prompt `nl2dsl-prompt/run8`
-became `run9`. One trial each on the 8 GB M1 MacBook Air in Chrome 154:
-
-| | Run 8 baseline | Run 9 annotated predicates |
-|---|---|---|
-| Overall correct | 20/50 (40%) | 23/50 (46%) |
-| Supported correct after repair | 13/38 (~34%) | 17/38 (~45%) |
-| Valid DSL after repair | 32/38 | 36/38 |
-| Unsupported recognised | 7/12 | 6/12 |
-| `wrong_predicate` | 8 | 5 |
-| `validation_repair_failed` | 6 | 2 |
-| `wrong_projection` | 4 | 2 |
-
-An earlier run labelled `annotated-predicates` (`20261006T131109Z`, 20/50) is
-**not** a valid annotation experiment. At that point `beingdb-wasm` dropped the
-annotations, so the model received the run-8 prompt byte for byte and gave
-identical replies.
-
-**Interpretation.** This initial benchmark result suggests a measurable
-improvement:
-
-- Overall correctness rose from 40% to 46%, and supported-query correctness
-  from 13/38 to 17/38.
-- Wrong-predicate failures fell from 8 to 5, and queries still invalid after
-  repair from 6 to 2.
-- Unsupported-question recognition declined slightly, from 7/12 to 6/12; five
-  unsupported questions got a valid but meaningless query, against three
-  before.
-
-This is one model, one trial and 50 questions, so it should not be read as
-statistically conclusive.
-
-**Example: `m02`**, "Which works were created after 1980, and by whom?"
-
-- Run 8: `wrong_predicate`. The model used only `year_created` and left out
-  `created_by`.
-- Run 9: the model added `created_by(Work, Artist)` (the declared role name),
-  but still failed with `wrong_projection` because `Artist` was missing from
-  `find`.
-
-The answer is still wrong, but the semantic metadata changed which predicates
-the model chose.
-
-**Prompt size.** Descriptions are included only for the 31 main predicates
-(at least 5 facts) to control context size. The other 137 stay in the compact
-grouped list, although repair messages show their declared roles and
-descriptions.
-
-| | Run 8 | Run 9 |
-|---|---|---|
-| System prompt | 5,929 chars | 8,718 chars |
-| Llama prompt tokens for `m02` | 1,944 | 2,524 |
-
-The model's context window is 4,096 tokens, and repair turns add to the prompt.
-Run 9's model time per call was higher, but do not read that as a reliable
-performance difference. Both runs started with more than 8 GB of swap in use,
-and it grew during the runs (by 1.9 GB in run 9).
-
-**Reproduce.** Rebuild `beingdb-wasm` from the annotated pack, run
-`npm run link`, then:
-
-```sh
-npm run benchmark -- \
-  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
-  --machine "MacBook Air M1 8GB" \
-  --questions eval/questions-annotated.json \
-  --condition annotated-predicates-run9
+```
+question
+  -> local WebLLM model    translates the question into a query, or replies UNSUPPORTED
+  -> BeingDB DSL
+  -> BeingDB WASM          validates, applies only repairs it can prove, executes
+  -> results               rows straight from BeingDB
 ```
 
-With the annotated pack, `--questions eval/questions-annotated.json` is
-required: the default `eval/questions.json` carries the pre-annotation data
-fingerprint and the benchmark rejects it. `node eval/diagnose-annotations.mjs
---run <run dir>` checks that a run's recorded prompt contains the annotations.
+**The LLM interprets the question; BeingDB determines the answer.** The model
+never sees, edits or summarises result rows, and it holds no data. A query
+BeingDB accepts can still mean something other than what was asked. That gap
+is what the benchmark measures.
 
-Reports in `eval/results/benchmarks/`:
-[run 8 baseline](eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[run 9 annotated](eval/results/benchmarks/20261006T135634Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
-Run 9 was recorded from clean commits (`beingdb-webllm` d54a43d,
-`beingdb-wasm` d88657a, `beingdb` ccccfbc).
+**What is evaluated.** There are 50 questions over the Rewind dataset: 38
+answerable (18 easy, 14 medium, 6 hard) and 12 deliberately unsupported. An
+answerable question is correct only if BeingDB returns the same answer rows
+for the generated query as for a trusted reference query. An unsupported
+question is correct if the model replies `UNSUPPORTED`. See
+[evaluation method](docs/internals.md#evaluation-method).
 
-### BeingDB-guided repair (Run 10)
+Everything runs locally: static files, WebLLM, BeingDB WASM and the exported
+Rewind pack. There is no remote model API, API key, telemetry, embeddings or
+vector store. The only network access is the one-off download of model weights
+(Hugging Face) and WebLLM's model library (GitHub), which the browser caches.
 
-Principle: **spend BeingDB operations freely, spend model calls sparingly.**
-A BeingDB check takes milliseconds; a model call takes about 25 s on this
-machine. Run 10 asks whether BeingDB can fix or diagnose a candidate query
-between model calls.
+## Relationship to BeingDB
 
-**BeingDB** (`diagnose` action; `BeingDB.diagnose(dsl)` in the browser)
-checks a candidate query against the facts and the predicate declarations,
-without running it. It reports only what it can establish exactly:
+| Repository | Role |
+|---|---|
+| [`beingdb`](../beingdb) | the database: DSL parser, validator, planner, evaluator, query diagnostics and proven repairs |
+| [`beingdb-wasm`](../beingdb-wasm) | the same runtime compiled to WebAssembly for the browser, plus the exported (annotated) Rewind pack |
+| `beingdb-webllm` (this repo) | WebLLM model, prompt, output grammar, repair loop, evaluation and benchmark harness |
 
-- a constant that occurs in no fact (`unknown_constant`), or not at that
-  argument (`constant_not_at_position`, with where it does occur);
-- a join between arguments that share no value (`disjoint_join`);
-- a `not` block that repeats positive clauses (`contradictory_negation`);
-- a named variable used once (`singleton_variable`);
-- a variable named after another argument's declared role (`role_name_mismatch`).
+Nothing from BeingDB is copied here. `npm run link` symlinks the
+`beingdb-wasm` release build into `vendor/`, and the app uses its public
+browser API (`BeingDB.load`, `query`, `predicates`, `diagnose`). The schema
+shown to the model is built from `BeingDB.predicates()` at startup, so nothing
+about the dataset is hard-coded. See
+[consuming beingdb-wasm](docs/internals.md#consuming-beingdb-wasm).
 
-It also says whether the query provably returns no rows. It proposes a repair
-only when it can prove it:
+## Quick start
 
-- swap two arguments when that is the only swap that makes every constant
-  match (`performed_at(Venue, kevin_atherton)` -> `performed_at(kevin_atherton, Venue)`);
-- replace a singleton variable with the atom its name spells, when that atom
-  occurs at exactly that argument (`employed_by(Person, BBC)` -> `bbc`).
+You need:
 
-The same BeingDB code serves the native server, the REPL, MCP (through
-`POST /query`) and the browser; the WASM output equals the native server's.
-
-**beingdb-webllm** (`npm run benchmark -- --db-guided-repair`; off by
-default) uses it as follows:
-
-1. Each model reply is diagnosed. A proven repair is applied and re-diagnosed,
-   at most twice, with no model call.
-2. A valid query is executed and accepted, unless it returns no rows *and*
-   BeingDB proves why. Then the model is asked again, with BeingDB's reasons,
-   and may reply `UNSUPPORTED`.
-3. An invalid query goes back to the model as before, now with BeingDB's
-   diagnostics added.
-
-There are at most 2 model repairs, as in Run 9. The prompt, model and decoding
-are unchanged. With the flag off, the code reproduces Run 9 exactly: a test
-replays Run 9's recorded replies, and a full rerun gave identical replies for
-all 50 questions.
-
-**Controlled comparison.** The same 50 questions, model, prompt
-(`nl2dsl-prompt/run9`, same hashes), grammar, seed and temperatures. Both runs
-were made on the same codebase, from clean commits, one trial each:
-
-| | Run 9 (reproduced, flag off) | Run 10 (`--db-guided-repair`) |
-|---|---|---|
-| Overall correct | 23/50 (46%) | 28/50 (56%) |
-| Supported correct | 17/38 (45%) | 22/38 (58%) |
-| Unsupported recognised | 6/12 | 6/12 |
-| False refusals / fabricated queries | 0 / 5 | 1 / 4 |
-| Model calls (total) | 60 | 78 |
-| Model repair calls | 10 | 28 |
-| Proven BeingDB repairs | 0 | 5 (all then correct) |
-| BeingDB calls | 54 | 130 (76 diagnose) |
-| Correct with one model call | 22 | 27 |
-| Correct answers per model call | 0.383 | 0.359 |
-| Median model time per call | 25.1 s | 26.2 s |
-| Median BeingDB time per question | 3.0 ms | 3.7 ms |
-| Median time per question | 26.1 s | 28.4 s |
-| Correct within 30 s per question | 21 | 26 |
-
-All 50 first replies were identical, so every difference comes from the
-repair stage. The two mechanisms behave very differently:
-
-| Mechanism | Questions | Extra model calls | Effect |
-|---|---|---|---|
-| Proven BeingDB repairs | 5 (3 argument swaps, 2 names written as variables) | 0 | +5 correct |
-| Model repair after BeingDB proves an empty result | 9 | +17 (15 after the proof, 2 follow-on repairs of invalid replies) | +1 correct (`m10`); 1 false refusal (a question already wrong in Run 9); no unsupported question newly recognised |
-| BeingDB diagnostics added to invalid-query repairs | 7 others | +1 | −1 (`m08`, correct in Run 9: a sampled repair went differently) |
-
-**Interpretation.** This initial result suggests that a fast symbolic store
-can correct a small model's mistakes. The proven repairs added 5 correct
-answers with no extra model calls, in milliseconds. Asking the model again
-when BeingDB proves an empty result did not pay off for this model: 17 more
-calls bought one correct answer, so accuracy per model call fell slightly
-overall. A condition that applies only the proven repairs was the obvious next
-measurement; see [Run 11](#proven-beingdb-repairs-only-run-11). One model, one
-trial and 50 questions: this is not statistically conclusive. Timings were
-measured with about 10 GB of swap in use.
+- Node 22 or later.
+- Sibling checkouts of `../beingdb-wasm` (and `../beingdb`).
+- A browser with WebGPU and `shader-f16`. The benchmark needs Chrome, Edge or
+  another Chromium-based browser.
+- Enough free memory for the model: WebLLM estimates about 2.3 GB of GPU
+  memory for 3B q4f16 models.
 
 ```sh
-npm run benchmark -- \
-  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
-  --machine "MacBook Air M1 8GB" \
-  --questions eval/questions-annotated.json \
-  --db-guided-repair \
-  --condition annotated-predicates-db-guided-run10
-npm run compare -- eval/results/benchmarks/<run 9 dir> eval/results/benchmarks/<run 10 dir>
+(cd ../beingdb-wasm && dune build --profile release)   # release build = one .wasm module (Safari needs it)
+npm install
+npm run link     # vendor/ -> ../beingdb-wasm build + WebLLM
+npm run serve    # http://localhost:8010/
 ```
 
-Reports in `eval/results/benchmarks/`:
-[run 9 reproduced](eval/results/benchmarks/20261006T162508Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[run 10](eval/results/benchmarks/20261006T164839Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
-Both runs were recorded from clean commits (`beingdb-webllm` 7ad5506 and
-17f39ef, `beingdb-wasm` d613e8c, `beingdb` 7c23845).
+Model-free checks (no WebGPU or model):
 
-### Proven BeingDB repairs only (Run 11)
+```sh
+npm test                                                         # schema/prompt/pipeline tests (incl. the linked WASM build)
+npm run check-eval -- --questions eval/questions-annotated.json  # reference queries and scorer against the linked pack
+node eval/diagnose-annotations.mjs                               # do the pack's predicate annotations reach the prompt?
+```
 
-Run 10 combined two mechanisms. Run 11 keeps the first and drops the second,
-to measure the value of the deterministic repairs on their own:
+## Run a model interactively
 
-| Repair policy (`--repair-policy`) | Run | What happens to a model reply |
-|---|---|---|
-| `model` (default) | 9 | `BeingDB.query`; a validation error goes back to the model with run 9's message |
-| `db-guided` (= `--db-guided-repair`) | 10 | `BeingDB.diagnose`; proven repairs applied without a model call; the model repairs invalid queries (with BeingDB's diagnostics) **and** valid queries BeingDB proves empty |
-| `proven-only` | 11 | `BeingDB.diagnose`; proven repairs applied (and re-diagnosed) without a model call; then exactly run 9's path. An empty result never causes a model call |
+- <http://localhost:8010/>: the demo. Click **Load model**, type a question
+  and press **Ask BeingDB**. The page shows the generated DSL, BeingDB's
+  verdict, any repairs, timings, the raw rows and the full prompt.
+- <http://localhost:8010/eval.html>: runs the 50 questions in the page and
+  saves a report to `eval/results/`. Keep the tab visible. Inspect a report
+  with `node eval/show-run.mjs eval/results/<report>.json`, or re-score it in
+  Node with `node eval/check-references.mjs eval/results/<report>.json`.
 
-The question, model, prompt, grammar, seed, temperatures and token limit are
-the same in all three. `run.json` records the policy in
-`config.pipeline.repairPolicy` (with its version and a description).
+Both pages default to `Qwen2.5-1.5B-Instruct-q4f16_1-MLC`, the original small
+model. Use another model with `?model=<MODEL-ID>`, e.g.
+`?model=Llama-3.2-3B-Instruct-q4f16_1-MLC`. The interactive pages always use
+the default (`model`) repair policy, and `eval.html` reads
+`eval/questions.json`. Use them for exploring, and `npm run benchmark` for
+comparisons.
 
-**Result.** One trial each, clean commits. Run 9 was rerun on the Run 11
-code and its replies matched the original Run 9 for all 50 questions.
+## Systematic benchmarking
 
-| | Run 9 (`model`) | Run 10 (`db-guided`) | Run 11 (`proven-only`) |
-|---|---|---|---|
-| Overall correct | 23/50 (46%) | 28/50 (56%) | **28/50 (56%)** |
-| Supported correct | 17/38 | 22/38 | **22/38** |
-| Unsupported recognised | 6/12 | 6/12 | 6/12 |
-| False refusals / fabricated | 0 / 5 | 1 / 4 | 0 / 5 |
-| Model calls (repairs) | 60 (10) | 78 (28) | **60 (10)** |
-| Model calls per supported question | 1.18 | 1.50 | 1.18 |
-| Proven BeingDB repairs (then correct) | 0 | 5 (5) | 5 (5) |
-| BeingDB calls: diagnose / query | 0 / 54 | 76 / 54 | 59 / 54 |
-| BeingDB time, total | 429 ms | 277 ms | 269 ms |
-| Correct with one model call | 22 | 27 | 27 |
-| **Correct answers per model call** | 0.383 | 0.359 | **0.467** |
-| Median model time per call | 24.0 s | 26.2 s | 27.3 s |
-| Median time per question | 25.4 s | 28.4 s | 28.0 s |
+`npm run benchmark` runs the full evaluation for one model in a real browser.
+Playwright drives a locally installed Chrome/Edge with WebGPU, running the same
+code as the demo. The command starts the server, launches the browser, checks
+compatibility, loads the model, runs, scores and records every question, and
+writes a self-describing run directory. `npm run benchmark -- --help` lists
+every option.
 
-**Where the gains come from.**
+### List models
 
-- Run 11's model replies and repair messages are byte-identical to Run 9's
-  for all 50 questions. Its only differences from Run 9 are the 5 questions
-  BeingDB repaired (3 argument swaps, 2 names written as variables), and all
-  5 became correct.
-- Run 10 reached the same 28/50 by a different mix, at 18 more model calls. Its
-  empty-result retries fixed `m10` (still wrong in Runs 9 and 11). Its changed
-  repair text lost `m08` (correct in Runs 9 and 11).
+```sh
+npm run models                                            # WebLLM prebuilt models: VRAM estimate, f16, context window
+npm run models -- --filter llama
+npm run models -- --validate models/benchmark-models.json # check a matrix file
+```
 
-**Interpretation.** In this initial result, BeingDB-proven repairs improved
-accuracy without any extra model inference: +5 correct answers (46% to 56%)
-for 59 extra BeingDB calls (about 3.9 ms of BeingDB time per question). Run 11
-saves 18 model calls (23%) against Run 10 at equal accuracy. It also gives up
-Run 10's one extra unsupported fabrication avoided and its one false refusal.
-The longer median times in Runs 10 and 11 come from model time per call, not
-BeingDB. The machine had about 10 GB of swap in use, and in Run 11 the model
-produced the same replies as in Run 9. One model, one trial and 50 questions:
-this suggests the deterministic layer is the valuable part of Run 10, but it
-is not statistically conclusive.
+Models whose context window cannot hold the prompt (~2,500 tokens plus
+repairs) are flagged.
+
+### Probe a model
+
+Check that a model loads and fits before spending a full run on it:
+
+```sh
+npm run benchmark -- --probe \
+  --model <MODEL-ID> \
+  --machine "<MACHINE DESCRIPTION>" \
+  --questions eval/questions-annotated.json
+```
+
+The probe checks WebGPU, the adapter (a software renderer is rejected),
+`shader-f16`, the WebGPU limits WebLLM needs, the data fingerprint against the
+question file, model loading, the context window, and one smoke generation.
+The result is a run with status `probe_ok`. Otherwise the status is
+`incompatible` or `model_load_failed` (exit code 2) with the reason. Weights
+download once into `~/.cache/beingdb-webllm/browser-profiles/`. Keep the
+default port (8010) so the cache is reused.
+
+### Run a benchmark
+
+New candidate models run in the reference condition:
 
 ```sh
 npm run benchmark -- \
-  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
-  --machine "MacBook Air M1 8GB" \
+  --model <MODEL-ID> \
+  --machine "<MACHINE DESCRIPTION>" \
   --questions eval/questions-annotated.json \
   --repair-policy proven-only \
-  --condition annotated-predicates-proven-repairs-run11
+  --condition annotated-predicates-proven-repairs
 ```
 
-Reports in `eval/results/benchmarks/`:
-[run 9 reproduced](eval/results/benchmarks/20261006T174738Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[run 11](eval/results/benchmarks/20261006T181140Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
-(clean commits: `beingdb-webllm` 7729741 and e2f50d8, `beingdb-wasm`
-d376be1, `beingdb` dd8c4fe).
+**Leave the browser window in the foreground until it finishes.** Browsers
+throttle hidden pages, and the report flags questions that ran while hidden.
+A 3B model takes about 20 minutes on the 8 GB M1.
+
+The bare default form,
+`npm run benchmark -- --model <MODEL-ID> --machine "<MACHINE DESCRIPTION>"`,
+runs the historical *baseline* condition (`eval/questions.json`, `model`
+repair). That question file is pinned to the pre-annotation pack, so with the
+current `beingdb-wasm` build it stops as `incompatible`, by design.
+
+Useful options: `--runs N` (repeat with the model loaded once), `--warmup`
+(compile both grammars before timing), `--notes "..."`, `--ids e01,m02`
+(partial run), `--browser edge`, `--cold` (measure a fresh download).
+
+### Run the reference condition
+
+```sh
+npm run benchmark -- \
+  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "<MACHINE DESCRIPTION>" \
+  --questions eval/questions-annotated.json \
+  --repair-policy proven-only \
+  --condition annotated-predicates-proven-repairs
+```
+
+Run it on every new machine, and again after any meaningful change to the
+pack, schema metadata, prompt, grammar, repair pipeline or WebLLM version.
+Candidate models then always have a reference run from the same condition and
+machine.
+
+The saved runs of this condition are labelled
+`annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`. They
+have identical settings and prompt/grammar hashes. The label is free text and
+the model is recorded separately, so use one model-independent label per
+condition for new runs, as above.
+
+### Several models
+
+```sh
+npm run benchmark:matrix -- \
+  --models models/benchmark-models.json \
+  --machine "<MACHINE DESCRIPTION>" \
+  --questions eval/questions-annotated.json \
+  --repair-policy proven-only \
+  --condition annotated-predicates-proven-repairs
+```
+
+The models file is a JSON array of `{"id", "label", "runs"?}`. Every model
+gets the same settings and a fresh browser.
+[`models/benchmark-models.json`](models/benchmark-models.json) lists larger
+(7-8B) candidates for machines with more memory.
+
+## Benchmark conditions
+
+A **condition** is everything besides the model and machine that can change a
+result:
+
+- question file and BeingDB pack
+- schema metadata and prompt
+- grammar
+- repair policy
+- decoding settings
+- WebLLM version and harness code
+
+**Model comparisons are meaningful only within one condition.**
+
+- `--condition <label>` is only a label (default `baseline`). It changes no
+  setting. Use it to name the experiment.
+- Settings that differ from the defaults are listed in `run.json` under
+  `config.nonDefault` (and printed as a warning). The prompt and grammar
+  hashes are in `config.prompt.sha256` and the repair policy in
+  `config.pipeline`. Check these, not just the label, before comparing runs.
+- Do not compare a baseline run with an annotated/proven-repair run as if only
+  the model changed.
+
+Conditions in the saved results:
+
+| Condition | Questions | Prompt | Repair policy | Role |
+|---|---|---|---|---|
+| Baseline (defaults) | `eval/questions.json` | `nl2dsl-prompt/run8` | `model` | historical; needs the pre-annotation pack (`beingdb-wasm` 41c0d8d) |
+| Annotated predicates (Run 9) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `model` | ablation |
+| Annotated + BeingDB-guided repair (Run 10) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `db-guided` | ablation |
+| **Annotated + proven repairs (Run 11)** | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | **reference condition** |
+
+The two question files hold the same 50 questions and reference queries. They
+differ only in the BeingDB data fingerprint they are pinned to. Annotating the
+pack's predicates changed that fingerprint, and the benchmark refuses a
+question file that does not match the loaded pack. See
+[question sets and fingerprints](docs/benchmarking.md#question-sets-data-fingerprints-and-prompt-versions).
+
+## Repair policies
+
+A model reply can be wrong in ways BeingDB detects. **Repair** is the bounded
+step that tries to fix such a reply before the answer is scored. There are two
+kinds:
+
+- **Model repair.** BeingDB's validation errors go back to the model, which is
+  asked again. This costs a model call (sampled at temperature 0.7, seed 1). A
+  question gets at most 2 model repairs (`--repair-attempts`).
+- **Proven (deterministic) repair.** BeingDB's `diagnose` rewrites the query
+  itself, with no model call, but only when it can prove the rewrite. There
+  are currently two cases:
+  - swap two arguments, when that is the only swap that makes every constant
+    match where it occurs in the data;
+  - replace a single-use variable with the atom its name spells
+    (`BBC` -> `bbc`), when that atom occurs at exactly that argument.
+
+  These repairs are applied to each model reply, at most 2 passes, before the
+  query is executed.
+
+`--repair-policy` selects how the two are combined. The prompt, model and
+decoding are the same under every policy.
+
+| Policy | Proven BeingDB repairs | Model repair of invalid queries | Model asked again when BeingDB proves a valid query returns nothing | Model sees BeingDB diagnostics |
+|---|---|---|---|---|
+| `model` (default) | no | yes | no | no |
+| **`proven-only`** (recommended) | yes | yes, exactly as in `model` | no | no |
+| `db-guided` (alias `--db-guided-repair`) | yes | yes | yes (it may then reply `UNSUPPORTED`) | yes |
+
+**Use `proven-only` for systematic experiments.** The model's side of the loop
+is identical to `model`: the same repair messages, and an empty result is
+accepted like any other. BeingDB only adds fixes it can prove, at no model
+cost. In Run 11 that added 5 correct answers with zero extra model calls.
+`db-guided` reached the same score in Run 10 but used 18 more model calls.
+
+**Keep the policy fixed when comparing models.** Proven repairs fix particular
+mistakes (swapped arguments, names written as variables). Some models make
+those mistakes more often than others, so a different policy changes scores
+unevenly across models.
+
+How the policy is accounted for:
+
+- Under `proven-only` and `db-guided`, the "first attempt" is the first model
+  reply *after* any proven repair. It is still one model call.
+- `summary.json` (`perTrial[].efficiency`) counts model calls, model repair
+  calls and proven repairs separately, and how many of those ended correct.
+- To measure a model without BeingDB's help, run it again with
+  `--repair-policy model`.
+
+Algorithms and message formats:
+[validation and repair](docs/internals.md#validation-and-repair),
+[pipeline conditions and cost metrics](docs/benchmarking.md#pipeline-conditions-and-cost-metrics).
+
+## Experimental discipline
+
+When comparing models, keep these fixed (and verify them in `run.json`):
+
+- [ ] question file (`suite.sha256`) and BeingDB pack (`beingdb.environmentFingerprint`, `provenance.artefacts`)
+- [ ] schema metadata, prompt and grammar (`config.prompt.version` and `config.prompt.sha256`)
+- [ ] repair policy (`config.pipeline`)
+- [ ] decoding settings (`config.generation`, `config.nonDefault`)
+- [ ] WebLLM version and harness commit (`provenance`)
+- [ ] machine, browser and browser version where practical
+
+Record with every run:
+
+- [ ] `--machine` with a description: model, chip, RAM
+- [ ] `--condition` with the condition label
+- [ ] `--notes` with anything unusual: power state, other load, why the run was made
+
+The harness records OS, RAM, power source, swap, browser and WebGPU adapter
+automatically. Run the reference model on the same machine in the same
+session where possible. A single trial is one observation: use `--runs N` to
+check timing spread (replies are deterministic on one machine).
+
+## Current reference model
+
+`Llama-3.2-3B-Instruct-q4f16_1-MLC` is the **reference model**. It is a stable
+comparison point for ongoing experiments:
+
+- it is not necessarily the best model available;
+- rerun it after meaningful schema, prompt, pipeline or runtime changes;
+- compare each new candidate against it under the same condition, ideally on
+  the same machine.
+
+Its current result is a reference point, not a leaderboard entry:
+
+| | |
+|---|---|
+| Model | `Llama-3.2-3B-Instruct-q4f16_1-MLC` (WebLLM 0.2.85) |
+| Condition | annotated predicates + `proven-only` repair (`eval/questions-annotated.json`, `nl2dsl-prompt/run9`, other settings default) |
+| Hardware | MacBook Air M1 (`MacBookAir10,1`), 8 GB, macOS 27, Chrome 155, mains power, 8.6 GB swap in use at start |
+| Overall correct | **28/50 (56%)** |
+| Supported correct, first attempt / after repair | 21/38 / **22/38** |
+| Valid DSL after repair | 36/38 |
+| Unsupported recognised | 6/12 (5 others got a valid but meaningless query) |
+| Model calls | 60 (10 model repairs); 5 proven BeingDB repairs, all ended correct |
+| Median model time per call | 21.2 s |
+| Median end-to-end per question | 22.1 s |
+| Run | [`20261009T102014Z_…`](eval/results/benchmarks/20261009T102014Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/) (clean commits) |
+
+The same condition was first run as Run 11
+([`20261006T181140Z_…`](eval/results/benchmarks/20261006T181140Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+Chrome 154). The replies and scores were identical, but the median was
+28.0 s per question, which shows how much timings vary on one machine.
+
+## Models tested so far
+
+All runs below are single trials on the same MacBook Air M1 8 GB. Scores are
+comparable only within a table.
+
+**Reference condition** (annotated predicates, `proven-only`):
+
+| Model | Overall | Supported correct | Valid DSL | Unsupported recognised | False refusals | Model calls | Median per question |
+|---|---|---|---|---|---|---|---|
+| Llama-3.2-3B-Instruct (reference) | 28/50 | 22/38 | 36/38 | 6/12 | 0 | 60 | 22.1 s (mains) |
+| Hermes-3-Llama-3.2-3B | 27/50 | 19/38 | 28/38 | 8/12 | 3 | 68 | 22.0 s (battery) |
+
+The same Llama model scored 23/50 under the `model` policy (Run 9) and 28/50
+under `db-guided` (Run 10, 78 model calls).
+
+**Baseline condition** (pre-annotation pack, `eval/questions.json`,
+`nl2dsl-prompt/run8`, `model` repair):
+
+| Model | Overall | Supported correct | Valid DSL | Unsupported recognised | Median per question |
+|---|---|---|---|---|---|
+| Qwen2.5-1.5B-Instruct | 14/50 | 14/38 | 32/38 | 0/12 | 10.2 s |
+| Llama-3.2-3B-Instruct | 20/50 | 13/38 | 32/38 | 7/12 | 16.1 s |
+| Qwen3.5-2B | aborted after 19 questions: no valid DSL (empty `<think>` blocks despite `enable_thinking: false`), then a 600 s timeout | | | | |
+
+Qwen2.5-3B was only tried with the earlier interactive harness and a
+pre-final prompt: 6/38 supported correct, at about twice the latency of the
+1.5B model.
+
+Full record, run by run:
+[experiment log](docs/internals.md#experiment-log) and
+[`eval/results/benchmarks/`](eval/results/benchmarks/).
+
+## Hardware used so far
+
+Every completed run in this repository so far was produced on one machine:
+
+| Machine | Chip / GPU | Memory | OS | Browsers |
+|---|---|---|---|---|
+| MacBook Air (`MacBookAir10,1`) | Apple M1, WebGPU adapter `apple / metal-3` | 8 GB unified | macOS 27 | Chrome 154-155 (benchmark); VS Code Chromium 150, Chrome 153, Safari 27 (interactive) |
+
+This is where the experiments happened to run, not a requirement or a
+recommendation. The harness was built to compare across machines, memory sizes,
+Apple Silicon generations and other WebGPU-capable hardware. Every run records
+the machine it ran on. Runs on this machine had heavy swap use (about 8-10.5 GB
+at the start of each benchmark), and some were on battery. Larger models in
+`models/benchmark-models.json` need a machine with more memory. Browser notes:
+Safari works but was about 2.3x slower; Firefox 156 could not run WebLLM (a
+WebGPU limit). See [browser support](docs/internals.md#browser-support).
+
+## Results and comparison
+
+Each run writes `eval/results/benchmarks/<UTC time>_<machine>_<model>/`:
+
+| File | Content |
+|---|---|
+| `run.json` | status, labels, configuration, environment, provenance, model loading |
+| `questions.jsonl` | every question and attempt: DSL, BeingDB errors, repairs, timings, failure category |
+| `summary.json` | accuracy counts, cost/efficiency, timing statistics, failure categories |
+| `browser.log` | page console |
+
+```sh
+npm run compare -- eval/results/benchmarks/<runA> eval/results/benchmarks/<runB>
+npm run export-results -- --format csv     # all runs -> eval/results/export/, one row per run x question
+```
+
+`compare` prints condition, accuracy, cost, latency and failure categories
+side by side, plus the questions one run got right and the other wrong. It
+also reads the older `eval/results/run*.json` reports. `export-results`
+produces flat CSV/JSONL for pandas or R. Schemas, metrics and the failure
+taxonomy: [docs/benchmarking.md](docs/benchmarking.md#result-files-and-schema-beingdb-webllm-benchmarkv1).
+
+## Reproducibility and provenance
+
+Every run records:
+
+- the git commit and uncommitted changes of `beingdb-webllm`, `beingdb-wasm`
+  and `beingdb` (a dirty tree is reported, never hidden);
+- hashes of the WASM build and data, and the BeingDB data fingerprint;
+- the question suite id and its sha256;
+- the prompt version and prompt/grammar hashes;
+- the WebLLM version;
+- machine, OS, RAM, swap, power source, browser and WebGPU adapter/limits;
+- all benchmark parameters, with non-default ones listed.
+
+The benchmark refuses to run with an incompatible environment: a question file
+whose fingerprint does not match the loaded pack, a software GPU, missing
+WebGPU features or limits, or a context window too small for the prompt. First
+attempts are greedy and repairs are seeded, so replies repeat exactly on the
+same machine and browser. WebGPU numerics may differ across GPUs and drivers.
+See [compatibility checks](docs/benchmarking.md#compatibility-checks-fail-fast)
+and [determinism](docs/benchmarking.md#determinism).
+
+## Interpreting timings
+
+- Timings depend on hardware: GPU, memory bandwidth and unified memory size.
+- Memory pressure matters. On an 8 GB machine a 3B model leaves little
+  headroom, and swap in use or growing during a run inflates timings. The
+  report warns about both.
+- Battery versus mains power, Low Power Mode and thermal state can matter.
+- Hidden or occluded browser windows are throttled; questions that ran
+  hidden are flagged.
+- Almost all time is prompt prefill (WebLLM has no prefix cache across
+  questions). BeingDB takes milliseconds per question.
+- Compare timings only between runs under reasonably controlled conditions:
+  same machine, power, similar memory state.
+
+For example, the reference condition gave identical replies on the M1 Air in
+Run 11 and in the later rerun. The median per question was 28.0 s in one and
+22.1 s in the other.
 
 ## Limitations
 
 - Accuracy is too low for unsupervised use: always read the generated DSL.
   BeingDB guarantees that shown rows are real facts for that query, not that
-  the query means what you asked.
-- ~11 s per question on an M1 Air, almost all of it prompt prefill; WebLLM
-  re-reads the whole prompt for every new question.
-- One model, one dataset, 50 questions. The questions were written with
-  knowledge of the data, and the examples resemble some question patterns.
+  the query means what was asked.
+- One dataset and 50 questions, written with knowledge of the data. The
+  few-shot examples resemble some question patterns. Results so far are
+  single trials.
 - Needs WebGPU. BeingDB itself runs in any browser `beingdb-wasm` supports.
+
+## Detailed documentation
+
+- [docs/benchmarking.md](docs/benchmarking.md): harness architecture,
+  compatibility checks, question sets and fingerprints, result schema,
+  repair-policy accounting and cost metrics, timing metrics, failure taxonomy,
+  manual annotations, determinism.
+- [docs/internals.md](docs/internals.md): execution path, schema context,
+  prompt, output grammar,
+  [validation and repair](docs/internals.md#validation-and-repair)
+  (including BeingDB-guided and proven-only repair), evaluation method,
+  [experiment log](docs/internals.md#experiment-log) (runs 1-11 and later),
+  performance and browser support.
+- [eval/questions.json](eval/questions.json) and
+  [eval/questions-annotated.json](eval/questions-annotated.json): the question
+  set (the same items, pinned to the pre-annotation and annotated packs).

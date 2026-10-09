@@ -264,12 +264,14 @@ Generation is deterministic (greedy first attempt, seeded repairs): run 8 gave
 the same replies as run 6 for every question, and the Chrome smoke test the
 same replies as the integrated browser.
 
-### Later runs (`npm run benchmark`, Chrome 154)
+### Later runs (`npm run benchmark`, Chrome 154/155)
 
-Same machine, 50 questions, settings and repair loop. Llama-3.2-3B-Instruct, one
-trial each. Only the model-facing predicate metadata changed: prompt run 9 adds
-the pack's declared argument roles and descriptions. Rules, examples and grammar
-are unchanged (identical hashes).
+Same machine, 50 questions, settings and repair loop, one trial each. From
+run 9 on, the model-facing predicate metadata changed: prompt run 9 adds the
+pack's declared argument roles and descriptions. Rules, examples and grammar
+are unchanged (identical hashes). Runs 10 and 11 change only the repair
+policy. The last two rows were run in Chrome 155 on the run-11 code
+(`beingdb-webllm` 6119082).
 
 | Prompt | Model | Change | 1st valid | 1st correct | Final valid | Final correct | Unsupported detected | Fabricated |
 |---|---|---|---|---|---|---|---|---|
@@ -278,16 +280,18 @@ are unchanged (identical hashes).
 | run 9 | Llama-3.2-3B | run 9 reproduced on the run-10 code (replies identical) | 33/38 | 16/38 | 36/38 | 17/38 | 6/12 | 5 |
 | run 9 | Llama-3.2-3B | **run 10**: + BeingDB-guided repair (`db-guided-repair/1`) | 33/38 | 21/38 | 34/38 | 22/38 | 6/12 | 4 |
 | run 9 | Llama-3.2-3B | **run 11**: + proven BeingDB repairs only (`proven-repairs-only/1`) | 33/38 | 21/38 | 36/38 | 22/38 | 6/12 | 5 |
+| run 9 | Llama-3.2-3B | run 11 condition rerun (replies identical to run 11) | 33/38 | 21/38 | 36/38 | 22/38 | 6/12 | 5 |
+| run 9 | Hermes-3-Llama-3.2-3B | run 11 condition | 26/38 | 18/38 | 28/38 | 19/38 | 8/12 | 3 |
 
-Runs 10 and 11 count a question's first attempt *after* any proven BeingDB
-repair (still one model call). Run 10 used 78 model calls, Run 11 the same 60
-as Run 9; both made 5 proven repairs. See the
-[README](../README.md#beingdb-guided-repair-run-10) for the cost comparison.
+Runs 10 and 11 (and the later proven-only runs) count a question's first
+attempt *after* any proven BeingDB repair (still one model call). Run 10 used
+78 model calls, Run 11 the same 60 as Run 9; both made 5 proven repairs. See
+[Run 10](#run-10-beingdb-guided-repair) and [Run 11](#run-11-proven-beingdb-repairs-only)
+below for the cost comparison.
 
 Run `20261006T131109Z`, labelled `annotated-predicates`, is not in the table:
 the annotations had not reached the model yet, so it was an exact repeat of the
-run-8 baseline. Results and caveats:
-[README](../README.md#semantic-predicate-metadata-llama-32-3b).
+run-8 baseline. See [Run 9](#run-9-semantic-predicate-metadata).
 
 ### Final run (run 8) in detail
 
@@ -355,6 +359,346 @@ Repair: BeingDB's feedback made 3 more queries valid (7-8 in other runs) but
 has not produced a correct answer in the final configuration (1 in runs 3 and
 7). The model fixes the reported symptom (e.g. drops the unbound `order by`)
 rather than the underlying mistake, or repeats the rejected query.
+
+### Default demo model (Qwen2.5-1.5B) and the harness reproduction of run 8
+
+The demo and `eval.html` still default to `Qwen2.5-1.5B-Instruct-q4f16_1-MLC`
+(`DEFAULT_MODEL` in `src/generator.js`). It was chosen for an 8 GB M1 MacBook
+Air: among WebLLM's 1-3B models it combines a small footprint (869 MB download,
+~1.6 GB GPU memory; WebLLM marks it `low_resource_required`) with good
+instruction following for its size. Sub-1B models were not tried. The
+benchmark experiments have since moved to Llama-3.2-3B as the reference model
+(see the [README](../README.md#current-reference-model)).
+
+Run 8 characterised the 1.5B model as follows. It reliably handles
+single-predicate lookups, simple year ranges and a negation pattern it has
+seen. It often picks the wrong predicate, swaps arguments, writes names as
+variables (`Elsa_Stansfield`), and never declines unsupported questions. The
+repair loop turned some rejected queries into valid ones but no wrong answer
+into a right one. Model load took 30 s the first time (download) and 2.5-9 s
+from the cache.
+
+`npm run benchmark` with default settings reproduced run 8 exactly. Every
+model reply of every attempt was identical to run 8, in Chrome 154 instead of
+VS Code's Chromium 150. That run used the pre-annotation pack (`beingdb-wasm`
+41c0d8d) and prompt run 8 (the prompt up to `beingdb-webllm` c15963d):
+[`20261001T120717Z_…`](../eval/results/benchmarks/20261001T120717Z_macbook-air-m1-8gb_Qwen2.5-1.5B-Instruct-q4f16_1-MLC/).
+The current code uses prompt run 9 with the annotated pack, so it no longer
+reproduces these replies.
+
+### Other models with the run-8 prompt (baseline condition)
+
+Same machine, prompt, grammar and repair loop. Run with `npm run benchmark`
+and default settings in Chrome 154, one trial each:
+
+| Model | Status | Overall correct | Valid DSL after repair | Unsupported recognised | Model time per call (median) |
+|---|---|---|---|---|---|
+| Qwen2.5-1.5B-Instruct | complete | 14/50 (28%) | 32/38 (84%) | 0/12 | 8.6 s (9.0 s in run 8) |
+| Llama-3.2-3B-Instruct | complete | 20/50 (40%) | 32/38 (84%) | 7/12 | 15.1 s |
+| Qwen3.5-2B | **aborted** after 19 of 50 questions | not scored | 0/19 completed questions | - | - |
+
+**Llama-3.2-3B-Instruct** (`Llama-3.2-3B-Instruct-q4f16_1-MLC`, ~2.3 GB GPU
+memory). First attempt: 27/38 valid DSL, 13/38 correct. After repair: 32/38
+valid, 13/38 correct (repair made 5 more queries valid, none correct). It
+recognised 7 of the 12 unsupported questions; 3 others got a valid but
+meaningless query. Model time per call 15.1 s median (first attempt 15.8 s,
+repair 3.5 s); BeingDB 2.4 ms median / 61.6 ms max per query. Failures: wrong
+predicate 8, still invalid after repair 6, unsupported not detected 5, wrong
+projection 4, wrong constraint 3, wrong argument order 2, entity grounding 1,
+unclassified 1. The gain over Qwen2.5-1.5B comes from declining unsupported
+questions. On supported questions the two are similar (13/38 vs 14/38), and
+Llama is about 1.7x slower per call.
+
+**Qwen3.5-2B** (`Qwen3.5-2B-q4f16_1-MLC`, ~2.2 GB GPU memory). This is an
+aborted run, not a 0% score. The `--probe` run passed: the model loaded, the
+4,096-token context window fits the prompt, and the smoke generation completed
+(its reply did not match the example query). The benchmark then produced no
+valid BeingDB DSL for any of the 19 questions it completed (`e01`-`e18`,
+`m01`). All 57 attempts, including repairs, were rejected as "neither a query
+nor UNSUPPORTED" (`syntax_generation`). Every reply began with an empty
+`<think></think>` block even though the harness sent `enable_thinking: false`,
+and 25 of the 57 replies hit the 200-token limit. The run was aborted when
+question `m02` timed out after 600 s.
+
+**Qwen2.5-3B** was only run with the earlier interactive harness (runs 5 and
+7 above, before the bounded grammar): 10/50 overall, 6/38 supported correct,
+at about twice the 1.5B model's latency.
+
+Caveats recorded in these reports: all four runs (two `--probe`, two
+benchmark) warn that the `beingdb-webllm` working tree had uncommitted changes
+(the recorded change is `package-lock.json`), so the results do not
+correspond exactly to commit `2b1dec9e1b`. Both benchmark runs started with
+heavy swap use (7.7 GB for Qwen3.5, 8.6 GB for Llama) that grew during the
+run, so memory pressure may have inflated timings. The Qwen3.5 runs were on
+battery power. No question ran with the page hidden.
+
+Reports in `eval/results/benchmarks/`: Llama-3.2-3B
+[probe](../eval/results/benchmarks/20261005T160554Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[benchmark](../eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/);
+Qwen3.5-2B
+[probe](../eval/results/benchmarks/20261005T152424Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/),
+[aborted benchmark](../eval/results/benchmarks/20261005T153112Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/).
+
+### Run 9: semantic predicate metadata
+
+**What changed.** BeingDB predicate declarations can give a predicate a
+natural-language description, argument roles and semantic types, e.g.
+`created_by(Work, Artist)`: "Relates a work to the artist or artist group who
+made it." They are compiled into the pack with the facts.
+
+- `beingdb-wasm` carries them through the browser runtime. `BeingDB.predicates()`
+  returns `description`, plus `role` and `semanticType` for each argument (the
+  same JSON as the native `GET /predicates?detailed=true`).
+- `beingdb-webllm` uses the declared roles instead of inferred ones, and adds
+  the descriptions to the schema context given to the model (see
+  [Schema context](#schema-context)).
+- The demo, evaluation page, benchmark and repair messages are all built from
+  the same schema, so they all receive the annotations.
+
+**Why it matters.** The model no longer has to guess what a predicate means,
+or which argument is which, from its name, argument types and one example. The
+metadata stays in BeingDB next to the data, not in application-specific prompt
+text: load a different annotated pack and the context changes with no code
+change.
+
+**Controlled comparison.** Both runs used the same 50 questions
+(`eval/questions-annotated.json` is `questions.json` with only the data
+fingerprint updated), the same model and settings, and identical rules,
+few-shot examples and grammar (same hashes). Only the model-facing predicate
+metadata changed: prompt `nl2dsl-prompt/run8` became `run9`. Llama-3.2-3B,
+one trial each, Chrome 154:
+
+| | Run 8 baseline | Run 9 annotated predicates |
+|---|---|---|
+| Overall correct | 20/50 (40%) | 23/50 (46%) |
+| Supported correct after repair | 13/38 (~34%) | 17/38 (~45%) |
+| Valid DSL after repair | 32/38 | 36/38 |
+| Unsupported recognised | 7/12 | 6/12 |
+| `wrong_predicate` | 8 | 5 |
+| `validation_repair_failed` | 6 | 2 |
+| `wrong_projection` | 4 | 2 |
+
+An earlier run labelled `annotated-predicates` (`20261006T131109Z`, 20/50) is
+**not** a valid annotation experiment. At that point `beingdb-wasm` dropped the
+annotations, so the model received the run-8 prompt byte for byte and gave
+identical replies.
+
+**Interpretation.** Overall correctness rose from 40% to 46%, supported-query
+correctness from 13/38 to 17/38, wrong-predicate failures fell from 8 to 5 and
+queries still invalid after repair from 6 to 2. Unsupported-question
+recognition declined slightly (7/12 to 6/12); five unsupported questions got a
+valid but meaningless query, against three before. One model, one trial and
+50 questions: not statistically conclusive.
+
+**Example: `m02`**, "Which works were created after 1980, and by whom?" In
+run 8 the model used only `year_created` and left out `created_by`
+(`wrong_predicate`). In run 9 it added `created_by(Work, Artist)` (the
+declared role name) but still failed with `wrong_projection` because `Artist`
+was missing from `find`. The answer is still wrong, but the metadata changed
+which predicates the model chose.
+
+**Prompt size.** Descriptions are included only for the 31 main predicates
+(at least 5 facts) to control context size. The other 137 stay in the compact
+grouped list, although repair messages show their declared roles and
+descriptions.
+
+| | Run 8 | Run 9 |
+|---|---|---|
+| System prompt | 5,929 chars | 8,718 chars |
+| Llama prompt tokens for `m02` | 1,944 | 2,524 |
+
+The model's context window is 4,096 tokens, and repair turns add to the
+prompt. Run 9's model time per call was higher, but both runs started with
+more than 8 GB of swap in use, which grew during the runs (by 1.9 GB in run 9),
+so this is not a reliable performance difference.
+
+```sh
+npm run benchmark -- \
+  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "MacBook Air M1 8GB" \
+  --questions eval/questions-annotated.json \
+  --condition annotated-predicates-run9
+```
+
+`node eval/diagnose-annotations.mjs --run <run dir>` checks that a run's
+recorded prompt contains the annotations. Reports:
+[run 8 baseline](../eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 9 annotated](../eval/results/benchmarks/20261006T135634Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
+(clean commits: `beingdb-webllm` d54a43d, `beingdb-wasm` d88657a, `beingdb`
+ccccfbc).
+
+### Run 10: BeingDB-guided repair
+
+Principle: **spend BeingDB operations freely, spend model calls sparingly.**
+A BeingDB check takes milliseconds; a model call takes about 25 s on this
+machine. Run 10 asks whether BeingDB can fix or diagnose a candidate query
+between model calls (mechanism:
+[BeingDB-guided repair](#beingdb-guided-repair---db-guided-repair-run-10)).
+
+**BeingDB** (`diagnose` action; `BeingDB.diagnose(dsl)` in the browser)
+checks a candidate query against the facts and the predicate declarations,
+without running it. It reports only what it can establish exactly:
+
+- a constant that occurs in no fact (`unknown_constant`), or not at that
+  argument (`constant_not_at_position`, with where it does occur);
+- a join between arguments that share no value (`disjoint_join`);
+- a `not` block that repeats positive clauses (`contradictory_negation`);
+- a named variable used once (`singleton_variable`);
+- a variable named after another argument's declared role (`role_name_mismatch`).
+
+It also says whether the query provably returns no rows. It proposes a repair
+only when it can prove it:
+
+- swap two arguments when that is the only swap that makes every constant
+  match (`performed_at(Venue, kevin_atherton)` -> `performed_at(kevin_atherton, Venue)`);
+- replace a singleton variable with the atom its name spells, when that atom
+  occurs at exactly that argument (`employed_by(Person, BBC)` -> `bbc`).
+
+The same BeingDB code serves the native server, the REPL, MCP (through
+`POST /query`) and the browser; the WASM output equals the native server's.
+
+**Controlled comparison.** The same 50 questions, model, prompt
+(`nl2dsl-prompt/run9`, same hashes), grammar, seed and temperatures, on the
+same codebase from clean commits, one trial each:
+
+| | Run 9 (reproduced, `model`) | Run 10 (`db-guided`) |
+|---|---|---|
+| Overall correct | 23/50 (46%) | 28/50 (56%) |
+| Supported correct | 17/38 (45%) | 22/38 (58%) |
+| Unsupported recognised | 6/12 | 6/12 |
+| False refusals / fabricated queries | 0 / 5 | 1 / 4 |
+| Model calls (total) | 60 | 78 |
+| Model repair calls | 10 | 28 |
+| Proven BeingDB repairs | 0 | 5 (all then correct) |
+| BeingDB calls | 54 | 130 (76 diagnose) |
+| Correct with one model call | 22 | 27 |
+| Correct answers per model call | 0.383 | 0.359 |
+| Median model time per call | 25.1 s | 26.2 s |
+| Median BeingDB time per question | 3.0 ms | 3.7 ms |
+| Median time per question | 26.1 s | 28.4 s |
+| Correct within 30 s per question | 21 | 26 |
+
+All 50 first replies were identical, so every difference comes from the
+repair stage:
+
+| Mechanism | Questions | Extra model calls | Effect |
+|---|---|---|---|
+| Proven BeingDB repairs | 5 (3 argument swaps, 2 names written as variables) | 0 | +5 correct |
+| Model repair after BeingDB proves an empty result | 9 | +17 (15 after the proof, 2 follow-on repairs of invalid replies) | +1 correct (`m10`); 1 false refusal (a question already wrong in Run 9); no unsupported question newly recognised |
+| BeingDB diagnostics added to invalid-query repairs | 7 others | +1 | −1 (`m08`, correct in Run 9: a sampled repair went differently) |
+
+**Interpretation.** The proven repairs added 5 correct answers with no extra
+model calls, in milliseconds. Asking the model again when BeingDB proves an
+empty result did not pay off for this model: 17 more calls bought one correct
+answer, so accuracy per model call fell slightly. One model, one trial, 50
+questions; timings measured with about 10 GB of swap in use.
+
+```sh
+npm run benchmark -- \
+  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "MacBook Air M1 8GB" \
+  --questions eval/questions-annotated.json \
+  --repair-policy db-guided \
+  --condition annotated-predicates-db-guided-run10
+```
+
+Reports:
+[run 9 reproduced](../eval/results/benchmarks/20261006T162508Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 10](../eval/results/benchmarks/20261006T164839Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
+(clean commits: `beingdb-webllm` 7ad5506 and 17f39ef, `beingdb-wasm` d613e8c,
+`beingdb` 7c23845). Run 10 was recorded with `--db-guided-repair`, the alias of
+`--repair-policy db-guided`.
+
+### Run 11: proven BeingDB repairs only
+
+Run 10 combined two mechanisms. Run 11 keeps the first (proven repairs) and
+drops the second (model retries on proven-empty results and diagnostics in
+repair messages), to measure the deterministic repairs on their own
+(mechanism: [Proven repairs only](#proven-repairs-only---repair-policy-proven-only-run-11)).
+Run 9 was rerun on the Run 11 code; its replies matched the original Run 9 for
+all 50 questions. One trial each, clean commits:
+
+| | Run 9 (`model`) | Run 10 (`db-guided`) | Run 11 (`proven-only`) |
+|---|---|---|---|
+| Overall correct | 23/50 (46%) | 28/50 (56%) | **28/50 (56%)** |
+| Supported correct | 17/38 | 22/38 | **22/38** |
+| Unsupported recognised | 6/12 | 6/12 | 6/12 |
+| False refusals / fabricated | 0 / 5 | 1 / 4 | 0 / 5 |
+| Model calls (repairs) | 60 (10) | 78 (28) | **60 (10)** |
+| Model calls per supported question | 1.18 | 1.50 | 1.18 |
+| Proven BeingDB repairs (then correct) | 0 | 5 (5) | 5 (5) |
+| BeingDB calls: diagnose / query | 0 / 54 | 76 / 54 | 59 / 54 |
+| BeingDB time, total | 429 ms | 277 ms | 269 ms |
+| Correct with one model call | 22 | 27 | 27 |
+| **Correct answers per model call** | 0.383 | 0.359 | **0.467** |
+| Median model time per call | 24.0 s | 26.2 s | 27.3 s |
+| Median time per question | 25.4 s | 28.4 s | 28.0 s |
+
+**Where the gains come from.** Run 11's model replies and repair messages are
+byte-identical to Run 9's for all 50 questions. Its only differences from
+Run 9 are the 5 questions BeingDB repaired (3 argument swaps, 2 names written
+as variables), and all 5 became correct. Run 10 reached the same 28/50 by a
+different mix, at 18 more model calls: its empty-result retries fixed `m10`
+(still wrong in Runs 9 and 11), and its changed repair text lost `m08`
+(correct in Runs 9 and 11).
+
+**Interpretation.** BeingDB-proven repairs improved accuracy without extra
+model inference: +5 correct answers (46% to 56%) for 59 extra BeingDB calls
+(about 3.9 ms of BeingDB time per question). Run 11 saves 18 model calls (23%)
+against Run 10 at equal accuracy. The longer median times in Runs 10 and 11
+come from model time per call, not BeingDB; the machine had about 10 GB of
+swap in use, and in Run 11 the model produced the same replies as in Run 9.
+This suggests the deterministic layer is the valuable part of Run 10, but one
+model, one trial and 50 questions are not statistically conclusive. This
+condition became the [reference condition](../README.md#current-reference-model).
+
+```sh
+npm run benchmark -- \
+  --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "MacBook Air M1 8GB" \
+  --questions eval/questions-annotated.json \
+  --repair-policy proven-only \
+  --condition annotated-predicates-proven-repairs-run11
+```
+
+Reports:
+[run 9 reproduced](../eval/results/benchmarks/20261006T174738Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 11](../eval/results/benchmarks/20261006T181140Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
+(clean commits: `beingdb-webllm` 7729741 and e2f50d8, `beingdb-wasm`
+d376be1, `beingdb` dd8c4fe).
+
+### Reference-condition runs in Chrome 155 (Llama rerun, Hermes 3)
+
+Both on the run-11 code (clean commits: `beingdb-webllm` 6119082,
+`beingdb-wasm` d376be1, `beingdb` dd8c4fe), with the Run 11 settings
+(`--questions eval/questions-annotated.json --repair-policy proven-only`) and
+identical prompt, grammar and pipeline hashes. One trial each.
+
+| | Llama-3.2-3B-Instruct (rerun) | Hermes-3-Llama-3.2-3B |
+|---|---|---|
+| Condition label | `annotated-predicates-proven-repairs-llama` | `annotated-predicates-proven-repairs-hermes` |
+| Overall correct | 28/50 | 27/50 |
+| Supported correct, first attempt / after repair | 21/38 / 22/38 | 18/38 / 19/38 |
+| Valid DSL after repair | 36/38 | 28/38 |
+| Unsupported recognised | 6/12 | 8/12 |
+| False refusals / fabricated | 0 / 5 | 3 / 3 |
+| Model calls (repairs) | 60 (10) | 68 (18) |
+| Proven BeingDB repairs (then correct) | 5 (5) | 4 (4) |
+| Median model time per call | 21.2 s | 20.6 s |
+| Median time per question | 22.1 s | 22.0 s |
+| Power | mains | battery |
+| Swap at start | 8.6 GB | 8.9 GB |
+
+The Llama rerun gave the same replies as Run 11 for all 50 questions; only
+the timings differ (22.1 s vs 28.0 s median per question). Hermes declined
+more unsupported questions but falsely refused 3 supported ones (`e11`,
+`e12`, `m10`) and left 7 queries invalid after repair. Its first attempt
+(`20261009T095534Z`) used the default `eval/questions.json` and stopped as
+`incompatible` (data fingerprint mismatch with the annotated pack).
+
+Reports:
+[Llama rerun](../eval/results/benchmarks/20261009T102014Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[Hermes 3](../eval/results/benchmarks/20261009T095637Z_macbook-air-m1-8gb_Hermes-3-Llama-3.2-3B-q4f16_1-MLC/).
 
 ## Performance (8 GB M1 MacBook Air)
 
@@ -440,8 +784,10 @@ look in BeingDB itself:
 
 - A different model family first, rather than a bigger Qwen: the 3B model was
   worse and twice as slow. Llama-3.2-3B has since been run (20/50 overall, 23/50
-  with predicate annotations). Remaining candidates on WebLLM: Qwen2.5-Coder-3B,
-  Qwen3-1.7B/4B (with thinking disabled), Phi-3.5-mini.
+  with predicate annotations, 28/50 with proven BeingDB repairs) and is the
+  reference model; Hermes-3-Llama-3.2-3B scored 27/50 in the same condition.
+  Remaining candidates on WebLLM: Qwen2.5-Coder-3B, Qwen3-1.7B/4B (with
+  thinking disabled), Phi-3.5-mini.
 - Predicate annotations for more of the schema: descriptions are shown only for
   the 31 main predicates. Describing the other 137 would add about 9,400 chars,
   which is tight in a 4,096-token context. Selecting descriptions relevant to

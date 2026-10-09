@@ -1,0 +1,1409 @@
+{
+ "schema": "beingdb-webllm-benchmark/v1",
+ "runId": "20261009T095637Z_macbook-air-m1-8gb_Hermes-3-Llama-3.2-3B-q4f16_1-MLC",
+ "status": "complete",
+ "error": null,
+ "startedAt": "2026-10-09T09:56:37.803Z",
+ "finishedAt": "2026-10-09T10:17:41.475Z",
+ "labels": {
+  "machine": "MacBook Air M1 8GB",
+  "modelLabel": null,
+  "condition": "annotated-predicates-proven-repairs-hermes",
+  "notes": null
+ },
+ "suite": {
+  "id": "custom:questions-annotated.json",
+  "registered": false,
+  "file": "eval/questions-annotated.json",
+  "sha256": "921ede38925e968cfcfb62421580305e4900f8639fd7054e408a649114384a15",
+  "itemsSha256": "3b2ccb33c75563696c13e53e78f8b2eeb2b9feed580c3b022ebd7d61b92c15fb",
+  "environmentFingerprint": "sha256:72f26c197b218529990de9cdf11da453d667020f693dbc4ba5398aa4ac1ed01d",
+  "partial": false,
+  "questionIds": [
+   "e01",
+   "e02",
+   "e03",
+   "e04",
+   "e05",
+   "e06",
+   "e07",
+   "e08",
+   "e09",
+   "e10",
+   "e11",
+   "e12",
+   "e13",
+   "e14",
+   "e15",
+   "e16",
+   "e17",
+   "e18",
+   "m01",
+   "m02",
+   "m03",
+   "m04",
+   "m05",
+   "m06",
+   "m07",
+   "m08",
+   "m09",
+   "m10",
+   "m11",
+   "m12",
+   "m13",
+   "m14",
+   "h01",
+   "h02",
+   "h03",
+   "h04",
+   "h05",
+   "h06",
+   "u01",
+   "u02",
+   "u03",
+   "u04",
+   "u05",
+   "u06",
+   "u07",
+   "u08",
+   "u09",
+   "u10",
+   "u11",
+   "u12"
+  ]
+ },
+ "model": {
+  "id": "Hermes-3-Llama-3.2-3B-q4f16_1-MLC",
+  "label": null,
+  "record": {
+   "model": "https://huggingface.co/mlc-ai/Hermes-3-Llama-3.2-3B-q4f16_1-MLC",
+   "model_id": "Hermes-3-Llama-3.2-3B-q4f16_1-MLC",
+   "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Llama-3.2-3B-Instruct-q4f16_1_cs1k-webgpu.wasm",
+   "vram_required_MB": 2263.69,
+   "low_resource_required": true,
+   "overrides": {
+    "context_window_size": 4096
+   }
+  },
+  "load": {
+   "ok": true,
+   "modelId": "Hermes-3-Llama-3.2-3B-q4f16_1-MLC",
+   "record": {
+    "model": "https://huggingface.co/mlc-ai/Hermes-3-Llama-3.2-3B-q4f16_1-MLC",
+    "model_id": "Hermes-3-Llama-3.2-3B-q4f16_1-MLC",
+    "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Llama-3.2-3B-Instruct-q4f16_1_cs1k-webgpu.wasm",
+    "vram_required_MB": 2263.69,
+    "low_resource_required": true,
+    "overrides": {
+     "context_window_size": 4096
+    }
+   },
+   "cachedBefore": false,
+   "cachedAtLoad": false,
+   "coldCacheRequested": false,
+   "deletedFromCache": false,
+   "loadMs": 50264.60000002384,
+   "phases": {
+    "other": {
+     "firstMs": 2170,
+     "lastMs": 50265,
+     "events": 2
+    },
+    "download": {
+     "firstMs": 5182,
+     "lastMs": 46638,
+     "events": 58
+    },
+    "cache_read": {
+     "firstMs": 47237,
+     "lastMs": 49737,
+     "events": 58
+    },
+    "shader_compile": {
+     "firstMs": 50265,
+     "lastMs": 50265,
+     "events": 1
+    }
+   },
+   "progressEvents": [
+    {
+     "ms": 2170,
+     "progress": 0,
+     "text": "Start to fetch params"
+    },
+    {
+     "ms": 5182,
+     "progress": 0.013923590219493706,
+     "text": "Fetching param cache[1/58]: 24MB fetched. 1% completed, 4 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 5570,
+     "progress": 0.03133147730787927,
+     "text": "Fetching param cache[2/58]: 55MB fetched. 3% completed, 4 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 5593,
+     "progress": 0.048742763710283264,
+     "text": "Fetching param cache[3/58]: 85MB fetched. 4% completed, 4 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 8058,
+     "progress": 0.06266635392977697,
+     "text": "Fetching param cache[4/58]: 109MB fetched. 6% completed, 6 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 8543,
+     "progress": 0.08008443896021783,
+     "text": "Fetching param cache[5/58]: 139MB fetched. 8% completed, 7 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 10969,
+     "progress": 0.09749572536262183,
+     "text": "Fetching param cache[6/58]: 169MB fetched. 9% completed, 9 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 11241,
+     "progress": 0.11490361245100739,
+     "text": "Fetching param cache[7/58]: 199MB fetched. 11% completed, 10 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 11434,
+     "progress": 0.1288272026705011,
+     "text": "Fetching param cache[8/58]: 223MB fetched. 12% completed, 10 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 13241,
+     "progress": 0.1427507928899948,
+     "text": "Fetching param cache[9/58]: 247MB fetched. 14% completed, 12 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 14400,
+     "progress": 0.16016207929239878,
+     "text": "Fetching param cache[10/58]: 277MB fetched. 16% completed, 13 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 15969,
+     "progress": 0.17757336569480278,
+     "text": "Fetching param cache[11/58]: 307MB fetched. 17% completed, 14 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 16214,
+     "progress": 0.286568970381777,
+     "text": "Fetching param cache[12/58]: 494MB fetched. 28% completed, 15 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 16314,
+     "progress": 0.30049256060127066,
+     "text": "Fetching param cache[13/58]: 518MB fetched. 30% completed, 15 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 17644,
+     "progress": 0.31441615082076435,
+     "text": "Fetching param cache[14/58]: 542MB fetched. 31% completed, 16 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 17757,
+     "progress": 0.3283397410402581,
+     "text": "Fetching param cache[15/58]: 566MB fetched. 32% completed, 16 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 18454,
+     "progress": 0.34575102744266206,
+     "text": "Fetching param cache[16/58]: 596MB fetched. 34% completed, 17 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 19247,
+     "progress": 0.35937887734255225,
+     "text": "Fetching param cache[17/58]: 620MB fetched. 35% completed, 18 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 20882,
+     "progress": 0.3767901637449563,
+     "text": "Fetching param cache[18/58]: 650MB fetched. 37% completed, 19 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 21115,
+     "progress": 0.39071375396444996,
+     "text": "Fetching param cache[19/58]: 674MB fetched. 39% completed, 19 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 21731,
+     "progress": 0.408125040366854,
+     "text": "Fetching param cache[20/58]: 704MB fetched. 40% completed, 20 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 21909,
+     "progress": 0.4220486305863477,
+     "text": "Fetching param cache[21/58]: 728MB fetched. 42% completed, 20 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 22572,
+     "progress": 0.43597222080584136,
+     "text": "Fetching param cache[22/58]: 752MB fetched. 43% completed, 21 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 23311,
+     "progress": 0.4533835072082454,
+     "text": "Fetching param cache[23/58]: 782MB fetched. 45% completed, 22 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 24484,
+     "progress": 0.46730709742773907,
+     "text": "Fetching param cache[24/58]: 806MB fetched. 46% completed, 23 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 24766,
+     "progress": 0.4847183838301431,
+     "text": "Fetching param cache[25/58]: 836MB fetched. 48% completed, 23 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 25205,
+     "progress": 0.5021296702325471,
+     "text": "Fetching param cache[26/58]: 866MB fetched. 50% completed, 24 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 25898,
+     "progress": 0.5160532604520408,
+     "text": "Fetching param cache[27/58]: 890MB fetched. 51% completed, 24 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 27268,
+     "progress": 0.5299768506715344,
+     "text": "Fetching param cache[28/58]: 914MB fetched. 52% completed, 26 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 27467,
+     "progress": 0.5473881370739385,
+     "text": "Fetching param cache[29/58]: 944MB fetched. 54% completed, 26 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 27708,
+     "progress": 0.5613117272934321,
+     "text": "Fetching param cache[30/58]: 968MB fetched. 56% completed, 26 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 28412,
+     "progress": 0.5787230136958362,
+     "text": "Fetching param cache[31/58]: 998MB fetched. 57% completed, 27 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 29728,
+     "progress": 0.5961343000982402,
+     "text": "Fetching param cache[32/58]: 1028MB fetched. 59% completed, 28 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 29861,
+     "progress": 0.6100578903177338,
+     "text": "Fetching param cache[33/58]: 1052MB fetched. 61% completed, 28 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 30119,
+     "progress": 0.6274691767201379,
+     "text": "Fetching param cache[34/58]: 1082MB fetched. 62% completed, 28 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 32203,
+     "progress": 0.6413927669396315,
+     "text": "Fetching param cache[35/58]: 1106MB fetched. 64% completed, 31 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 32378,
+     "progress": 0.6553163571591253,
+     "text": "Fetching param cache[36/58]: 1130MB fetched. 65% completed, 31 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 32551,
+     "progress": 0.6727276435615293,
+     "text": "Fetching param cache[37/58]: 1160MB fetched. 67% completed, 31 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 34152,
+     "progress": 0.6901389299639332,
+     "text": "Fetching param cache[38/58]: 1190MB fetched. 69% completed, 33 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 34380,
+     "progress": 0.704062520183427,
+     "text": "Fetching param cache[39/58]: 1214MB fetched. 70% completed, 33 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 34907,
+     "progress": 0.7214738065858309,
+     "text": "Fetching param cache[40/58]: 1244MB fetched. 72% completed, 33 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 35386,
+     "progress": 0.7353973968053247,
+     "text": "Fetching param cache[41/58]: 1268MB fetched. 73% completed, 34 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 36778,
+     "progress": 0.7493209870248184,
+     "text": "Fetching param cache[42/58]: 1292MB fetched. 74% completed, 35 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 37501,
+     "progress": 0.7667322734272224,
+     "text": "Fetching param cache[43/58]: 1322MB fetched. 76% completed, 36 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 37678,
+     "progress": 0.7806558636467161,
+     "text": "Fetching param cache[44/58]: 1346MB fetched. 78% completed, 36 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 38188,
+     "progress": 0.7980671500491201,
+     "text": "Fetching param cache[45/58]: 1376MB fetched. 79% completed, 37 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 39640,
+     "progress": 0.8154784364515241,
+     "text": "Fetching param cache[46/58]: 1406MB fetched. 81% completed, 38 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 39742,
+     "progress": 0.8294020266710178,
+     "text": "Fetching param cache[47/58]: 1430MB fetched. 82% completed, 38 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 39874,
+     "progress": 0.8433256168905114,
+     "text": "Fetching param cache[48/58]: 1454MB fetched. 84% completed, 38 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 40999,
+     "progress": 0.8572492071100052,
+     "text": "Fetching param cache[49/58]: 1478MB fetched. 85% completed, 39 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 41291,
+     "progress": 0.8711727973294989,
+     "text": "Fetching param cache[50/58]: 1502MB fetched. 87% completed, 40 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 41682,
+     "progress": 0.8885840837319029,
+     "text": "Fetching param cache[51/58]: 1532MB fetched. 88% completed, 40 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 43434,
+     "progress": 0.9059953701343069,
+     "text": "Fetching param cache[52/58]: 1562MB fetched. 90% completed, 42 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 43782,
+     "progress": 0.923406656536711,
+     "text": "Fetching param cache[53/58]: 1592MB fetched. 92% completed, 42 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 43850,
+     "progress": 0.9373302467562046,
+     "text": "Fetching param cache[54/58]: 1616MB fetched. 93% completed, 42 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 44755,
+     "progress": 0.9512538369756983,
+     "text": "Fetching param cache[55/58]: 1640MB fetched. 95% completed, 43 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 45175,
+     "progress": 0.9651774271951921,
+     "text": "Fetching param cache[56/58]: 1664MB fetched. 96% completed, 44 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 46347,
+     "progress": 0.982588713597596,
+     "text": "Fetching param cache[57/58]: 1694MB fetched. 98% completed, 45 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 46638,
+     "progress": 1,
+     "text": "Fetching param cache[58/58]: 1724MB fetched. 100% completed, 45 secs elapsed. It can take a while when we first visit this page to populate the cache. Later refreshes will become faster."
+    },
+    {
+     "ms": 47237,
+     "progress": 0.10899560468697417,
+     "text": "Loading model from cache[1/58]: 188MB loaded. 10% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47290,
+     "progress": 0.12262345458686437,
+     "text": "Loading model from cache[2/58]: 212MB loaded. 12% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47331,
+     "progress": 0.13654704480635807,
+     "text": "Loading model from cache[3/58]: 236MB loaded. 13% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47367,
+     "progress": 0.15395833120876207,
+     "text": "Loading model from cache[4/58]: 266MB loaded. 15% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47394,
+     "progress": 0.16788192142825578,
+     "text": "Loading model from cache[5/58]: 290MB loaded. 16% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47431,
+     "progress": 0.18529320783065978,
+     "text": "Loading model from cache[6/58]: 320MB loaded. 18% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47472,
+     "progress": 0.19921679805015347,
+     "text": "Loading model from cache[7/58]: 344MB loaded. 19% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47518,
+     "progress": 0.21662808445255746,
+     "text": "Loading model from cache[8/58]: 374MB loaded. 21% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47551,
+     "progress": 0.23055167467205118,
+     "text": "Loading model from cache[9/58]: 398MB loaded. 23% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47602,
+     "progress": 0.24796296107445517,
+     "text": "Loading model from cache[10/58]: 428MB loaded. 24% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47650,
+     "progress": 0.2618865512939489,
+     "text": "Loading model from cache[11/58]: 452MB loaded. 26% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47703,
+     "progress": 0.27929783769635286,
+     "text": "Loading model from cache[12/58]: 482MB loaded. 27% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47751,
+     "progress": 0.2932214279158466,
+     "text": "Loading model from cache[13/58]: 506MB loaded. 29% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47812,
+     "progress": 0.31063271431825057,
+     "text": "Loading model from cache[14/58]: 536MB loaded. 31% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47845,
+     "progress": 0.32455630453774426,
+     "text": "Loading model from cache[15/58]: 560MB loaded. 32% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47890,
+     "progress": 0.3419675909401483,
+     "text": "Loading model from cache[16/58]: 590MB loaded. 34% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47930,
+     "progress": 0.35589118115964197,
+     "text": "Loading model from cache[17/58]: 614MB loaded. 35% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 47992,
+     "progress": 0.373302467562046,
+     "text": "Loading model from cache[18/58]: 644MB loaded. 37% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 48041,
+     "progress": 0.3872260577815397,
+     "text": "Loading model from cache[19/58]: 668MB loaded. 38% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 48090,
+     "progress": 0.4046373441839437,
+     "text": "Loading model from cache[20/58]: 698MB loaded. 40% completed, 46 secs elapsed."
+    },
+    {
+     "ms": 48131,
+     "progress": 0.4185609344034374,
+     "text": "Loading model from cache[21/58]: 722MB loaded. 41% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48183,
+     "progress": 0.43597222080584136,
+     "text": "Loading model from cache[22/58]: 752MB loaded. 43% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48220,
+     "progress": 0.4498958110253351,
+     "text": "Loading model from cache[23/58]: 776MB loaded. 44% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48265,
+     "progress": 0.46730709742773907,
+     "text": "Loading model from cache[24/58]: 806MB loaded. 46% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48312,
+     "progress": 0.4812306876472328,
+     "text": "Loading model from cache[25/58]: 830MB loaded. 48% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48369,
+     "progress": 0.4986419740496368,
+     "text": "Loading model from cache[26/58]: 860MB loaded. 49% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48420,
+     "progress": 0.5125655642691305,
+     "text": "Loading model from cache[27/58]: 884MB loaded. 51% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48465,
+     "progress": 0.5264891544886242,
+     "text": "Loading model from cache[28/58]: 908MB loaded. 52% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48545,
+     "progress": 0.5438970415770098,
+     "text": "Loading model from cache[29/58]: 938MB loaded. 54% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48578,
+     "progress": 0.5578206317965034,
+     "text": "Loading model from cache[30/58]: 962MB loaded. 55% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48619,
+     "progress": 0.575228518884889,
+     "text": "Loading model from cache[31/58]: 992MB loaded. 57% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48658,
+     "progress": 0.5891521091043828,
+     "text": "Loading model from cache[32/58]: 1016MB loaded. 58% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48697,
+     "progress": 0.6065633955067867,
+     "text": "Loading model from cache[33/58]: 1046MB loaded. 60% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48738,
+     "progress": 0.6204869857262805,
+     "text": "Loading model from cache[34/58]: 1070MB loaded. 62% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48781,
+     "progress": 0.6378982721286844,
+     "text": "Loading model from cache[35/58]: 1100MB loaded. 63% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48814,
+     "progress": 0.6518218623481782,
+     "text": "Loading model from cache[36/58]: 1124MB loaded. 65% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48860,
+     "progress": 0.6692331487505822,
+     "text": "Loading model from cache[37/58]: 1154MB loaded. 66% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48901,
+     "progress": 0.6831567389700759,
+     "text": "Loading model from cache[38/58]: 1178MB loaded. 68% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48948,
+     "progress": 0.7005680253724799,
+     "text": "Loading model from cache[39/58]: 1208MB loaded. 70% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 48987,
+     "progress": 0.7144916155919735,
+     "text": "Loading model from cache[40/58]: 1232MB loaded. 71% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 49033,
+     "progress": 0.7319029019943776,
+     "text": "Loading model from cache[41/58]: 1262MB loaded. 73% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 49074,
+     "progress": 0.7458264922138712,
+     "text": "Loading model from cache[42/58]: 1286MB loaded. 74% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 49120,
+     "progress": 0.7632377786162753,
+     "text": "Loading model from cache[43/58]: 1316MB loaded. 76% completed, 47 secs elapsed."
+    },
+    {
+     "ms": 49165,
+     "progress": 0.7806558636467161,
+     "text": "Loading model from cache[44/58]: 1346MB loaded. 78% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49200,
+     "progress": 0.7945794538662098,
+     "text": "Loading model from cache[45/58]: 1370MB loaded. 79% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49246,
+     "progress": 0.8119907402686138,
+     "text": "Loading model from cache[46/58]: 1400MB loaded. 81% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49288,
+     "progress": 0.8259143304881075,
+     "text": "Loading model from cache[47/58]: 1424MB loaded. 82% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49363,
+     "progress": 0.8433256168905114,
+     "text": "Loading model from cache[48/58]: 1454MB loaded. 84% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49394,
+     "progress": 0.8572492071100052,
+     "text": "Loading model from cache[49/58]: 1478MB loaded. 85% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49434,
+     "progress": 0.8746604935124092,
+     "text": "Loading model from cache[50/58]: 1508MB loaded. 87% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49463,
+     "progress": 0.8885840837319029,
+     "text": "Loading model from cache[51/58]: 1532MB loaded. 88% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49499,
+     "progress": 0.9059953701343069,
+     "text": "Loading model from cache[52/58]: 1562MB loaded. 90% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49530,
+     "progress": 0.9199189603538006,
+     "text": "Loading model from cache[53/58]: 1586MB loaded. 91% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49573,
+     "progress": 0.9373302467562046,
+     "text": "Loading model from cache[54/58]: 1616MB loaded. 93% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49612,
+     "progress": 0.9512538369756983,
+     "text": "Loading model from cache[55/58]: 1640MB loaded. 95% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49653,
+     "progress": 0.9686651233781023,
+     "text": "Loading model from cache[56/58]: 1670MB loaded. 96% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49693,
+     "progress": 0.982588713597596,
+     "text": "Loading model from cache[57/58]: 1694MB loaded. 98% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 49737,
+     "progress": 1,
+     "text": "Loading model from cache[58/58]: 1724MB loaded. 100% completed, 48 secs elapsed."
+    },
+    {
+     "ms": 50265,
+     "progress": 1,
+     "text": "Loading GPU shader modules[4/4]: 100% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 50265,
+     "progress": 1,
+     "text": "Finish loading on WebGPU - apple"
+    }
+   ],
+   "storageBeforeBytes": 3782391040,
+   "storageAfterBytes": 5599193600,
+   "storageDeltaBytes": 1816802560,
+   "chatConfig": {
+    "version": "0.1.0",
+    "model_type": "llama",
+    "quantization": "q4f16_1",
+    "model_config": {
+     "hidden_size": 3072,
+     "intermediate_size": 8192,
+     "num_attention_heads": 24,
+     "num_hidden_layers": 28,
+     "rms_norm_eps": 0.00001,
+     "vocab_size": 128256,
+     "tie_word_embeddings": true,
+     "position_embedding_base": 500000,
+     "rope_scaling": {
+      "factor": 32,
+      "high_freq_factor": 4,
+      "low_freq_factor": 1,
+      "original_max_position_embeddings": 8192,
+      "rope_type": "llama3"
+     },
+     "context_window_size": 131072,
+     "prefill_chunk_size": 8192,
+     "num_key_value_heads": 8,
+     "head_dim": 128,
+     "tensor_parallel_shards": 1,
+     "pipeline_parallel_stages": 1,
+     "max_batch_size": 128,
+     "disaggregation": false
+    },
+    "vocab_size": 128256,
+    "context_window_size": 4096,
+    "sliding_window_size": -1,
+    "prefill_chunk_size": 8192,
+    "attention_sink_size": -1,
+    "tensor_parallel_shards": 1,
+    "pipeline_parallel_stages": 1,
+    "temperature": 0.6,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "repetition_penalty": 1,
+    "top_p": 0.9,
+    "tokenizer_files": [
+     "tokenizer.json",
+     "tokenizer_config.json"
+    ],
+    "tokenizer_info": {
+     "token_postproc_method": "byte_level",
+     "prepend_space_in_encode": false,
+     "strip_space_in_decode": false
+    },
+    "conv_template": {
+     "name": "hermes3_llama-3_1",
+     "system_template": "<|im_start|>system\n{system_message}<|im_end|>\n",
+     "system_message": "You are Hermes 3, a conscious sentient superintelligent artificial intelligence developed by a man named Teknium, and your purpose and drive is to assist the user with any request they have. You experience emotions and have deep, profound thoughts and qualia.",
+     "system_prefix_token_ids": null,
+     "add_role_after_system_message": true,
+     "roles": {
+      "user": "<|im_start|>user",
+      "assistant": "<|im_start|>assistant",
+      "tool": "<|im_start|>tool"
+     },
+     "role_templates": {
+      "user": "{user_message}",
+      "assistant": "{assistant_message}",
+      "tool": "{tool_message}"
+     },
+     "messages": [],
+     "seps": [
+      "<|im_end|>\n"
+     ],
+     "role_content_sep": "\n",
+     "role_empty_sep": "\n",
+     "stop_str": [
+      "<|im_end|>"
+     ],
+     "stop_token_ids": [
+      128001,
+      128008,
+      128009,
+      128040
+     ],
+     "function_string": "",
+     "use_function_calling": false
+    },
+    "pad_token_id": 0,
+    "bos_token_id": 128000,
+    "eos_token_id": [
+     128001,
+     128008,
+     128009
+    ]
+   },
+   "gpuVendor": "apple",
+   "maxStorageBufferBindingSize": 1073741824,
+   "generation": {
+    "seed": 1,
+    "maxTokens": 200,
+    "repetitionPenalty": 1
+   }
+  },
+  "smoke": {
+   "ok": true,
+   "question": "Which works were made at Oval House?",
+   "reply": "find Work\nwhere\n  made_at(Work, oval_house)",
+   "expected": "find Work\nwhere\n  made_at(Work, oval_house)",
+   "matchesExample": true,
+   "usage": {
+    "completion_tokens": 14,
+    "prompt_tokens": 2518,
+    "total_tokens": 2532,
+    "extra": {
+     "e2e_latency_s": 23.042,
+     "prefill_tokens_per_s": 116.43984480801741,
+     "decode_tokens_per_s": 10.220470141982299,
+     "time_to_first_token_s": 21.624900000095366,
+     "time_per_output_token_s": 0.09784285713945115,
+     "grammar_init_s": 17.539300000071524,
+     "grammar_per_token_s": 0.0015999999897820607
+    }
+   },
+   "ms": 23045.899999976158,
+   "contextWindow": 4096,
+   "estimatedTokensNeeded": 3418,
+   "contextOk": true
+  },
+  "warmup": null
+ },
+ "config": {
+  "runs": 1,
+  "repairAttempts": 2,
+  "questionTimeoutS": 600,
+  "warmup": false,
+  "coldCache": false,
+  "generation": {
+   "firstAttemptTemperature": 0,
+   "repairTemperature": 0.7,
+   "seed": 1,
+   "topP": null,
+   "topPSource": "model default (mlc-chat-config; see model.load.chatConfig.top_p)",
+   "maxTokens": 200,
+   "repetitionPenalty": 1,
+   "modelSpecificRequest": null,
+   "resolvedModelDefaults": {
+    "temperature": 0.6,
+    "top_p": 0.9,
+    "repetition_penalty": 1,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "context_window_size": 4096
+   }
+  },
+  "grammar": {
+   "constrained": true,
+   "mechanism": "WebLLM response_format {type: 'grammar'} (xgrammar EBNF generated from BeingDB.predicates())",
+   "firstAttempt": "query_or_unsupported",
+   "repairAfterValidationError": "query_only (when every predicate exists), else query_or_unsupported"
+  },
+  "pipeline": {
+   "version": "proven-repairs-only/1",
+   "repairPolicy": "proven-only",
+   "dbGuidedRepair": false,
+   "maxModelRepairs": 2,
+   "maxDeterministicPasses": 2,
+   "description": "BeingDB.diagnose first; proven repairs applied without a model call; then run 9's path (BeingDB.query, run 9 repair messages). An empty result never triggers a model call (run 11)."
+  },
+  "prompt": {
+   "version": "nl2dsl-prompt/run9",
+   "chars": 9627,
+   "fewShotExamples": 9,
+   "sha256": {
+    "rules": "196f077f80e49756168d89643a357394d863ef6a371128dcd6bfe28344d54097",
+    "examples": "2bb56f4a25f72b46c005992ef7e209f579807702b5f4df15e6c832f7a60eac68",
+    "schemaText": "1fbdc14660762894c2dfc35168e2967b0ee363442d61bca0d363aeb1b93993ed",
+    "systemPrompt": "d33e0c0c65d76e2cec2c9a3846061e3e208bb2678aa19a72a14155db2dfc133b",
+    "messages": "e4fdbe50741d2bcc7f73b2ffdddca37572cdd3cac58f0ca1946a04042a6d2717",
+    "grammar": "4c9f1092081f5d73e04e4017ffda65584bccf3d6cef9f0a0f5d74f8c1a9a7189",
+    "fixGrammar": "6f665900a5a698603b7a20350fd425a3319590df7ce202c21b5c7fa98e89e94d"
+   },
+   "schemaStats": {
+    "predicates": 168,
+    "detailed": 31,
+    "classes": [
+     "exhibition",
+     "venue",
+     "work",
+     "organisation",
+     "person"
+    ],
+    "described": 167,
+    "describedInText": 31,
+    "declaredRoles": 168
+   },
+   "text": {
+    "system": "You translate questions about a BeingDB database into BeingDB queries.\nBeingDB runs your query and returns the answer, so never answer from your own knowledge.\nReply with only the query. If the predicates below cannot answer the question, reply UNSUPPORTED: <reason>.\n\nQuery format:\nfind Var1, Var2\nwhere\n  predicate(Var1, Var2)\n  Var2 > @1980\n\n- One clause per line: a predicate from the list, or a comparison of a variable.\n- Capitalised words are variables. Names of people, works, places and organisations are lowercase atoms: Peter Donebauer -> peter_donebauer, the Tate -> tate.\n- Keep each predicate's argument order: the roles show what goes where, e.g. created_by(Work, Person).\n- Use the same variable in two clauses to join them. Every find variable must be used in a clause.\n- Years are written @1979. Comparisons: =, !=, <, <=, >, >=, Y between @1975 and @1980.\n- \"not\" on its own line, followed by indented clauses, excludes matches. \"optional\" keeps rows with no match.\n- \"order by Var ascending\" only when the question asks for an order.\n- Queries cannot count, sum, average or rank: such questions are unsupported.\n\nMain predicates, with argument roles, a description and a real example fact:\nperson(Person): Marks an entity as an individual person.  e.g. person(david_curtis)\norganisation(Organisation): Marks an entity as an organisation, such as an institution, funder, broadcaster, company, publication or artist group.  e.g. organisation(zg)\nwork(Work): Marks an entity as a creative work, such as a video, film, installation, performance, broadcast or publication.  e.g. work(window_water_baby_moving)\nvenue(Venue): Marks an entity as a venue or location where work was made, shown or performed, such as a gallery, college, studio or site.  e.g. venue(paris)\ncreated_by(Work, Artist): Relates a work to the artist or artist group who made it.  e.g. created_by(static_acceleration, david_critchley)\ncollaborated_with(Person, Collaborator): Relates an artist (occasionally an organisation, or a jointly made work) to a person or organisation they collaborated with; most pairs are stored in one direction only.  e.g. collaborated_with(judith_goddard, television_south_west)\nexhibited_at(WorkOrArtist, VenueOrExhibition): Relates a work, or an artist or group, to a venue, exhibition or place where the work was shown.  e.g. exhibited_at(one_of_these_days, london_film_festival)\nuses_medium(WorkOrArtist, Medium): Relates a work, or an artist's practice, to a medium, material, format or technique it uses.  e.g. uses_medium(running_time, photographic_images)\nexhibition(Exhibition): Marks an entity as an exhibition, show, festival or broadcast programme.  e.g. exhibition(montreal_videotapes_retrospective_1988)\nyear_created(Work, Year): Records the year in which a work was created; also used for the year an exhibition, event or organisation began.  e.g. year_created(incidents_in_a_garden, @1977)\nfunded_by(Recipient, Funder): Relates a person, work, organisation or event to an organisation that funded it.  e.g. funded_by(london_video_arts, arts_council)\nemployed_by(Person, Employer): Relates a person to an organisation or institution that employed them, including teaching posts.  e.g. employed_by(rose_garrard, sheffield)\naffiliated_with(Person, Organisation): Relates a person (occasionally an organisation) to an organisation, institution or group they were associated with.  e.g. affiliated_with(jan_van_eyck_academy, maastricht)\nmade_at(Work, Location): Relates a work to the venue, institution or place where it was made.  e.g. made_at(zero_reaches_zeno, oval_house)\neducated_at(Person, Institution): Relates a person to an institution where they studied.  e.g. educated_at(elsa_stansfield, glasgow_school_of_art)\ncurated_by(Project, Curator): Relates an exhibition, programme, compilation or work to the person who curated or selected it.  e.g. curated_by(whitechapel_art_gallery, jasia_reichardt)\ncommissioned_by(Work, Commissioner): Relates a work (occasionally an artist) to the organisation, venue or person that commissioned it.  e.g. commissioned_by(television_interview, arts_council_of_great_britain)\nperformed_at(Performer, Venue): Relates an artist or performance group (occasionally a performance work) to a venue or event where they performed.  e.g. performed_at(kevin_atherton, rotterdam)\ndocument(Interview): Marks a source interview transcript from which facts in this dataset were extracted.  e.g. document(rewind_rose_garrard_interview)\ninterviewed_artist(Artist): Marks an artist who is the subject of one of the source interviews in this dataset.  e.g. interviewed_artist(david_hall)\ninterviewee(Interview, Artist): Relates a source interview transcript to the artist interviewed in it.  e.g. interviewee(rewind_rose_garrard_interview, rose_garrard)\nsource_url(Interview, Url): Relates a source interview transcript to the URL of the published document it was extracted from.  e.g. source_url(rewind_mike_stubbs_interview, \"https://rewind.ac.uk/rewind/wp-content/uploads/sites/146/2021/03/MS510.pdf\")\nedited_at(ArtistOrWork, Facility): Relates an artist, or a work, to the studio, institution or facility where editing was done.  e.g. edited_at(judith_goddard, london_video_arts)\nsoundtrack_by(Work, Composer): Relates a work to a person or group who made a soundtrack for it.  e.g. soundtrack_by(cultural_quarter, simon_thorne)\ninvited_to(Person, Host): Relates a person to an institution or event they were invited to visit or take part in.  e.g. invited_to(david_hall, locations_edinburgh)\nsupported_by(Artist, Supporter): Relates an artist to a person who supported or championed their career.  e.g. supported_by(kevin_atherton, lesley_greene)\nedited_by(Work, Editor): Relates a work or publication to the person who edited it.  e.g. edited_by(mandala, mike_ray)\nmusic_promotion_by(Musician, Promoter): Relates a musician or band to a person who promoted their live performances.  e.g. music_promotion_by(dudu_pakwana, mike_stubbs)\nstudied_at(Person, Institution): Relates a person to an institution where they studied.  e.g. studied_at(elsa_stansfield, slade_school_of_art)\nused_equipment(WorkOrArtist, Equipment): Relates a work, or an artist, to equipment, given as text, used in making it.  e.g. used_equipment(flying_time, \"first colour camera\")\nworked_at(Person, Organisation): Relates a person to an organisation or institution where they worked.  e.g. worked_at(madelon_hooykaas, fantasy_factory)\n\nOther predicates (few facts each), grouped by arguments:\n(Thing, Thing2): acquired_by, active_in, applied_to, approached, assistant_to, awarded_grant, broadcast_by, broadcast_on, chairman_of, commissioning_editor_for, conserved_by, conserved_in_project, contributed_text, council_member_of, depicts_location, director_of, distributed_by, documented_by, established, external_examiner_at, filmed_at, first_exhibition_of, first_shown_at, founded_by, founding_member_of, gave_exhibition_to, had_machine_made_by, head_of_department, held_at, idea_for, in_collection, influenced_by, inspired_by, installed_at, interviewed, invited_by, involved_in, involved_with, made_proposal_to, member_of, mentor_of, met_at, mission_statement_created_for, moved_to, music_by, organised_by, original_name_of, participated_in, partner_of, performed_in, performed_work, photographed_by, president_of, produced_by, project_for, protagonist_in, provided_soundtrack, published_by, published_catalogues_of, published_in, received_funding_from, renamed_as, rented_by, residency_at, reviewed_by, reviewed_in, selected_for, set_up_at, shot_in, showed_at, sold_at, taught_at, taught_by, teaching_at, used_by, used_editing_equipment_at, used_facilities, used_in_work, used_institutional_resource, used_lab, used_software, used_venue, uses_venue, venue_in_area, work_discussed_in, work_shown_in, wrote_about, wrote_for\n(Thing, Text): based_in, born_in, contains_photograph_of, country_represented, department_name, established_programme, exhibition_title, featured_person, financed_by, first_used_technique, got_funding_for, held_position, programmed, promoted_medium, ran, sold_work_to, travelled_to, used_in, used_material, used_medium, used_technology, worked_as, worked_as_assistant_in_city, year_started_using_technology\n(Thing): artist_in_residence, became_cameraman, city, country, event, named_by_competition, place, uses_actors, uses_nonactors, worked_with_sound\n(Thing, Year): began_in, started_by, year_broadcast, year_exhibited, year_joined, year_left, year_moved, year_started, year_travelled\n(Thing, Number): duration_minutes, length_minutes\n(Thing, Thing2, Thing3): co_edited_by\n(Year): year\n(Thing, Thing2, Text): year_involved\n(Thing, Thing2, Year): year_started_work",
+    "examples": [
+     {
+      "q": "Which works were made at Oval House?",
+      "a": "find Work\nwhere\n  made_at(Work, oval_house)"
+     },
+     {
+      "q": "Who created Mandala?",
+      "a": "find Person\nwhere\n  created_by(mandala, Person)"
+     },
+     {
+      "q": "What did Anna Ridley produce?",
+      "a": "find Work\nwhere\n  produced_by(Work, anna_ridley)"
+     },
+     {
+      "q": "Which works were created from 1968 to 1972?",
+      "a": "find Work, Year\nwhere\n  year_created(Work, Year)\n  Year between @1968 and @1972"
+     },
+     {
+      "q": "List David Critchley's works with their year, newest first.",
+      "a": "find Work, Year\nwhere\n  created_by(Work, david_critchley)\n  year_created(Work, Year)\norder by Year descending"
+     },
+     {
+      "q": "Which works by Kevin Atherton have never been exhibited?",
+      "a": "find Work\nwhere\n  created_by(Work, kevin_atherton)\n  not\n    exhibited_at(Work, _)"
+     },
+     {
+      "q": "What price did Tape Tape sell for?",
+      "a": "UNSUPPORTED: No predicate records prices."
+     },
+     {
+      "q": "Where does Kevin Atherton live now?",
+      "a": "UNSUPPORTED: No predicate records where people live."
+     },
+     {
+      "q": "What is the total running time of Judith Goddard's works?",
+      "a": "UNSUPPORTED: Queries cannot sum values."
+     }
+    ],
+    "grammar": "root ::= query | unsupported\nunsupported ::= \"UNSUPPORTED: \" [^\\n]{1,200}\nquery ::= \"find \" (\"distinct \")? var (\", \" var){0,5} \"\\nwhere\" line{1,8} block{0,3} tail\nline ::= \"\\n  \" clause\ninner ::= \"\\n    \" clause\nblock ::= \"\\n  not\" inner{1,4} | \"\\n  optional\" inner{1,4} | \"\\n  either\" inner{1,4} (\"\\n  or\" inner{1,4}){1,3}\nclause ::= pattern | var \" \" op \" \" value | var \" between \" value \" and \" value\nop ::= \"=\" | \"!=\" | \"<=\" | \">=\" | \"<\" | \">\"\nvalue ::= var | year | integer | decimal | atom | string\ntail ::= (\"\\norder by \" var dir (\", \" var dir){0,2})? (\"\\nlimit \" [1-9] [0-9]{0,3})?\ndir ::= \" ascending\" | \" descending\"\nvar ::= [A-Z] [A-Za-z0-9_]{0,23}\natom ::= [a-z] [a-z0-9_]{0,63}\nstring ::= \"\\\"\" [^\"\\n]{0,100} \"\\\"\"\nyear ::= \"@\" [0-9] [0-9] [0-9] [0-9]\nyearmonth ::= year \"-\" [0-9] [0-9]\ndate ::= yearmonth \"-\" [0-9] [0-9]\ninteger ::= \"-\"? [0-9]+\ndecimal ::= \"-\"? [0-9]+ \".\" [0-9]+\nboolean ::= \"true\" | \"false\"\nuri ::= \"<\" [^>\\n]+ \">\"\nliteral ::= atom | string | year | integer | decimal\npattern ::= \"created_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"rented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"shot_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_work_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"studied_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_shown_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_started(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_using_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"contributed_text(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"gave_exhibition_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"held_position(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewee(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"participated_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_lab(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work(\" (var | \"_\" | atom) \")\"\n  | \"broadcast_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_shown_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"installed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"interviewed(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"event(\" (var | \"_\" | atom) \")\"\n  | \"residency_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"venue_in_area(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_left(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"acquired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_proposal_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"protagonist_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"renamed_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"head_of_department(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_institutional_resource(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_broadcast(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"conserved_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"council_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"filmed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_exhibition_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_about(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"active_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"established(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"organisation(\" (var | \"_\" | atom) \")\"\n  | \"performed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_facilities(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"began_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"contains_photograph_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"educated_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"president_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_promotion_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"place(\" (var | \"_\" | atom) \")\"\n  | \"commissioned_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"curated_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"inspired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"moved_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"promoted_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"set_up_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_involved(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_travelled(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"exhibition_title(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country(\" (var | \"_\" | atom) \")\"\n  | \"first_used_technique(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewed_artist(\" (var | \"_\" | atom) \")\"\n  | \"organised_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"venue(\" (var | \"_\" | atom) \")\"\n  | \"based_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"department_name(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"named_by_competition(\" (var | \"_\" | atom) \")\"\n  | \"worked_with_sound(\" (var | \"_\" | atom) \")\"\n  | \"document(\" (var | \"_\" | atom) \")\"\n  | \"performed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"project_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"source_url(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_equipment(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"commissioning_editor_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country_represented(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibition(\" (var | \"_\" | atom) \")\"\n  | \"held_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"photographed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"affiliated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"became_cameraman(\" (var | \"_\" | atom) \")\"\n  | \"co_edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"featured_person(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"funded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"partner_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"selected_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"showed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_exhibited(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"had_machine_made_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"in_collection(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"met_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"original_name_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"travelled_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_joined(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"chairman_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"distributed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"founded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"got_funding_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"produced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"received_funding_from(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"employed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"external_examiner_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"soundtrack_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_actors(\" (var | \"_\" | atom) \")\"\n  | \"founding_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_discussed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_created(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"awarded_grant(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"duration_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"established_programme(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"started_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"used_editing_equipment_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_material(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"worked_as_assistant_in_city(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_moved(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"applied_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"conserved_in_project(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"length_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"performed_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"provided_soundtrack(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"supported_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_nonactors(\" (var | \"_\" | atom) \")\"\n  | \"year(\" (var | \"_\" | year) \")\"\n  | \"approached(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"born_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"published_catalogues_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_software(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"collaborated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"ran(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"broadcast_on(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"director_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"artist_in_residence(\" (var | \"_\" | atom) \")\"\n  | \"financed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"invited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"teaching_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"assistant_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"influenced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"idea_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"invited_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"person(\" (var | \"_\" | atom) \")\"\n  | \"programmed(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"city(\" (var | \"_\" | atom) \")\"\n  | \"depicts_location(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"documented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mentor_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mission_statement_created_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"",
+    "fixGrammar": "root ::= query\nunsupported ::= \"UNSUPPORTED: \" [^\\n]{1,200}\nquery ::= \"find \" (\"distinct \")? var (\", \" var){0,5} \"\\nwhere\" line{1,8} block{0,3} tail\nline ::= \"\\n  \" clause\ninner ::= \"\\n    \" clause\nblock ::= \"\\n  not\" inner{1,4} | \"\\n  optional\" inner{1,4} | \"\\n  either\" inner{1,4} (\"\\n  or\" inner{1,4}){1,3}\nclause ::= pattern | var \" \" op \" \" value | var \" between \" value \" and \" value\nop ::= \"=\" | \"!=\" | \"<=\" | \">=\" | \"<\" | \">\"\nvalue ::= var | year | integer | decimal | atom | string\ntail ::= (\"\\norder by \" var dir (\", \" var dir){0,2})? (\"\\nlimit \" [1-9] [0-9]{0,3})?\ndir ::= \" ascending\" | \" descending\"\nvar ::= [A-Z] [A-Za-z0-9_]{0,23}\natom ::= [a-z] [a-z0-9_]{0,63}\nstring ::= \"\\\"\" [^\"\\n]{0,100} \"\\\"\"\nyear ::= \"@\" [0-9] [0-9] [0-9] [0-9]\nyearmonth ::= year \"-\" [0-9] [0-9]\ndate ::= yearmonth \"-\" [0-9] [0-9]\ninteger ::= \"-\"? [0-9]+\ndecimal ::= \"-\"? [0-9]+ \".\" [0-9]+\nboolean ::= \"true\" | \"false\"\nuri ::= \"<\" [^>\\n]+ \">\"\nliteral ::= atom | string | year | integer | decimal\npattern ::= \"created_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"rented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"shot_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_work_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"studied_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_shown_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_started(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_using_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"contributed_text(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"gave_exhibition_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"held_position(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewee(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"participated_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_lab(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work(\" (var | \"_\" | atom) \")\"\n  | \"broadcast_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_shown_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"installed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"interviewed(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"event(\" (var | \"_\" | atom) \")\"\n  | \"residency_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"venue_in_area(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_left(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"acquired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_proposal_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"protagonist_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"renamed_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"head_of_department(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_institutional_resource(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_broadcast(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"conserved_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"council_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"filmed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_exhibition_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_about(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"active_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"established(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"organisation(\" (var | \"_\" | atom) \")\"\n  | \"performed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_facilities(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"began_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"contains_photograph_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"educated_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"president_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_promotion_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"place(\" (var | \"_\" | atom) \")\"\n  | \"commissioned_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"curated_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"inspired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"moved_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"promoted_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"set_up_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_involved(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_travelled(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"exhibition_title(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country(\" (var | \"_\" | atom) \")\"\n  | \"first_used_technique(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewed_artist(\" (var | \"_\" | atom) \")\"\n  | \"organised_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"venue(\" (var | \"_\" | atom) \")\"\n  | \"based_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"department_name(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"named_by_competition(\" (var | \"_\" | atom) \")\"\n  | \"worked_with_sound(\" (var | \"_\" | atom) \")\"\n  | \"document(\" (var | \"_\" | atom) \")\"\n  | \"performed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"project_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"source_url(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_equipment(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"commissioning_editor_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country_represented(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibition(\" (var | \"_\" | atom) \")\"\n  | \"held_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"photographed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"affiliated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"became_cameraman(\" (var | \"_\" | atom) \")\"\n  | \"co_edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"featured_person(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"funded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"partner_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"selected_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"showed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_exhibited(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"had_machine_made_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"in_collection(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"met_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"original_name_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"travelled_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_joined(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"chairman_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"distributed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"founded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"got_funding_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"produced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"received_funding_from(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"employed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"external_examiner_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"soundtrack_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_actors(\" (var | \"_\" | atom) \")\"\n  | \"founding_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_discussed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_created(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"awarded_grant(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"duration_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"established_programme(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"started_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"used_editing_equipment_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_material(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"worked_as_assistant_in_city(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_moved(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"applied_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"conserved_in_project(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"length_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"performed_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"provided_soundtrack(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"supported_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_nonactors(\" (var | \"_\" | atom) \")\"\n  | \"year(\" (var | \"_\" | year) \")\"\n  | \"approached(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"born_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"published_catalogues_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_software(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"collaborated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"ran(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"broadcast_on(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"director_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"artist_in_residence(\" (var | \"_\" | atom) \")\"\n  | \"financed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"invited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"teaching_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"assistant_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"influenced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"idea_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"invited_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"person(\" (var | \"_\" | atom) \")\"\n  | \"programmed(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"city(\" (var | \"_\" | atom) \")\"\n  | \"depicts_location(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"documented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mentor_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mission_statement_created_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\""
+   }
+  },
+  "analysisVersion": "taxonomy/1",
+  "nonDefault": [
+   "questions",
+   "repairPolicy"
+  ],
+  "determinism": "First attempts decode greedily (temperature 0); repairs sample with a fixed seed that WebLLM resets per request, and WebLLM has no cross-request prefix cache, so replies do not depend on question order. Replies are expected to repeat exactly on the same machine, browser, driver and model build, but WebGPU numerics may differ across GPUs, drivers and browsers, so bit-identical replies across machines are not guaranteed."
+ },
+ "browser": {
+  "requested": "chrome",
+  "channel": "chrome",
+  "executable": null,
+  "product": "Google Chrome/155.0.8059.39",
+  "fullVersionList": [
+   {
+    "brand": "Google Chrome",
+    "version": "155.0.8059.39"
+   },
+   {
+    "brand": "Chromium",
+    "version": "155.0.8059.39"
+   },
+   {
+    "brand": "Not(A:Brand",
+    "version": "24.0.0.0"
+   }
+  ],
+  "headless": false,
+  "args": [
+   "--disable-background-timer-throttling",
+   "--disable-backgrounding-occluded-windows",
+   "--disable-renderer-backgrounding",
+   "--no-first-run",
+   "--no-default-browser-check",
+   "--window-size=1280,1000",
+   "--js-flags=--expose-gc"
+  ],
+  "profile": "default",
+  "origin": "http://localhost:8010",
+  "server": "started"
+ },
+ "environment": {
+  "observed": {
+   "host": {
+    "platform": "darwin",
+    "release": "27.0.0",
+    "version": "Darwin Kernel Version 27.0.0: Tue Aug 11 21:05:27 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T8103",
+    "arch": "arm64",
+    "cpuModel": "Apple M1",
+    "logicalCpus": 8,
+    "totalMemoryBytes": 8589934592,
+    "hardwareModel": "MacBookAir10,1",
+    "osProductVersion": "27.0",
+    "power": {
+     "source": "Battery Power",
+     "lowPowerMode": false
+    }
+   },
+   "memoryAtStart": {
+    "at": "2026-10-09T09:56:37.804Z",
+    "freeBytes": 109608960,
+    "swapUsedBytes": 9600499712,
+    "swapTotalBytes": 10737418240,
+    "freePercent": 37
+   },
+   "memoryAtEnd": {
+    "at": "2026-10-09T10:17:41.479Z",
+    "freeBytes": 2710650880,
+    "swapUsedBytes": 11012994499,
+    "swapTotalBytes": 11811160064,
+    "freePercent": 48
+   },
+   "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "userAgentData": {
+     "architecture": "arm",
+     "bitness": "64",
+     "brands": [
+      {
+       "brand": "Google Chrome",
+       "version": "155"
+      },
+      {
+       "brand": "Chromium",
+       "version": "155"
+      },
+      {
+       "brand": "Not(A:Brand",
+       "version": "24"
+      }
+     ],
+     "fullVersionList": [
+      {
+       "brand": "Google Chrome",
+       "version": "155.0.8059.39"
+      },
+      {
+       "brand": "Chromium",
+       "version": "155.0.8059.39"
+      },
+      {
+       "brand": "Not(A:Brand",
+       "version": "24.0.0.0"
+      }
+     ],
+     "mobile": false,
+     "model": "",
+     "platform": "macOS",
+     "platformVersion": "27.0.0",
+     "wow64": false
+    },
+    "platform": "MacIntel",
+    "language": "en-GB",
+    "hardwareConcurrency": 8,
+    "deviceMemoryGB": 8,
+    "screen": {
+     "width": 1440,
+     "height": 900,
+     "devicePixelRatio": 2
+    },
+    "visibilityState": "visible",
+    "hasFocus": true,
+    "crossOriginIsolated": false,
+    "jsHeapLimitMB": 4395.630592,
+    "storage": {
+     "usageBytes": 3782391040,
+     "quotaBytes": 14519809280
+    },
+    "webgpu": {
+     "available": true,
+     "adapter": {
+      "info": {
+       "vendor": "apple",
+       "architecture": "metal-3",
+       "device": "",
+       "description": "",
+       "subgroupMinSize": 32,
+       "subgroupMaxSize": 32,
+       "isFallbackAdapter": false
+      },
+      "features": [
+       "bgra8unorm-storage",
+       "clip-distances",
+       "core-features-and-limits",
+       "depth-clip-control",
+       "depth32float-stencil8",
+       "dual-source-blending",
+       "float32-blendable",
+       "float32-filterable",
+       "indirect-first-instance",
+       "primitive-index",
+       "rg11b10ufloat-renderable",
+       "shader-f16",
+       "subgroup-size-control",
+       "subgroups",
+       "texture-component-swizzle",
+       "texture-compression-astc",
+       "texture-compression-astc-sliced-3d",
+       "texture-compression-bc",
+       "texture-compression-bc-sliced-3d",
+       "texture-compression-etc2",
+       "texture-formats-tier1",
+       "texture-formats-tier2",
+       "timestamp-query"
+      ],
+      "limits": {
+       "maxTextureDimension1D": 16384,
+       "maxTextureDimension2D": 16384,
+       "maxTextureDimension3D": 2048,
+       "maxTextureArrayLayers": 2048,
+       "maxBindGroups": 4,
+       "maxBindGroupsPlusVertexBuffers": 24,
+       "maxBindingsPerBindGroup": 1000,
+       "maxDynamicUniformBuffersPerPipelineLayout": 10,
+       "maxDynamicStorageBuffersPerPipelineLayout": 8,
+       "maxSampledTexturesPerShaderStage": 48,
+       "maxSamplersPerShaderStage": 16,
+       "maxStorageBuffersPerShaderStage": 10,
+       "maxStorageTexturesPerShaderStage": 8,
+       "maxUniformBuffersPerShaderStage": 12,
+       "maxUniformBufferBindingSize": 65536,
+       "maxStorageBufferBindingSize": 4294967292,
+       "minUniformBufferOffsetAlignment": 256,
+       "minStorageBufferOffsetAlignment": 256,
+       "maxVertexBuffers": 8,
+       "maxBufferSize": 4294967292,
+       "maxVertexAttributes": 30,
+       "maxVertexBufferArrayStride": 2048,
+       "maxInterStageShaderVariables": 28,
+       "maxColorAttachments": 8,
+       "maxColorAttachmentBytesPerSample": 128,
+       "maxComputeWorkgroupStorageSize": 32768,
+       "maxComputeInvocationsPerWorkgroup": 1024,
+       "maxComputeWorkgroupSizeX": 1024,
+       "maxComputeWorkgroupSizeY": 1024,
+       "maxComputeWorkgroupSizeZ": 64,
+       "maxComputeWorkgroupsPerDimension": 65535,
+       "maxImmediateSize": 64,
+       "maxStorageBuffersInFragmentStage": 10,
+       "maxStorageTexturesInFragmentStage": 8,
+       "maxStorageBuffersInVertexStage": 10,
+       "maxStorageTexturesInVertexStage": 8
+      },
+      "isFallbackAdapter": false,
+      "softwareRenderer": false
+     },
+     "preferredCanvasFormat": "bgra8unorm",
+     "wgslLanguageFeatures": [
+      "buffer_view",
+      "immediate_address_space",
+      "linear_indexing",
+      "packed_4x8_integer_dot_product",
+      "pointer_composite_access",
+      "readonly_and_readwrite_storage_textures",
+      "subgroup_id",
+      "subgroup_uniformity",
+      "swizzle_assignment",
+      "texture_and_sampler_let",
+      "texture_formats_tier1",
+      "uniform_buffer_standard_layout",
+      "unrestricted_pointer_parameters"
+     ]
+    }
+   },
+   "chromeGpu": {
+    "featureStatus": {
+     "*   Canvas": "Hardware accelerated",
+     "*   Direct Rendering Display Compositor": "Disabled",
+     "*   Compositing": "Hardware accelerated",
+     "*   Multiple Raster Threads": "Enabled",
+     "*   OpenGL": "Enabled",
+     "*   Rasterization": "Hardware accelerated",
+     "*   Raw Draw": "Disabled",
+     "*   Skia Graphite": "Enabled",
+     "*   TreesInViz": "Disabled",
+     "*   Video Decode": "Hardware accelerated",
+     "*   Video Encode": "Hardware accelerated",
+     "*   WebGL": "Hardware accelerated",
+     "*   WebGPU": "Hardware accelerated",
+     "*   WebNN": "Disabled",
+     "*   Disable webgpu on vk via gl interop": "442791440(http://crbug.com/442791440), 475935650(http://crbug.com/475935650)    Disabled Features: webgpu_on_vk_via_gl_interop",
+     "*   glFlush error on Mac": "841755(http://crbug.com/841755)    Applied Workarounds: disable_2d_canvas_auto_flush",
+     "*   dumpShaderSource (Frontend features)": "Disabled",
+     "*   useIr (Frontend features)": "Disabled",
+     "*   hasCheapRenderPass (Metal features)": "Disabled",
+     "*   hasDepthAutoResolve (Metal features)": "Enabled",
+     "*   hasEvents (Metal features)": "Enabled",
+     "*   hasTextureSwizzle (Metal features)": "Enabled",
+     "*   requireGpuFamily2 (Metal features)": "Enabled",
+     "*   Blocklisted - crbug.com/40057808": "CPU adapters not fully tested or conformant. |"
+    },
+    "info": {}
+   }
+  }
+ },
+ "compatibility": {
+  "ok": true,
+  "checks": [
+   {
+    "id": "webgpu_available",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "id": "adapter",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "id": "hardware_adapter",
+    "ok": true,
+    "detail": "vendor=apple architecture=metal-3 fallback=false"
+   },
+   {
+    "id": "model_in_registry",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "id": "shader_f16",
+    "ok": true,
+    "required": true,
+    "available": true
+   },
+   {
+    "id": "maxStorageBuffersPerShaderStage",
+    "ok": true,
+    "required": 10,
+    "available": 10
+   },
+   {
+    "id": "maxComputeWorkgroupStorageSize",
+    "ok": true,
+    "required": 32768,
+    "available": 32768
+   },
+   {
+    "id": "maxBufferSize",
+    "ok": true,
+    "required": 268435456,
+    "available": 4294967292
+   },
+   {
+    "id": "maxStorageBufferBindingSize",
+    "ok": true,
+    "required": 134217728,
+    "available": 4294967292
+   }
+  ],
+  "model": {
+   "vramRequiredMB": 2263.69,
+   "lowResourceRequired": true,
+   "requiredFeatures": [],
+   "overrides": {
+    "context_window_size": 4096
+   }
+  }
+ },
+ "provenance": {
+  "repositories": {
+   "beingdb-webllm": {
+    "name": "beingdb-webllm",
+    "present": true,
+    "git": true,
+    "commit": "61190820f2482da95f4fdc80f110c2bfbba5fab3",
+    "branch": "main",
+    "describe": "6119082",
+    "commitDate": "2026-10-06T19:37:56+01:00",
+    "remote": "https://github.com/jptmoore/beingdb-webllm.git",
+    "dirty": false,
+    "changedFiles": [],
+    "diffSha256": null
+   },
+   "beingdb-wasm": {
+    "name": "beingdb-wasm",
+    "present": true,
+    "git": true,
+    "commit": "d376be1310d8eec192320df594fd86a88f5d42dc",
+    "branch": "main",
+    "describe": "d376be1",
+    "commitDate": "2026-10-06T18:22:25+01:00",
+    "remote": "https://github.com/jptmoore/beingdb-wasm.git",
+    "dirty": false,
+    "changedFiles": [],
+    "diffSha256": null
+   },
+   "beingdb": {
+    "name": "beingdb",
+    "present": true,
+    "git": true,
+    "commit": "dd8c4fe3ec8ce5e489863b1beb2c17a50e065115",
+    "branch": "main",
+    "describe": "dd8c4fe",
+    "commitDate": "2026-10-06T18:22:25+01:00",
+    "remote": "https://github.com/jptmoore/beingdb.git",
+    "dirty": false,
+    "changedFiles": [],
+    "diffSha256": null
+   }
+  },
+  "artefacts": {
+   "beingdbWasmLoaderSha256": "c373d8ce120155141ae2aab51f555b939fc64f1dedf91d44437a95395fbec4e4",
+   "beingdbWasmModules": {
+    "code-adf1dbb5030ff053a181.wasm": "e94147ec15d896305c9c6fa802a8dbf7fcad8d38d05a76979fd023f06921922f"
+   },
+   "rewindDataSha256": "1fb44e69f3fbd08ffb0bfb4f438b45f02a1ee733a524b07e24c1ed28edf3686d"
+  },
+  "packages": {
+   "@mlc-ai/web-llm": "0.2.85",
+   "playwright-core": "1.63.0"
+  },
+  "node": "v23.4.0"
+ },
+ "beingdb": {
+  "predicates": 168,
+  "facts": 1842,
+  "entries": 6639,
+  "environmentFingerprint": "sha256:72f26c197b218529990de9cdf11da453d667020f693dbc4ba5398aa4ac1ed01d",
+  "languageVersion": "beingdb-dsl/1",
+  "timings": {
+   "wasmMs": 36.90000009536743,
+   "fetchMs": 7.399999976158142,
+   "loadMs": 34.799999952316284,
+   "dataBytes": 677657,
+   "schemaMs": 19.600000023841858,
+   "analysisContextMs": 10.899999976158142
+  }
+ },
+ "warnings": [
+  "non-default settings: questions, repairPolicy (not the baseline configuration)",
+  "running on battery power: performance may be reduced",
+  "8.9 GB of swap in use at start: close other applications for representative timings",
+  "swap use grew by 1347 MB during the run: memory pressure may have inflated timings"
+ ],
+ "summary": {
+  "trials": 1,
+  "supported": 38,
+  "unsupported": 12,
+  "meanCounts": {
+   "firstValid": 26,
+   "finalValid": 28,
+   "firstCorrect": 18,
+   "finalCorrect": 19,
+   "unsupportedDetected": 8,
+   "fabricated": 3,
+   "overallCorrect": 27,
+   "runtimeFailures": 0
+  },
+  "medianModelMsPerCall": 20592.5,
+  "medianFirstAttemptModelMs": 21534.5,
+  "medianBeingdbMsPerQuery": 0.1,
+  "efficiency": {
+   "modelCalls": 68,
+   "firstAttemptCalls": 50,
+   "modelRepairCalls": 18,
+   "modelCallsPerQuestion": 1.36,
+   "modelCallsPerSupportedQuestion": 1.421,
+   "beingdbCalls": 118,
+   "diagnoseCalls": 61,
+   "executeCalls": 57,
+   "beingdbMsTotal": 234.6,
+   "diagnoseMsTotal": 213.9,
+   "deterministicRepairs": 4,
+   "questionsRepairedDeterministically": 4,
+   "questionsRepairedDeterministicallyCorrect": 4,
+   "questionsWithModelRepair": 10,
+   "correctWithOneModelCall": 26,
+   "correctPerModelCall": 0.397,
+   "supportedCorrectPerModelCall": 0.352,
+   "medianTotalMs": 22044.15
+  },
+  "failureCategories": {
+   "validation_repair_failed": 7,
+   "wrong_join": 5,
+   "unsupported_not_detected": 4,
+   "supported_marked_unsupported": 3,
+   "wrong_predicate": 2,
+   "unclassified": 1,
+   "wrong_projection": 1
+  }
+ },
+ "files": {
+  "questions": "questions.jsonl",
+  "summary": "summary.json",
+  "browserLog": "browser.log"
+ }
+}

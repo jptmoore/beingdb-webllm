@@ -1,7 +1,7 @@
 # Benchmark harness internals
 
 How `npm run benchmark` works, what it records, and how results are judged.
-Usage is in the [README](../README.md#reproducible-benchmarking).
+Usage is in the [README](../README.md#systematic-benchmarking).
 
 ## Architecture
 
