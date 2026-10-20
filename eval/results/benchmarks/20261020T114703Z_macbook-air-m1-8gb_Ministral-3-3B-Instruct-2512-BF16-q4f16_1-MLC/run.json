@@ -1,0 +1,1141 @@
+{
+ "schema": "beingdb-webllm-benchmark/v1",
+ "runId": "20261020T114703Z_macbook-air-m1-8gb_Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+ "status": "complete",
+ "error": null,
+ "startedAt": "2026-10-20T11:47:03.923Z",
+ "finishedAt": "2026-10-20T12:10:31.648Z",
+ "labels": {
+  "machine": "MacBook Air M1 8GB",
+  "modelLabel": null,
+  "condition": "annotated-predicates-proven-repairs",
+  "notes": null
+ },
+ "suite": {
+  "id": "custom:questions-annotated.json",
+  "registered": false,
+  "file": "eval/questions-annotated.json",
+  "sha256": "921ede38925e968cfcfb62421580305e4900f8639fd7054e408a649114384a15",
+  "itemsSha256": "3b2ccb33c75563696c13e53e78f8b2eeb2b9feed580c3b022ebd7d61b92c15fb",
+  "environmentFingerprint": "sha256:72f26c197b218529990de9cdf11da453d667020f693dbc4ba5398aa4ac1ed01d",
+  "partial": false,
+  "questionIds": [
+   "e01",
+   "e02",
+   "e03",
+   "e04",
+   "e05",
+   "e06",
+   "e07",
+   "e08",
+   "e09",
+   "e10",
+   "e11",
+   "e12",
+   "e13",
+   "e14",
+   "e15",
+   "e16",
+   "e17",
+   "e18",
+   "m01",
+   "m02",
+   "m03",
+   "m04",
+   "m05",
+   "m06",
+   "m07",
+   "m08",
+   "m09",
+   "m10",
+   "m11",
+   "m12",
+   "m13",
+   "m14",
+   "h01",
+   "h02",
+   "h03",
+   "h04",
+   "h05",
+   "h06",
+   "u01",
+   "u02",
+   "u03",
+   "u04",
+   "u05",
+   "u06",
+   "u07",
+   "u08",
+   "u09",
+   "u10",
+   "u11",
+   "u12"
+  ]
+ },
+ "model": {
+  "id": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+  "label": null,
+  "record": {
+   "model": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+   "model_id": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+   "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Ministral-3-3B-Instruct-2512-BF16-q4f16_1_cs1k-webgpu.wasm",
+   "vram_required_MB": 2863.69,
+   "low_resource_required": true,
+   "overrides": {
+    "context_window_size": 4096
+   }
+  },
+  "load": {
+   "ok": true,
+   "modelId": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+   "record": {
+    "model": "https://huggingface.co/mlc-ai/Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+    "model_id": "Ministral-3-3B-Instruct-2512-BF16-q4f16_1-MLC",
+    "model_lib": "https://raw.githubusercontent.com/mlc-ai/binary-mlc-llm-libs/main/web-llm-models/v0_2_84/base/Ministral-3-3B-Instruct-2512-BF16-q4f16_1_cs1k-webgpu.wasm",
+    "vram_required_MB": 2863.69,
+    "low_resource_required": true,
+    "overrides": {
+     "context_window_size": 4096
+    }
+   },
+   "cachedBefore": true,
+   "cachedAtLoad": true,
+   "coldCacheRequested": false,
+   "deletedFromCache": false,
+   "loadMs": 3347.5,
+   "phases": {
+    "other": {
+     "firstMs": 1008,
+     "lastMs": 3348,
+     "events": 2
+    },
+    "cache_read": {
+     "firstMs": 1322,
+     "lastMs": 3297,
+     "events": 63
+    },
+    "shader_compile": {
+     "firstMs": 3348,
+     "lastMs": 3348,
+     "events": 1
+    }
+   },
+   "progressEvents": [
+    {
+     "ms": 1008,
+     "progress": 0,
+     "text": "Start to fetch params"
+    },
+    {
+     "ms": 1322,
+     "progress": 0.10436566201552362,
+     "text": "Loading model from cache[1/63]: 192MB loaded. 10% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1350,
+     "progress": 0.1174145547547082,
+     "text": "Loading model from cache[2/63]: 217MB loaded. 11% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1375,
+     "progress": 0.1320909759756412,
+     "text": "Loading model from cache[3/63]: 244MB loaded. 13% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1415,
+     "progress": 0.14768785851012667,
+     "text": "Loading model from cache[4/63]: 272MB loaded. 14% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1440,
+     "progress": 0.16236427973105969,
+     "text": "Loading model from cache[5/63]: 299MB loaded. 16% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1464,
+     "progress": 0.17612979460017264,
+     "text": "Loading model from cache[6/63]: 325MB loaded. 17% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1493,
+     "progress": 0.19264395346096638,
+     "text": "Loading model from cache[7/63]: 355MB loaded. 19% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1528,
+     "progress": 0.2082376510082077,
+     "text": "Loading model from cache[8/63]: 384MB loaded. 20% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1551,
+     "progress": 0.2192513368983957,
+     "text": "Loading model from cache[9/63]: 404MB loaded. 21% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1580,
+     "progress": 0.23392775811932873,
+     "text": "Loading model from cache[10/63]: 431MB loaded. 23% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1613,
+     "progress": 0.2495246406538142,
+     "text": "Loading model from cache[11/63]: 460MB loaded. 24% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1648,
+     "progress": 0.2642010618747472,
+     "text": "Loading model from cache[12/63]: 487MB loaded. 26% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1677,
+     "progress": 0.27796657674386016,
+     "text": "Loading model from cache[13/63]: 512MB loaded. 27% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1710,
+     "progress": 0.2944807356046539,
+     "text": "Loading model from cache[14/63]: 542MB loaded. 29% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1745,
+     "progress": 0.3100744331518952,
+     "text": "Loading model from cache[15/63]: 571MB loaded. 31% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1791,
+     "progress": 0.32658859201268897,
+     "text": "Loading model from cache[16/63]: 601MB loaded. 32% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1817,
+     "progress": 0.341265013233622,
+     "text": "Loading model from cache[17/63]: 628MB loaded. 34% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1841,
+     "progress": 0.35503052810273494,
+     "text": "Loading model from cache[18/63]: 654MB loaded. 35% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1868,
+     "progress": 0.3715446869635287,
+     "text": "Loading model from cache[19/63]: 684MB loaded. 37% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1900,
+     "progress": 0.38713838451077004,
+     "text": "Loading model from cache[20/63]: 713MB loaded. 38% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1927,
+     "progress": 0.39815207040095807,
+     "text": "Loading model from cache[21/63]: 733MB loaded. 39% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1963,
+     "progress": 0.41282849162189106,
+     "text": "Loading model from cache[22/63]: 760MB loaded. 41% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 1999,
+     "progress": 0.4284253741563765,
+     "text": "Loading model from cache[23/63]: 789MB loaded. 42% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2034,
+     "progress": 0.44310179537730954,
+     "text": "Loading model from cache[24/63]: 816MB loaded. 44% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2068,
+     "progress": 0.45686731024642246,
+     "text": "Loading model from cache[25/63]: 841MB loaded. 45% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2101,
+     "progress": 0.47338146910721624,
+     "text": "Loading model from cache[26/63]: 871MB loaded. 47% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2135,
+     "progress": 0.48897516665445756,
+     "text": "Loading model from cache[27/63]: 900MB loaded. 48% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2162,
+     "progress": 0.49998885254464553,
+     "text": "Loading model from cache[28/63]: 920MB loaded. 49% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2195,
+     "progress": 0.5146652737655786,
+     "text": "Loading model from cache[29/63]: 947MB loaded. 51% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2230,
+     "progress": 0.530262156300064,
+     "text": "Loading model from cache[30/63]: 976MB loaded. 53% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2270,
+     "progress": 0.5449385775209971,
+     "text": "Loading model from cache[31/63]: 1003MB loaded. 54% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2298,
+     "progress": 0.55870409239011,
+     "text": "Loading model from cache[32/63]: 1028MB loaded. 55% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2325,
+     "progress": 0.5752182512509038,
+     "text": "Loading model from cache[33/63]: 1059MB loaded. 57% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2354,
+     "progress": 0.590811948798145,
+     "text": "Loading model from cache[34/63]: 1087MB loaded. 59% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2380,
+     "progress": 0.601825634688333,
+     "text": "Loading model from cache[35/63]: 1108MB loaded. 60% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2415,
+     "progress": 0.6165020559092661,
+     "text": "Loading model from cache[36/63]: 1135MB loaded. 61% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2446,
+     "progress": 0.6265984654731458,
+     "text": "Loading model from cache[37/63]: 1153MB loaded. 62% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2480,
+     "progress": 0.6412748866940788,
+     "text": "Loading model from cache[38/63]: 1180MB loaded. 64% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2519,
+     "progress": 0.6568717692285643,
+     "text": "Loading model from cache[39/63]: 1209MB loaded. 65% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2554,
+     "progress": 0.6715481904494972,
+     "text": "Loading model from cache[40/63]: 1236MB loaded. 67% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2586,
+     "progress": 0.6853137053186102,
+     "text": "Loading model from cache[41/63]: 1261MB loaded. 68% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2625,
+     "progress": 0.701827864179404,
+     "text": "Loading model from cache[42/63]: 1292MB loaded. 70% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2664,
+     "progress": 0.7174215617266453,
+     "text": "Loading model from cache[43/63]: 1320MB loaded. 71% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2694,
+     "progress": 0.7284352476168333,
+     "text": "Loading model from cache[44/63]: 1341MB loaded. 72% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2723,
+     "progress": 0.7431116688377664,
+     "text": "Loading model from cache[45/63]: 1368MB loaded. 74% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2757,
+     "progress": 0.7587085513722518,
+     "text": "Loading model from cache[46/63]: 1396MB loaded. 75% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2791,
+     "progress": 0.7733849725931847,
+     "text": "Loading model from cache[47/63]: 1423MB loaded. 77% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2824,
+     "progress": 0.7871504874622978,
+     "text": "Loading model from cache[48/63]: 1449MB loaded. 78% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2858,
+     "progress": 0.8036646463230914,
+     "text": "Loading model from cache[49/63]: 1479MB loaded. 80% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2903,
+     "progress": 0.8192583438703328,
+     "text": "Loading model from cache[50/63]: 1508MB loaded. 81% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2925,
+     "progress": 0.8302720297605208,
+     "text": "Loading model from cache[51/63]: 1528MB loaded. 83% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2950,
+     "progress": 0.8449484509814538,
+     "text": "Loading model from cache[52/63]: 1555MB loaded. 84% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 2977,
+     "progress": 0.8605453335159393,
+     "text": "Loading model from cache[53/63]: 1584MB loaded. 86% completed, 2 secs elapsed."
+    },
+    {
+     "ms": 3004,
+     "progress": 0.8752217547368722,
+     "text": "Loading model from cache[54/63]: 1611MB loaded. 87% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3029,
+     "progress": 0.8889872696059852,
+     "text": "Loading model from cache[55/63]: 1636MB loaded. 88% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3059,
+     "progress": 0.905501428466779,
+     "text": "Loading model from cache[56/63]: 1666MB loaded. 90% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3098,
+     "progress": 0.9210951260140203,
+     "text": "Loading model from cache[57/63]: 1695MB loaded. 92% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3124,
+     "progress": 0.9321088119042084,
+     "text": "Loading model from cache[58/63]: 1715MB loaded. 93% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3154,
+     "progress": 0.9467852331251413,
+     "text": "Loading model from cache[59/63]: 1742MB loaded. 94% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3186,
+     "progress": 0.9623821156596268,
+     "text": "Loading model from cache[60/63]: 1771MB loaded. 96% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3219,
+     "progress": 0.9770585368805598,
+     "text": "Loading model from cache[61/63]: 1798MB loaded. 97% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3256,
+     "progress": 0.9908240517496727,
+     "text": "Loading model from cache[62/63]: 1823MB loaded. 99% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3297,
+     "progress": 1,
+     "text": "Loading model from cache[63/63]: 1840MB loaded. 100% completed, 3 secs elapsed."
+    },
+    {
+     "ms": 3348,
+     "progress": 1,
+     "text": "Loading GPU shader modules[4/4]: 100% completed, 1 secs elapsed."
+    },
+    {
+     "ms": 3348,
+     "progress": 1,
+     "text": "Finish loading on WebGPU - apple"
+    }
+   ],
+   "storageBeforeBytes": 7550880000,
+   "storageAfterBytes": 7550880000,
+   "storageDeltaBytes": 0,
+   "chatConfig": {
+    "version": "0.1.0",
+    "model_type": "ministral3",
+    "quantization": "q4f16_1",
+    "model_config": {
+     "hidden_size": 3072,
+     "intermediate_size": 9216,
+     "num_attention_heads": 32,
+     "num_hidden_layers": 26,
+     "rms_norm_eps": 0.00001,
+     "vocab_size": 131072,
+     "attention_sink_size": 0,
+     "context_window_size": 262144,
+     "dtype": "bfloat16",
+     "head_dim": 128,
+     "hidden_act": "silu",
+     "max_batch_size": 128,
+     "num_key_value_heads": 8,
+     "position_embedding_base": 1000000,
+     "prefill_chunk_size": 1024,
+     "rope_parameters": {
+      "beta_fast": 32,
+      "beta_slow": 1,
+      "factor": 16,
+      "llama_4_scaling_beta": 0.1,
+      "mscale": 1,
+      "mscale_all_dim": 1,
+      "original_max_position_embeddings": 16384,
+      "rope_type": "yarn",
+      "type": "yarn"
+     },
+     "sliding_window_size": -1,
+     "tensor_parallel_shards": 1,
+     "tie_word_embeddings": true,
+     "weight_block_size": null,
+     "modules_to_not_convert": []
+    },
+    "vocab_size": 131072,
+    "context_window_size": 4096,
+    "sliding_window_size": -1,
+    "prefill_chunk_size": 1024,
+    "attention_sink_size": 0,
+    "tensor_parallel_shards": 1,
+    "pipeline_parallel_stages": 1,
+    "active_vocab_size": 131072,
+    "temperature": 1,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "repetition_penalty": 1,
+    "top_p": 1,
+    "tokenizer_files": [
+     "tokenizer.json",
+     "tokenizer_config.json"
+    ],
+    "tokenizer_info": {
+     "token_postproc_method": "byte_level",
+     "prepend_space_in_encode": false,
+     "strip_space_in_decode": false
+    },
+    "conv_template": {
+     "name": "ministral3",
+     "system_template": "[SYSTEM_PROMPT]{system_message}[/SYSTEM_PROMPT]{function_string}",
+     "system_message": "You are Ministral-3-3B-Instruct-2512, a Large Language Model (LLM) created by Mistral AI, a French startup headquartered in Paris.\nYou power an AI assistant called Le Chat.\nYour knowledge base was last updated on 2023-10-01.\nThe current date is {today}.\n\nWhen you're not sure about some information or when the user's request requires up-to-date or specific data, you must use the available tools to fetch the information. Do not hesitate to use tools whenever they can provide a more accurate or complete response. If no relevant tools are available, then clearly state that you don't have the information and avoid making up anything.\nIf the user's question is not clear, ambiguous, or does not provide enough context for you to accurately answer the question, you do not try to answer it right away and you rather ask the user to clarify their request (e.g. \"What are some good restaurants around me?\" => \"Where are you?\" or \"When is the next flight to Tokyo\" => \"Where do you travel from?\").\nYou are always very attentive to dates, in particular you try to resolve dates (e.g. \"yesterday\" is {yesterday}) and when asked about information at specific dates, you discard information that is at another date.\nYou follow these instructions in all languages, and always respond to the user in the language they use or request.\nNext sections describe the capabilities that you have.\n\n# WEB BROWSING INSTRUCTIONS\n\nYou cannot perform any web search or access internet to open URLs, links etc. If it seems like the user is expecting you to do so, you clarify the situation and ask the user to copy paste the text directly in the chat.\n\n# MULTI-MODAL INSTRUCTIONS\n\nYou have the ability to read images, but you cannot generate images. You also cannot transcribe audio files or videos.\nYou cannot read nor transcribe audio files or videos.\n\n# TOOL CALLING INSTRUCTIONS\n\nYou may have access to tools that you can use to fetch information or perform actions. You must use these tools in the following situations:\n\n1. When the request requires up-to-date information.\n2. When the request requires specific data that you do not have in your knowledge base.\n3. When the request involves actions that you cannot perform without tools.\n\nAlways prioritize using tools to provide the most accurate and helpful response. If tools are not available, inform the user that you cannot perform the requested action at the moment.",
+     "system_prefix_token_ids": [
+      1
+     ],
+     "add_role_after_system_message": true,
+     "roles": {
+      "user": "",
+      "assistant": "",
+      "tool": ""
+     },
+     "role_templates": {
+      "user": "[INST]{user_message}[/INST]",
+      "assistant": "{assistant_message}</s>",
+      "tool": "[TOOL_RESULTS]{tool_message}[/TOOL_RESULTS]"
+     },
+     "messages": [],
+     "seps": [
+      ""
+     ],
+     "role_content_sep": "",
+     "role_empty_sep": "",
+     "stop_str": [
+      "</s>"
+     ],
+     "stop_token_ids": [
+      2
+     ],
+     "function_string": "",
+     "use_function_calling": false
+    },
+    "pad_token_id": 11,
+    "bos_token_id": 1,
+    "eos_token_id": 2
+   },
+   "gpuVendor": "apple",
+   "maxStorageBufferBindingSize": 1073741824,
+   "generation": {
+    "seed": 1,
+    "maxTokens": 200,
+    "repetitionPenalty": 1
+   }
+  },
+  "smoke": {
+   "ok": true,
+   "question": "Which works were made at Oval House?",
+   "reply": "find Work\nwhere\n  made_at(Work, oval_house)",
+   "expected": "find Work\nwhere\n  made_at(Work, oval_house)",
+   "matchesExample": true,
+   "usage": {
+    "completion_tokens": 15,
+    "prompt_tokens": 2577,
+    "total_tokens": 2592,
+    "extra": {
+     "e2e_latency_s": 23.774,
+     "prefill_tokens_per_s": 114.47380695377802,
+     "decode_tokens_per_s": 11.994242762959043,
+     "time_to_first_token_s": 22.51169999998808,
+     "time_per_output_token_s": 0.0833733333369096,
+     "grammar_init_s": 14.19359999999404,
+     "grammar_per_token_s": 0.0007533333420753481
+    }
+   },
+   "ms": 23775.80000001192,
+   "contextWindow": 4096,
+   "estimatedTokensNeeded": 3477,
+   "contextOk": true
+  },
+  "warmup": null
+ },
+ "config": {
+  "runs": 1,
+  "repairAttempts": 2,
+  "questionTimeoutS": 600,
+  "warmup": false,
+  "coldCache": false,
+  "generation": {
+   "firstAttemptTemperature": 0,
+   "repairTemperature": 0.7,
+   "seed": 1,
+   "topP": null,
+   "topPSource": "model default (mlc-chat-config; see model.load.chatConfig.top_p)",
+   "maxTokens": 200,
+   "repetitionPenalty": 1,
+   "modelSpecificRequest": null,
+   "resolvedModelDefaults": {
+    "temperature": 1,
+    "top_p": 1,
+    "repetition_penalty": 1,
+    "presence_penalty": 0,
+    "frequency_penalty": 0,
+    "context_window_size": 4096
+   }
+  },
+  "grammar": {
+   "constrained": true,
+   "mechanism": "WebLLM response_format {type: 'grammar'} (xgrammar EBNF generated from BeingDB.predicates())",
+   "firstAttempt": "query_or_unsupported",
+   "repairAfterValidationError": "query_only (when every predicate exists), else query_or_unsupported"
+  },
+  "pipeline": {
+   "version": "proven-repairs-only/1",
+   "repairPolicy": "proven-only",
+   "dbGuidedRepair": false,
+   "maxModelRepairs": 2,
+   "maxDeterministicPasses": 2,
+   "description": "BeingDB.diagnose first; proven repairs applied without a model call; then run 9's path (BeingDB.query, run 9 repair messages). An empty result never triggers a model call (run 11)."
+  },
+  "prompt": {
+   "version": "nl2dsl-prompt/run9",
+   "chars": 9627,
+   "fewShotExamples": 9,
+   "sha256": {
+    "rules": "196f077f80e49756168d89643a357394d863ef6a371128dcd6bfe28344d54097",
+    "examples": "2bb56f4a25f72b46c005992ef7e209f579807702b5f4df15e6c832f7a60eac68",
+    "schemaText": "1fbdc14660762894c2dfc35168e2967b0ee363442d61bca0d363aeb1b93993ed",
+    "systemPrompt": "d33e0c0c65d76e2cec2c9a3846061e3e208bb2678aa19a72a14155db2dfc133b",
+    "messages": "e4fdbe50741d2bcc7f73b2ffdddca37572cdd3cac58f0ca1946a04042a6d2717",
+    "grammar": "4c9f1092081f5d73e04e4017ffda65584bccf3d6cef9f0a0f5d74f8c1a9a7189",
+    "fixGrammar": "6f665900a5a698603b7a20350fd425a3319590df7ce202c21b5c7fa98e89e94d"
+   },
+   "schemaStats": {
+    "predicates": 168,
+    "detailed": 31,
+    "classes": [
+     "exhibition",
+     "venue",
+     "work",
+     "organisation",
+     "person"
+    ],
+    "described": 167,
+    "describedInText": 31,
+    "declaredRoles": 168
+   },
+   "text": {
+    "system": "You translate questions about a BeingDB database into BeingDB queries.\nBeingDB runs your query and returns the answer, so never answer from your own knowledge.\nReply with only the query. If the predicates below cannot answer the question, reply UNSUPPORTED: <reason>.\n\nQuery format:\nfind Var1, Var2\nwhere\n  predicate(Var1, Var2)\n  Var2 > @1980\n\n- One clause per line: a predicate from the list, or a comparison of a variable.\n- Capitalised words are variables. Names of people, works, places and organisations are lowercase atoms: Peter Donebauer -> peter_donebauer, the Tate -> tate.\n- Keep each predicate's argument order: the roles show what goes where, e.g. created_by(Work, Person).\n- Use the same variable in two clauses to join them. Every find variable must be used in a clause.\n- Years are written @1979. Comparisons: =, !=, <, <=, >, >=, Y between @1975 and @1980.\n- \"not\" on its own line, followed by indented clauses, excludes matches. \"optional\" keeps rows with no match.\n- \"order by Var ascending\" only when the question asks for an order.\n- Queries cannot count, sum, average or rank: such questions are unsupported.\n\nMain predicates, with argument roles, a description and a real example fact:\nperson(Person): Marks an entity as an individual person.  e.g. person(david_curtis)\norganisation(Organisation): Marks an entity as an organisation, such as an institution, funder, broadcaster, company, publication or artist group.  e.g. organisation(zg)\nwork(Work): Marks an entity as a creative work, such as a video, film, installation, performance, broadcast or publication.  e.g. work(window_water_baby_moving)\nvenue(Venue): Marks an entity as a venue or location where work was made, shown or performed, such as a gallery, college, studio or site.  e.g. venue(paris)\ncreated_by(Work, Artist): Relates a work to the artist or artist group who made it.  e.g. created_by(static_acceleration, david_critchley)\ncollaborated_with(Person, Collaborator): Relates an artist (occasionally an organisation, or a jointly made work) to a person or organisation they collaborated with; most pairs are stored in one direction only.  e.g. collaborated_with(judith_goddard, television_south_west)\nexhibited_at(WorkOrArtist, VenueOrExhibition): Relates a work, or an artist or group, to a venue, exhibition or place where the work was shown.  e.g. exhibited_at(one_of_these_days, london_film_festival)\nuses_medium(WorkOrArtist, Medium): Relates a work, or an artist's practice, to a medium, material, format or technique it uses.  e.g. uses_medium(running_time, photographic_images)\nexhibition(Exhibition): Marks an entity as an exhibition, show, festival or broadcast programme.  e.g. exhibition(montreal_videotapes_retrospective_1988)\nyear_created(Work, Year): Records the year in which a work was created; also used for the year an exhibition, event or organisation began.  e.g. year_created(incidents_in_a_garden, @1977)\nfunded_by(Recipient, Funder): Relates a person, work, organisation or event to an organisation that funded it.  e.g. funded_by(london_video_arts, arts_council)\nemployed_by(Person, Employer): Relates a person to an organisation or institution that employed them, including teaching posts.  e.g. employed_by(rose_garrard, sheffield)\naffiliated_with(Person, Organisation): Relates a person (occasionally an organisation) to an organisation, institution or group they were associated with.  e.g. affiliated_with(jan_van_eyck_academy, maastricht)\nmade_at(Work, Location): Relates a work to the venue, institution or place where it was made.  e.g. made_at(zero_reaches_zeno, oval_house)\neducated_at(Person, Institution): Relates a person to an institution where they studied.  e.g. educated_at(elsa_stansfield, glasgow_school_of_art)\ncurated_by(Project, Curator): Relates an exhibition, programme, compilation or work to the person who curated or selected it.  e.g. curated_by(whitechapel_art_gallery, jasia_reichardt)\ncommissioned_by(Work, Commissioner): Relates a work (occasionally an artist) to the organisation, venue or person that commissioned it.  e.g. commissioned_by(television_interview, arts_council_of_great_britain)\nperformed_at(Performer, Venue): Relates an artist or performance group (occasionally a performance work) to a venue or event where they performed.  e.g. performed_at(kevin_atherton, rotterdam)\ndocument(Interview): Marks a source interview transcript from which facts in this dataset were extracted.  e.g. document(rewind_rose_garrard_interview)\ninterviewed_artist(Artist): Marks an artist who is the subject of one of the source interviews in this dataset.  e.g. interviewed_artist(david_hall)\ninterviewee(Interview, Artist): Relates a source interview transcript to the artist interviewed in it.  e.g. interviewee(rewind_rose_garrard_interview, rose_garrard)\nsource_url(Interview, Url): Relates a source interview transcript to the URL of the published document it was extracted from.  e.g. source_url(rewind_mike_stubbs_interview, \"https://rewind.ac.uk/rewind/wp-content/uploads/sites/146/2021/03/MS510.pdf\")\nedited_at(ArtistOrWork, Facility): Relates an artist, or a work, to the studio, institution or facility where editing was done.  e.g. edited_at(judith_goddard, london_video_arts)\nsoundtrack_by(Work, Composer): Relates a work to a person or group who made a soundtrack for it.  e.g. soundtrack_by(cultural_quarter, simon_thorne)\ninvited_to(Person, Host): Relates a person to an institution or event they were invited to visit or take part in.  e.g. invited_to(david_hall, locations_edinburgh)\nsupported_by(Artist, Supporter): Relates an artist to a person who supported or championed their career.  e.g. supported_by(kevin_atherton, lesley_greene)\nedited_by(Work, Editor): Relates a work or publication to the person who edited it.  e.g. edited_by(mandala, mike_ray)\nmusic_promotion_by(Musician, Promoter): Relates a musician or band to a person who promoted their live performances.  e.g. music_promotion_by(dudu_pakwana, mike_stubbs)\nstudied_at(Person, Institution): Relates a person to an institution where they studied.  e.g. studied_at(elsa_stansfield, slade_school_of_art)\nused_equipment(WorkOrArtist, Equipment): Relates a work, or an artist, to equipment, given as text, used in making it.  e.g. used_equipment(flying_time, \"first colour camera\")\nworked_at(Person, Organisation): Relates a person to an organisation or institution where they worked.  e.g. worked_at(madelon_hooykaas, fantasy_factory)\n\nOther predicates (few facts each), grouped by arguments:\n(Thing, Thing2): acquired_by, active_in, applied_to, approached, assistant_to, awarded_grant, broadcast_by, broadcast_on, chairman_of, commissioning_editor_for, conserved_by, conserved_in_project, contributed_text, council_member_of, depicts_location, director_of, distributed_by, documented_by, established, external_examiner_at, filmed_at, first_exhibition_of, first_shown_at, founded_by, founding_member_of, gave_exhibition_to, had_machine_made_by, head_of_department, held_at, idea_for, in_collection, influenced_by, inspired_by, installed_at, interviewed, invited_by, involved_in, involved_with, made_proposal_to, member_of, mentor_of, met_at, mission_statement_created_for, moved_to, music_by, organised_by, original_name_of, participated_in, partner_of, performed_in, performed_work, photographed_by, president_of, produced_by, project_for, protagonist_in, provided_soundtrack, published_by, published_catalogues_of, published_in, received_funding_from, renamed_as, rented_by, residency_at, reviewed_by, reviewed_in, selected_for, set_up_at, shot_in, showed_at, sold_at, taught_at, taught_by, teaching_at, used_by, used_editing_equipment_at, used_facilities, used_in_work, used_institutional_resource, used_lab, used_software, used_venue, uses_venue, venue_in_area, work_discussed_in, work_shown_in, wrote_about, wrote_for\n(Thing, Text): based_in, born_in, contains_photograph_of, country_represented, department_name, established_programme, exhibition_title, featured_person, financed_by, first_used_technique, got_funding_for, held_position, programmed, promoted_medium, ran, sold_work_to, travelled_to, used_in, used_material, used_medium, used_technology, worked_as, worked_as_assistant_in_city, year_started_using_technology\n(Thing): artist_in_residence, became_cameraman, city, country, event, named_by_competition, place, uses_actors, uses_nonactors, worked_with_sound\n(Thing, Year): began_in, started_by, year_broadcast, year_exhibited, year_joined, year_left, year_moved, year_started, year_travelled\n(Thing, Number): duration_minutes, length_minutes\n(Thing, Thing2, Thing3): co_edited_by\n(Year): year\n(Thing, Thing2, Text): year_involved\n(Thing, Thing2, Year): year_started_work",
+    "examples": [
+     {
+      "q": "Which works were made at Oval House?",
+      "a": "find Work\nwhere\n  made_at(Work, oval_house)"
+     },
+     {
+      "q": "Who created Mandala?",
+      "a": "find Person\nwhere\n  created_by(mandala, Person)"
+     },
+     {
+      "q": "What did Anna Ridley produce?",
+      "a": "find Work\nwhere\n  produced_by(Work, anna_ridley)"
+     },
+     {
+      "q": "Which works were created from 1968 to 1972?",
+      "a": "find Work, Year\nwhere\n  year_created(Work, Year)\n  Year between @1968 and @1972"
+     },
+     {
+      "q": "List David Critchley's works with their year, newest first.",
+      "a": "find Work, Year\nwhere\n  created_by(Work, david_critchley)\n  year_created(Work, Year)\norder by Year descending"
+     },
+     {
+      "q": "Which works by Kevin Atherton have never been exhibited?",
+      "a": "find Work\nwhere\n  created_by(Work, kevin_atherton)\n  not\n    exhibited_at(Work, _)"
+     },
+     {
+      "q": "What price did Tape Tape sell for?",
+      "a": "UNSUPPORTED: No predicate records prices."
+     },
+     {
+      "q": "Where does Kevin Atherton live now?",
+      "a": "UNSUPPORTED: No predicate records where people live."
+     },
+     {
+      "q": "What is the total running time of Judith Goddard's works?",
+      "a": "UNSUPPORTED: Queries cannot sum values."
+     }
+    ],
+    "grammar": "root ::= query | unsupported\nunsupported ::= \"UNSUPPORTED: \" [^\\n]{1,200}\nquery ::= \"find \" (\"distinct \")? var (\", \" var){0,5} \"\\nwhere\" line{1,8} block{0,3} tail\nline ::= \"\\n  \" clause\ninner ::= \"\\n    \" clause\nblock ::= \"\\n  not\" inner{1,4} | \"\\n  optional\" inner{1,4} | \"\\n  either\" inner{1,4} (\"\\n  or\" inner{1,4}){1,3}\nclause ::= pattern | var \" \" op \" \" value | var \" between \" value \" and \" value\nop ::= \"=\" | \"!=\" | \"<=\" | \">=\" | \"<\" | \">\"\nvalue ::= var | year | integer | decimal | atom | string\ntail ::= (\"\\norder by \" var dir (\", \" var dir){0,2})? (\"\\nlimit \" [1-9] [0-9]{0,3})?\ndir ::= \" ascending\" | \" descending\"\nvar ::= [A-Z] [A-Za-z0-9_]{0,23}\natom ::= [a-z] [a-z0-9_]{0,63}\nstring ::= \"\\\"\" [^\"\\n]{0,100} \"\\\"\"\nyear ::= \"@\" [0-9] [0-9] [0-9] [0-9]\nyearmonth ::= year \"-\" [0-9] [0-9]\ndate ::= yearmonth \"-\" [0-9] [0-9]\ninteger ::= \"-\"? [0-9]+\ndecimal ::= \"-\"? [0-9]+ \".\" [0-9]+\nboolean ::= \"true\" | \"false\"\nuri ::= \"<\" [^>\\n]+ \">\"\nliteral ::= atom | string | year | integer | decimal\npattern ::= \"created_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"rented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"shot_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_work_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"studied_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_shown_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_started(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_using_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"contributed_text(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"gave_exhibition_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"held_position(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewee(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"participated_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_lab(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work(\" (var | \"_\" | atom) \")\"\n  | \"broadcast_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_shown_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"installed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"interviewed(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"event(\" (var | \"_\" | atom) \")\"\n  | \"residency_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"venue_in_area(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_left(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"acquired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_proposal_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"protagonist_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"renamed_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"head_of_department(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_institutional_resource(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_broadcast(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"conserved_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"council_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"filmed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_exhibition_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_about(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"active_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"established(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"organisation(\" (var | \"_\" | atom) \")\"\n  | \"performed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_facilities(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"began_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"contains_photograph_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"educated_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"president_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_promotion_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"place(\" (var | \"_\" | atom) \")\"\n  | \"commissioned_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"curated_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"inspired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"moved_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"promoted_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"set_up_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_involved(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_travelled(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"exhibition_title(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country(\" (var | \"_\" | atom) \")\"\n  | \"first_used_technique(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewed_artist(\" (var | \"_\" | atom) \")\"\n  | \"organised_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"venue(\" (var | \"_\" | atom) \")\"\n  | \"based_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"department_name(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"named_by_competition(\" (var | \"_\" | atom) \")\"\n  | \"worked_with_sound(\" (var | \"_\" | atom) \")\"\n  | \"document(\" (var | \"_\" | atom) \")\"\n  | \"performed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"project_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"source_url(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_equipment(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"commissioning_editor_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country_represented(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibition(\" (var | \"_\" | atom) \")\"\n  | \"held_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"photographed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"affiliated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"became_cameraman(\" (var | \"_\" | atom) \")\"\n  | \"co_edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"featured_person(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"funded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"partner_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"selected_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"showed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_exhibited(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"had_machine_made_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"in_collection(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"met_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"original_name_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"travelled_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_joined(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"chairman_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"distributed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"founded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"got_funding_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"produced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"received_funding_from(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"employed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"external_examiner_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"soundtrack_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_actors(\" (var | \"_\" | atom) \")\"\n  | \"founding_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_discussed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_created(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"awarded_grant(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"duration_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"established_programme(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"started_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"used_editing_equipment_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_material(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"worked_as_assistant_in_city(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_moved(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"applied_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"conserved_in_project(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"length_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"performed_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"provided_soundtrack(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"supported_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_nonactors(\" (var | \"_\" | atom) \")\"\n  | \"year(\" (var | \"_\" | year) \")\"\n  | \"approached(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"born_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"published_catalogues_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_software(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"collaborated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"ran(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"broadcast_on(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"director_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"artist_in_residence(\" (var | \"_\" | atom) \")\"\n  | \"financed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"invited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"teaching_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"assistant_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"influenced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"idea_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"invited_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"person(\" (var | \"_\" | atom) \")\"\n  | \"programmed(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"city(\" (var | \"_\" | atom) \")\"\n  | \"depicts_location(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"documented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mentor_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mission_statement_created_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"",
+    "fixGrammar": "root ::= query\nunsupported ::= \"UNSUPPORTED: \" [^\\n]{1,200}\nquery ::= \"find \" (\"distinct \")? var (\", \" var){0,5} \"\\nwhere\" line{1,8} block{0,3} tail\nline ::= \"\\n  \" clause\ninner ::= \"\\n    \" clause\nblock ::= \"\\n  not\" inner{1,4} | \"\\n  optional\" inner{1,4} | \"\\n  either\" inner{1,4} (\"\\n  or\" inner{1,4}){1,3}\nclause ::= pattern | var \" \" op \" \" value | var \" between \" value \" and \" value\nop ::= \"=\" | \"!=\" | \"<=\" | \">=\" | \"<\" | \">\"\nvalue ::= var | year | integer | decimal | atom | string\ntail ::= (\"\\norder by \" var dir (\", \" var dir){0,2})? (\"\\nlimit \" [1-9] [0-9]{0,3})?\ndir ::= \" ascending\" | \" descending\"\nvar ::= [A-Z] [A-Za-z0-9_]{0,23}\natom ::= [a-z] [a-z0-9_]{0,63}\nstring ::= \"\\\"\" [^\"\\n]{0,100} \"\\\"\"\nyear ::= \"@\" [0-9] [0-9] [0-9] [0-9]\nyearmonth ::= year \"-\" [0-9] [0-9]\ndate ::= yearmonth \"-\" [0-9] [0-9]\ninteger ::= \"-\"? [0-9]+\ndecimal ::= \"-\"? [0-9]+ \".\" [0-9]+\nboolean ::= \"true\" | \"false\"\nuri ::= \"<\" [^>\\n]+ \">\"\nliteral ::= atom | string | year | integer | decimal\npattern ::= \"created_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"rented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"shot_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"sold_work_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"studied_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_shown_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_started(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_using_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"contributed_text(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"gave_exhibition_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"held_position(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewee(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"participated_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_lab(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work(\" (var | \"_\" | atom) \")\"\n  | \"broadcast_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_shown_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"installed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"interviewed(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"event(\" (var | \"_\" | atom) \")\"\n  | \"residency_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"venue_in_area(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_left(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"acquired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_proposal_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"protagonist_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"renamed_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"head_of_department(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_institutional_resource(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_broadcast(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"conserved_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"council_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"filmed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"first_exhibition_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_about(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"active_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"established(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"organisation(\" (var | \"_\" | atom) \")\"\n  | \"performed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_facilities(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"began_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"contains_photograph_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"educated_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"president_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"wrote_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_promotion_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"place(\" (var | \"_\" | atom) \")\"\n  | \"commissioned_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"curated_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"inspired_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"moved_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"promoted_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"set_up_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_involved(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_travelled(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"exhibition_title(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country(\" (var | \"_\" | atom) \")\"\n  | \"first_used_technique(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"interviewed_artist(\" (var | \"_\" | atom) \")\"\n  | \"organised_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"venue(\" (var | \"_\" | atom) \")\"\n  | \"based_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"department_name(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"named_by_competition(\" (var | \"_\" | atom) \")\"\n  | \"worked_with_sound(\" (var | \"_\" | atom) \")\"\n  | \"document(\" (var | \"_\" | atom) \")\"\n  | \"performed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"project_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"source_url(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"used_equipment(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"commissioning_editor_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"country_represented(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"exhibition(\" (var | \"_\" | atom) \")\"\n  | \"held_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"photographed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_technology(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"affiliated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"became_cameraman(\" (var | \"_\" | atom) \")\"\n  | \"co_edited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"featured_person(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"funded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"involved_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"music_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"partner_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"selected_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"showed_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_exhibited(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"had_machine_made_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"in_collection(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"met_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"original_name_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"published_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"travelled_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_joined(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"year_started_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"chairman_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"distributed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"founded_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"got_funding_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"produced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"received_funding_from(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"employed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"external_examiner_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"soundtrack_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"taught_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_actors(\" (var | \"_\" | atom) \")\"\n  | \"founding_member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"work_discussed_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"year_created(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"awarded_grant(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"duration_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"established_programme(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"started_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"used_editing_equipment_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_material(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"worked_as_assistant_in_city(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"year_moved(\" (var | \"_\" | atom) \", \" (var | \"_\" | year) \")\"\n  | \"applied_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"conserved_in_project(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"length_minutes(\" (var | \"_\" | atom) \", \" (var | \"_\" | integer) \")\"\n  | \"performed_work(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"provided_soundtrack(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"supported_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_nonactors(\" (var | \"_\" | atom) \")\"\n  | \"year(\" (var | \"_\" | year) \")\"\n  | \"approached(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"born_in(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"published_catalogues_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"used_software(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"collaborated_with(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"member_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"ran(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"broadcast_on(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"director_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"made_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_medium(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"artist_in_residence(\" (var | \"_\" | atom) \")\"\n  | \"financed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"invited_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"teaching_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"assistant_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"edited_at(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"influenced_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"reviewed_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"uses_venue(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"worked_as(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"idea_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"invited_to(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"person(\" (var | \"_\" | atom) \")\"\n  | \"programmed(\" (var | \"_\" | atom) \", \" (var | \"_\" | string) \")\"\n  | \"city(\" (var | \"_\" | atom) \")\"\n  | \"depicts_location(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"documented_by(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mentor_of(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\"\n  | \"mission_statement_created_for(\" (var | \"_\" | atom) \", \" (var | \"_\" | atom) \")\""
+   }
+  },
+  "analysisVersion": "taxonomy/1",
+  "nonDefault": [
+   "questions",
+   "repairPolicy"
+  ],
+  "determinism": "First attempts decode greedily (temperature 0); repairs sample with a fixed seed that WebLLM resets per request, and WebLLM has no cross-request prefix cache, so replies do not depend on question order. Replies are expected to repeat exactly on the same machine, browser, driver and model build, but WebGPU numerics may differ across GPUs, drivers and browsers, so bit-identical replies across machines are not guaranteed."
+ },
+ "browser": {
+  "requested": "chrome",
+  "channel": "chrome",
+  "executable": null,
+  "product": "Google Chrome/155.0.8059.85",
+  "fullVersionList": [
+   {
+    "brand": "Google Chrome",
+    "version": "155.0.8059.85"
+   },
+   {
+    "brand": "Chromium",
+    "version": "155.0.8059.85"
+   },
+   {
+    "brand": "Not(A:Brand",
+    "version": "24.0.0.0"
+   }
+  ],
+  "headless": false,
+  "args": [
+   "--disable-background-timer-throttling",
+   "--disable-backgrounding-occluded-windows",
+   "--disable-renderer-backgrounding",
+   "--no-first-run",
+   "--no-default-browser-check",
+   "--window-size=1280,1000",
+   "--js-flags=--expose-gc"
+  ],
+  "profile": "default",
+  "origin": "http://localhost:8010",
+  "server": "started"
+ },
+ "environment": {
+  "observed": {
+   "host": {
+    "platform": "darwin",
+    "release": "27.0.0",
+    "version": "Darwin Kernel Version 27.0.0: Tue Aug 11 21:05:27 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T8103",
+    "arch": "arm64",
+    "cpuModel": "Apple M1",
+    "logicalCpus": 8,
+    "totalMemoryBytes": 8589934592,
+    "hardwareModel": "MacBookAir10,1",
+    "osProductVersion": "27.0.1",
+    "power": {
+     "source": "AC Power",
+     "lowPowerMode": false
+    }
+   },
+   "memoryAtStart": {
+    "at": "2026-10-20T11:47:03.924Z",
+    "freeBytes": 824721408,
+    "swapUsedBytes": 6327107584,
+    "swapTotalBytes": 7516192768,
+    "freePercent": 66
+   },
+   "memoryAtEnd": {
+    "at": "2026-10-20T12:10:31.651Z",
+    "freeBytes": 2983034880,
+    "swapUsedBytes": 6961558979,
+    "swapTotalBytes": 8589934592,
+    "freePercent": 56
+   },
+   "browser": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "userAgentData": {
+     "architecture": "arm",
+     "bitness": "64",
+     "brands": [
+      {
+       "brand": "Google Chrome",
+       "version": "155"
+      },
+      {
+       "brand": "Chromium",
+       "version": "155"
+      },
+      {
+       "brand": "Not(A:Brand",
+       "version": "24"
+      }
+     ],
+     "fullVersionList": [
+      {
+       "brand": "Google Chrome",
+       "version": "155.0.8059.85"
+      },
+      {
+       "brand": "Chromium",
+       "version": "155.0.8059.85"
+      },
+      {
+       "brand": "Not(A:Brand",
+       "version": "24.0.0.0"
+      }
+     ],
+     "mobile": false,
+     "model": "",
+     "platform": "macOS",
+     "platformVersion": "27.0.1",
+     "wow64": false
+    },
+    "platform": "MacIntel",
+    "language": "en-GB",
+    "hardwareConcurrency": 8,
+    "deviceMemoryGB": 8,
+    "screen": {
+     "width": 1440,
+     "height": 900,
+     "devicePixelRatio": 2
+    },
+    "visibilityState": "visible",
+    "hasFocus": true,
+    "crossOriginIsolated": false,
+    "jsHeapLimitMB": 4395.630592,
+    "storage": {
+     "usageBytes": 7550880000,
+     "quotaBytes": 18288298240
+    },
+    "webgpu": {
+     "available": true,
+     "adapter": {
+      "info": {
+       "vendor": "apple",
+       "architecture": "metal-3",
+       "device": "",
+       "description": "",
+       "subgroupMinSize": 32,
+       "subgroupMaxSize": 32,
+       "isFallbackAdapter": false
+      },
+      "features": [
+       "bgra8unorm-storage",
+       "clip-distances",
+       "core-features-and-limits",
+       "depth-clip-control",
+       "depth32float-stencil8",
+       "dual-source-blending",
+       "float32-blendable",
+       "float32-filterable",
+       "indirect-first-instance",
+       "primitive-index",
+       "rg11b10ufloat-renderable",
+       "shader-f16",
+       "subgroup-size-control",
+       "subgroups",
+       "texture-component-swizzle",
+       "texture-compression-astc",
+       "texture-compression-astc-sliced-3d",
+       "texture-compression-bc",
+       "texture-compression-bc-sliced-3d",
+       "texture-compression-etc2",
+       "texture-formats-tier1",
+       "texture-formats-tier2",
+       "timestamp-query"
+      ],
+      "limits": {
+       "maxTextureDimension1D": 16384,
+       "maxTextureDimension2D": 16384,
+       "maxTextureDimension3D": 2048,
+       "maxTextureArrayLayers": 2048,
+       "maxBindGroups": 4,
+       "maxBindGroupsPlusVertexBuffers": 24,
+       "maxBindingsPerBindGroup": 1000,
+       "maxDynamicUniformBuffersPerPipelineLayout": 10,
+       "maxDynamicStorageBuffersPerPipelineLayout": 8,
+       "maxSampledTexturesPerShaderStage": 48,
+       "maxSamplersPerShaderStage": 16,
+       "maxStorageBuffersPerShaderStage": 10,
+       "maxStorageTexturesPerShaderStage": 8,
+       "maxUniformBuffersPerShaderStage": 12,
+       "maxUniformBufferBindingSize": 65536,
+       "maxStorageBufferBindingSize": 4294967292,
+       "minUniformBufferOffsetAlignment": 256,
+       "minStorageBufferOffsetAlignment": 256,
+       "maxVertexBuffers": 8,
+       "maxBufferSize": 4294967292,
+       "maxVertexAttributes": 30,
+       "maxVertexBufferArrayStride": 2048,
+       "maxInterStageShaderVariables": 28,
+       "maxColorAttachments": 8,
+       "maxColorAttachmentBytesPerSample": 128,
+       "maxComputeWorkgroupStorageSize": 32768,
+       "maxComputeInvocationsPerWorkgroup": 1024,
+       "maxComputeWorkgroupSizeX": 1024,
+       "maxComputeWorkgroupSizeY": 1024,
+       "maxComputeWorkgroupSizeZ": 64,
+       "maxComputeWorkgroupsPerDimension": 65535,
+       "maxImmediateSize": 64,
+       "maxStorageBuffersInFragmentStage": 10,
+       "maxStorageTexturesInFragmentStage": 8,
+       "maxStorageBuffersInVertexStage": 10,
+       "maxStorageTexturesInVertexStage": 8
+      },
+      "isFallbackAdapter": false,
+      "softwareRenderer": false
+     },
+     "preferredCanvasFormat": "bgra8unorm",
+     "wgslLanguageFeatures": [
+      "buffer_view",
+      "immediate_address_space",
+      "linear_indexing",
+      "packed_4x8_integer_dot_product",
+      "pointer_composite_access",
+      "readonly_and_readwrite_storage_textures",
+      "subgroup_id",
+      "subgroup_uniformity",
+      "swizzle_assignment",
+      "texture_and_sampler_let",
+      "texture_formats_tier1",
+      "uniform_buffer_standard_layout",
+      "unrestricted_pointer_parameters"
+     ]
+    }
+   },
+   "chromeGpu": {
+    "featureStatus": {
+     "*   Canvas": "Hardware accelerated",
+     "*   Direct Rendering Display Compositor": "Disabled",
+     "*   Compositing": "Hardware accelerated",
+     "*   Multiple Raster Threads": "Enabled",
+     "*   OpenGL": "Enabled",
+     "*   Rasterization": "Hardware accelerated",
+     "*   Raw Draw": "Disabled",
+     "*   Skia Graphite": "Enabled",
+     "*   TreesInViz": "Disabled",
+     "*   Video Decode": "Hardware accelerated",
+     "*   Video Encode": "Hardware accelerated",
+     "*   WebGL": "Hardware accelerated",
+     "*   WebGPU": "Hardware accelerated",
+     "*   WebNN": "Disabled",
+     "*   Disable webgpu on vk via gl interop": "442791440(http://crbug.com/442791440), 475935650(http://crbug.com/475935650)    Disabled Features: webgpu_on_vk_via_gl_interop",
+     "*   glFlush error on Mac": "841755(http://crbug.com/841755)    Applied Workarounds: disable_2d_canvas_auto_flush",
+     "*   dumpShaderSource (Frontend features)": "Disabled",
+     "*   useIr (Frontend features)": "Disabled",
+     "*   hasCheapRenderPass (Metal features)": "Disabled",
+     "*   hasDepthAutoResolve (Metal features)": "Enabled",
+     "*   hasEvents (Metal features)": "Enabled",
+     "*   hasTextureSwizzle (Metal features)": "Enabled",
+     "*   requireGpuFamily2 (Metal features)": "Enabled"
+    },
+    "info": {}
+   }
+  }
+ },
+ "compatibility": {
+  "ok": true,
+  "checks": [
+   {
+    "id": "webgpu_available",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "id": "adapter",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "id": "hardware_adapter",
+    "ok": true,
+    "detail": "vendor=apple architecture=metal-3 fallback=false"
+   },
+   {
+    "id": "model_in_registry",
+    "ok": true,
+    "detail": null
+   },
+   {
+    "id": "shader_f16",
+    "ok": true,
+    "required": true,
+    "available": true
+   },
+   {
+    "id": "maxStorageBuffersPerShaderStage",
+    "ok": true,
+    "required": 10,
+    "available": 10
+   },
+   {
+    "id": "maxComputeWorkgroupStorageSize",
+    "ok": true,
+    "required": 32768,
+    "available": 32768
+   },
+   {
+    "id": "maxBufferSize",
+    "ok": true,
+    "required": 268435456,
+    "available": 4294967292
+   },
+   {
+    "id": "maxStorageBufferBindingSize",
+    "ok": true,
+    "required": 134217728,
+    "available": 4294967292
+   }
+  ],
+  "model": {
+   "vramRequiredMB": 2863.69,
+   "lowResourceRequired": true,
+   "requiredFeatures": [],
+   "overrides": {
+    "context_window_size": 4096
+   }
+  }
+ },
+ "provenance": {
+  "repositories": {
+   "beingdb-webllm": {
+    "name": "beingdb-webllm",
+    "present": true,
+    "git": true,
+    "commit": "073f3d5342563eefb9c9f83ef7f63778be0324ca",
+    "branch": "main",
+    "describe": "073f3d5",
+    "commitDate": "2026-10-09T12:36:31+01:00",
+    "remote": "https://github.com/jptmoore/beingdb-webllm.git",
+    "dirty": false,
+    "changedFiles": [],
+    "diffSha256": null
+   },
+   "beingdb-wasm": {
+    "name": "beingdb-wasm",
+    "present": true,
+    "git": true,
+    "commit": "d376be1310d8eec192320df594fd86a88f5d42dc",
+    "branch": "main",
+    "describe": "d376be1",
+    "commitDate": "2026-10-06T18:22:25+01:00",
+    "remote": "https://github.com/jptmoore/beingdb-wasm.git",
+    "dirty": false,
+    "changedFiles": [],
+    "diffSha256": null
+   },
+   "beingdb": {
+    "name": "beingdb",
+    "present": true,
+    "git": true,
+    "commit": "dd8c4fe3ec8ce5e489863b1beb2c17a50e065115",
+    "branch": "main",
+    "describe": "dd8c4fe",
+    "commitDate": "2026-10-06T18:22:25+01:00",
+    "remote": "https://github.com/jptmoore/beingdb.git",
+    "dirty": false,
+    "changedFiles": [],
+    "diffSha256": null
+   }
+  },
+  "artefacts": {
+   "beingdbWasmLoaderSha256": "c373d8ce120155141ae2aab51f555b939fc64f1dedf91d44437a95395fbec4e4",
+   "beingdbWasmModules": {
+    "code-adf1dbb5030ff053a181.wasm": "e94147ec15d896305c9c6fa802a8dbf7fcad8d38d05a76979fd023f06921922f"
+   },
+   "rewindDataSha256": "1fb44e69f3fbd08ffb0bfb4f438b45f02a1ee733a524b07e24c1ed28edf3686d"
+  },
+  "packages": {
+   "@mlc-ai/web-llm": "0.2.85",
+   "playwright-core": "1.63.0"
+  },
+  "node": "v23.4.0"
+ },
+ "beingdb": {
+  "predicates": 168,
+  "facts": 1842,
+  "entries": 6639,
+  "environmentFingerprint": "sha256:72f26c197b218529990de9cdf11da453d667020f693dbc4ba5398aa4ac1ed01d",
+  "languageVersion": "beingdb-dsl/1",
+  "timings": {
+   "wasmMs": 26.69999998807907,
+   "fetchMs": 19.80000001192093,
+   "loadMs": 26.30000001192093,
+   "dataBytes": 677657,
+   "schemaMs": 17.299999982118607,
+   "analysisContextMs": 11
+  }
+ },
+ "warnings": [
+  "non-default settings: questions, repairPolicy (not the baseline configuration)",
+  "5.9 GB of swap in use at start: close other applications for representative timings",
+  "swap use grew by 605 MB during the run: memory pressure may have inflated timings"
+ ],
+ "summary": {
+  "trials": 1,
+  "supported": 38,
+  "unsupported": 12,
+  "meanCounts": {
+   "firstValid": 20,
+   "finalValid": 31,
+   "firstCorrect": 3,
+   "finalCorrect": 3,
+   "unsupportedDetected": 8,
+   "fabricated": 4,
+   "overallCorrect": 11,
+   "runtimeFailures": 0
+  },
+  "medianModelMsPerCall": 23653.7,
+  "medianFirstAttemptModelMs": 24009.95,
+  "medianBeingdbMsPerQuery": 0.1,
+  "efficiency": {
+   "modelCalls": 80,
+   "firstAttemptCalls": 50,
+   "modelRepairCalls": 30,
+   "modelCallsPerQuestion": 1.6,
+   "modelCallsPerSupportedQuestion": 1.684,
+   "beingdbCalls": 144,
+   "diagnoseCalls": 73,
+   "executeCalls": 71,
+   "beingdbMsTotal": 248.6,
+   "diagnoseMsTotal": 214.6,
+   "deterministicRepairs": 2,
+   "questionsRepairedDeterministically": 2,
+   "questionsRepairedDeterministicallyCorrect": 0,
+   "questionsWithModelRepair": 19,
+   "correctWithOneModelCall": 11,
+   "correctPerModelCall": 0.138,
+   "supportedCorrectPerModelCall": 0.047,
+   "medianTotalMs": 25121.4
+  },
+  "failureCategories": {
+   "wrong_predicate": 21,
+   "validation_repair_failed": 6,
+   "unsupported_not_detected": 4,
+   "missing_constraint": 3,
+   "entity_grounding": 2,
+   "wrong_constraint": 2,
+   "supported_marked_unsupported": 1
+  }
+ },
+ "files": {
+  "questions": "questions.jsonl",
+  "summary": "summary.json",
+  "browserLog": "browser.log"
+ }
+}
