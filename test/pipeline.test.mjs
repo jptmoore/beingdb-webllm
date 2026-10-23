@@ -90,6 +90,20 @@ test("a contains query runs end to end and scores against suite v2", async () =>
   assert.match(buildGrammar(schema.meta), /\| var " contains " string$/m);
 });
 
+test("an answer matching an alternative reference is correct, and the verdict says which", async () => {
+  const e15 = countingSuite.get("e15");
+  const score = async (dsl) => scoreItem(e15, (await run([dsl])).r, db);
+  const ref = await score("find Work\nwhere\n  exhibited_at(Work, tate)");
+  assert.equal(ref.correct, true);
+  assert.equal(ref.alternative, undefined);
+  // contains "tate" also finds tate_gallery_london and tate_liverpool: the alternative answer.
+  const wide = await score('find Work, V\nwhere\n  exhibited_at(Work, V)\n  V contains "tate"');
+  assert.equal(wide.correct, true);
+  assert.equal(wide.alternative, 1);
+  // Neither the reference nor the alternative: only one of the Tate venues.
+  assert.equal((await score("find Work\nwhere\n  exhibited_at(Work, tate_liverpool)")).correct, false);
+});
+
 test("db-guided: a provably empty zero count goes back to the model like an empty result", async () => {
   const bad = "find count(Work)\nwhere\n  created_by(Work, george_barbr)";
   const good = "find count(Work)\nwhere\n  created_by(Work, george_barber)";

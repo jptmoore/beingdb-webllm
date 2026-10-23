@@ -28,7 +28,7 @@ where
 - "order by Var ascending" only when the question asks for an order.
 - For "how many", count in the query: "find count(Work)" gives one number, "find Artist, count(Work)" one per artist, and "order by count(Work) descending" ranks them. count counts distinct values.
 - When the question gives only a word or part of a name, do not guess an atom or put the word in a clause: use a variable and add Var contains "word" (ignores case).
-- Queries cannot sum or average: such questions are unsupported.`;
+- Queries cannot sum, average, divide or filter on a count: such questions are unsupported.`;
 
 // Real Rewind queries (checked by eval/check-references.mjs), none of them eval questions.
 export const EXAMPLES = [
