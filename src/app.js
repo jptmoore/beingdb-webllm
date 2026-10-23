@@ -11,7 +11,12 @@ export function resultsTable(res) {
   const rows = res.results
     .map((r) => `<tr>${res.variables.map((v) => `<td>${r[v] ? esc(r[v].value) : "<i>null</i>"}</td>`).join("")}</tr>`)
     .join("");
-  return `<p>${res.count} rows</p><table><tr>${head}</tr>${rows}</table>`;
+  const summary = res.truncated
+    ? `<p class="warn">First ${res.count} rows only: BeingDB's row limit cut the result, so more rows match.</p>`
+    : res.hasMore
+      ? `<p>${res.count} rows (more match beyond the query's limit)</p>`
+      : `<p>${res.count} rows</p>`;
+  return `${summary}<table><tr>${head}</tr>${rows}</table>`;
 }
 
 let generator;
