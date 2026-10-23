@@ -63,8 +63,8 @@ test("a correct candidate costs one model call in both conditions", async () => 
   }
 });
 
-// Counting suite (BeingDB 0.3.0 count(Var)): u03 became c01.
-const countingSuite = new Map(JSON.parse(readFileSync("eval/questions-counting.json", "utf8")).items.map((i) => [i.id, i]));
+// Suite v2 (BeingDB 0.3.0 count(Var), 0.4.0 contains): u03 became c01.
+const countingSuite = new Map(JSON.parse(readFileSync("eval/questions-v2.json", "utf8")).items.map((i) => [i.id, i]));
 
 test("a count query runs end to end and scores against the counting suite", async () => {
   const c01 = countingSuite.get("c01");
@@ -80,6 +80,14 @@ test("a count query runs end to end and scores against the counting suite", asyn
   // A zero count from a misspelling is invalid as an answer.
   const { r: zero } = await run(["find count(W)\nwhere\n  created_by(W, george_barbr)"]);
   assert.equal(scoreItem(c01, zero, db).correct, false);
+});
+
+test("a contains query runs end to end and scores against suite v2", async () => {
+  const s02 = countingSuite.get("s02");
+  const { r } = await run(['find distinct W\nwhere\n  created_by(W, _)\n  W contains "TAPE"'], { repairPolicy: "proven-only" });
+  assert.equal(r.outcome, "ok");
+  assert.equal(scoreItem(s02, r, db).correct, true);
+  assert.match(buildGrammar(schema.meta), /\| var " contains " string$/m);
 });
 
 test("the grammar allows count(Var) in find and order by", () => {

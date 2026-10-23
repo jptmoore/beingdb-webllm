@@ -31,7 +31,7 @@ item ::= var | count
 line ::= "\n  " clause
 inner ::= "\n    " clause
 block ::= "\n  not" inner{1,4} | "\n  optional" inner{1,4} | "\n  either" inner{1,4} ("\n  or" inner{1,4}){1,3}
-clause ::= pattern | var " " op " " value | var " between " value " and " value
+clause ::= pattern | var " " op " " value | var " between " value " and " value | var " contains " string
 op ::= "=" | "!=" | "<=" | ">=" | "<" | ">"
 value ::= var | year | integer | decimal | atom | string
 tail ::= ("\norder by " item dir (", " item dir){0,2})? ("\nlimit " [1-9] [0-9]{0,3})?

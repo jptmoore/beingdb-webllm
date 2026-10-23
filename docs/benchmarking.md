@@ -100,12 +100,13 @@ changes it even when no fact changes.
   with the annotated pack's fingerprint. Pass it with `--questions`. It is
   recorded as suite `custom:questions-annotated.json` and as a non-default
   setting.
-- `eval/questions-counting.json` (suite `rewind-nl2dsl-annotated-counting-v1`)
-  is the annotated suite for BeingDB 0.3.0's `count(Var)`: `u03` ("How many works
-  did George Barber create?") is answerable and becomes `c01`, and `c02`-`c04` add
-  a grouped count, a count that must be distinct through a join (21 work-venue
-  rows, 12 works) and a ranking by count. 53 items: 42 supported, 11 unsupported.
-  Pass it with `--questions`.
+- `eval/questions-v2.json` (suite `rewind-nl2dsl-annotated-v2`) is the
+  annotated suite for BeingDB 0.4.0. Counting (`count(Var)`): `u03` ("How many
+  works did George Barber create?") is answerable and becomes `c01`, and `c02`-`c04`
+  add a grouped count, a count that must be distinct through a join (21 work-venue
+  rows, 12 works) and a ranking by count. Text search (`contains`): `s01`-`s04` find
+  things by part of a value or an atom's name, one of them combined with a count.
+  57 items: 46 supported, 11 unsupported. Pass it with `--questions`.
 - `npm run check-eval -- --questions <file>` checks references, examples and
   the scorer against the linked build for any of these files.
 
@@ -298,22 +299,25 @@ and `config.nonDefault` rather than the label.
 | Annotated predicates (Run 9) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `model` | historical ablation; prompt run9 is `beingdb-webllm` 5e28dc5 |
 | Annotated + BeingDB-guided repair (Run 10) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `db-guided` | historical ablation; as Run 9 |
 | Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | previous reference condition; as Run 9 |
-| Annotated + counting + proven repairs (Run 12) | `eval/questions-counting.json` | `nl2dsl-prompt/run12` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.3.0); not yet run |
+| Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); not yet run |
 
 Saved runs of the Run 11 condition carry the labels
 `annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`, with
 identical settings and hashes.
 
-Prompt run12 lets the model write `count(Var)`: the decoding grammar accepts it
-in `find` and `order by`, the rules say to count "how many" in the query (sums and
-averages stay unsupported), and one example (David Hall, not an eval question)
-shows it. It changes the prompt for every question, so compare Run 12 with Run 11
-on the 49 items they share as well as on the count items. For Llama:
+Prompt run12 lets the model write `count(Var)` and `Var contains "text"`: the
+decoding grammar accepts `count(Var)` in `find` and `order by` and `contains` with
+quoted text as a clause, the rules say to count "how many" in the query (sums and
+averages stay unsupported) and to find things by part of their text with
+`contains`, and one example of each (David Hall's works; who ran a cinema; neither is
+an eval question) shows them. It changes the prompt for every question, so compare
+Run 12 with Run 11 on the 49 items they share as well as on the new items. For
+Llama:
 
 ```bash
 npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
-  --questions eval/questions-counting.json --repair-policy proven-only \
-  --condition annotated-counting-proven-repairs-run12-llama
+  --questions eval/questions-v2.json --repair-policy proven-only \
+  --condition annotated-v2-proven-repairs-run12-llama
 ``` Results per condition:
 [experiment log](internals.md#later-runs-npm-run-benchmark-chrome-154155).
 
