@@ -111,7 +111,9 @@ export async function ask({
         attempt.db = db.query(guided.dsl);
         steps.push({ kind: "execute", ms: attempt.db.ms, status: attempt.db.status, rows: attempt.db.response.count ?? null });
         const proofs = (diag.response.diagnostics || []).filter((d) => d.severity === "error" && EMPTY_PROOFS.has(d.code));
-        if (attempt.db.status === "ok" && !(attempt.db.response.count === 0 && proofs.length)) break;
+        // Nothing matched: no rows, or (BeingDB >= 0.3.0) a count of 0, which is one row.
+        const nothingMatched = attempt.db.response.count === 0 || attempt.db.response.provablyEmpty === true;
+        if (attempt.db.status === "ok" && !(nothingMatched && proofs.length)) break;
         if (attempt.db.status === "ok") {
           attempt.feedback = emptyResultMessage(proofs, schema);
           next = prompt.format;

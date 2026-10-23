@@ -6,7 +6,7 @@ const UNSUPPORTED = "UNSUPPORTED: ";
 
 // Bump when RULES, EXAMPLES, the schema text, the grammar or the repair message change (benchmarks also record hashes).
 // run9: declared argument roles and descriptions from the pack (BeingDB annotations).
-// run12: count(Var) (BeingDB 0.3.0) and contains (0.4.0) in the rules, grammar and one example each.
+// run12: count(Var) (BeingDB 0.3.0) and contains (0.4.0) in the rules, grammar and examples.
 export const PROMPT_VERSION = "nl2dsl-prompt/run12";
 
 export const RULES = `You translate questions about a BeingDB database into BeingDB queries.
@@ -27,7 +27,7 @@ where
 - "not" on its own line, followed by indented clauses, excludes matches. "optional" keeps rows with no match.
 - "order by Var ascending" only when the question asks for an order.
 - For "how many", count in the query: "find count(Work)" gives one number, "find Artist, count(Work)" one per artist, and "order by count(Work) descending" ranks them. count counts distinct values.
-- To find something by part of its name or text: Title contains "video" (ignores case; quoted text only).
+- When the question gives only a word or part of a name, do not guess an atom or put the word in a clause: use a variable and add Var contains "word" (ignores case).
 - Queries cannot sum or average: such questions are unsupported.`;
 
 // Real Rewind queries (checked by eval/check-references.mjs), none of them eval questions.
@@ -45,7 +45,9 @@ export const EXAMPLES = [
     a: "find Work\nwhere\n  created_by(Work, kevin_atherton)\n  not\n    exhibited_at(Work, _)",
   },
   { q: "How many works did David Hall create?", a: "find count(Work)\nwhere\n  created_by(Work, david_hall)" },
+  { q: "How many collaborators did each person have?", a: "find Person, count(Other)\nwhere\n  collaborated_with(Person, Other)" },
   { q: "Who ran a cinema?", a: 'find Person, Activity\nwhere\n  ran(Person, Activity)\n  Activity contains "cinema"' },
+  { q: "Who studied at a college?", a: 'find Person, Institution\nwhere\n  studied_at(Person, Institution)\n  Institution contains "college"' },
   { q: "What price did Tape Tape sell for?", a: `${UNSUPPORTED}No predicate records prices.` },
   { q: "Where does Kevin Atherton live now?", a: `${UNSUPPORTED}No predicate records where people live.` },
   { q: "What is the total running time of Judith Goddard's works?", a: `${UNSUPPORTED}Queries cannot sum values.` },

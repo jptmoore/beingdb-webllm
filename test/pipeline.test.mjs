@@ -90,6 +90,17 @@ test("a contains query runs end to end and scores against suite v2", async () =>
   assert.match(buildGrammar(schema.meta), /\| var " contains " string$/m);
 });
 
+test("db-guided: a provably empty zero count goes back to the model like an empty result", async () => {
+  const bad = "find count(Work)\nwhere\n  created_by(Work, george_barbr)";
+  const good = "find count(Work)\nwhere\n  created_by(Work, george_barber)";
+  const { r } = await run([bad, good], { repairPolicy: "db-guided" });
+  assert.equal(r.attempts.length, 2);
+  assert.match(r.attempts[0].feedback, /returned no rows, because:/);
+  assert.match(r.attempts[0].feedback, /george_barbr/);
+  assert.equal(r.attempts[1].reply.dsl, good);
+  assert.equal(scoreItem(countingSuite.get("c01"), r, db).correct, true);
+});
+
 test("the grammar allows count(Var) in find and order by", () => {
   const grammar = buildGrammar(schema.meta);
   assert.match(grammar, /^item ::= var \| count$/m);

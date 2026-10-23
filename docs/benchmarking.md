@@ -308,9 +308,10 @@ identical settings and hashes.
 Prompt run12 lets the model write `count(Var)` and `Var contains "text"`: the
 decoding grammar accepts `count(Var)` in `find` and `order by` and `contains` with
 quoted text as a clause, the rules say to count "how many" in the query (sums and
-averages stay unsupported) and to find things by part of their text with
-`contains`, and one example of each (David Hall's works; who ran a cinema; neither is
-an eval question) shows them. It changes the prompt for every question, so compare
+averages stay unsupported) and, when a question gives only a word or part of a
+name, to use `contains` instead of guessing an atom, and two examples of each show
+them (an overall and a per-group count; `contains` on a text column and on an atom
+column), none of them eval questions or eval predicates' answers. It changes the prompt for every question, so compare
 Run 12 with Run 11 on the 49 items they share as well as on the new items. For
 Llama:
 
@@ -338,6 +339,17 @@ DSL result now carries the `diagnose` fields. In the recorded Run 10 replies thi
 adds lines to the repair messages of `e16` and `u05` only; outcomes, paths, calls and
 proven repairs are unchanged, and the Run 10 replay test tolerates exactly those
 added lines.
+
+A smoke run of the eight new v2 items with Llama 3.2 3B
+(`20261023T175241Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`, `--ids`, so
+partial) got 1/8: the model used `count(...)` for every count question but did not
+group (`c02`), and never used `contains`, writing the searched word as an argument
+instead. It also exposed wrong references (`s01`, `s03`, `s04` targeted small text
+predicates while the main atom predicates `uses_medium`/`exhibited_at` hold most
+matches) and a `db-guided` gap (a zero count is one row, so a provably empty count
+was not treated as empty). The v2 references, the run12 rules and examples (a
+grouped count; `contains` on an atom column) and the pipeline (`provablyEmpty`) were
+changed after it, so that run predates the final v2 suite and prompt.
 
 ### Timing caveats
 
