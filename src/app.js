@@ -15,11 +15,12 @@ export function resultsTable(res) {
   const rows = res.results
     .map((r) => `<tr>${res.variables.map((v) => `<td>${r[v] ? esc(r[v].value) : "<i>null</i>"}</td>`).join("")}</tr>`)
     .join("");
+  const of = res.total !== undefined && res.total !== res.count ? ` of ${res.total}` : "";
   const summary = res.truncated
-    ? `<p class="warn">First ${res.count} rows only: BeingDB's row limit cut the result, so more rows match.</p>`
+    ? `<p class="warn">First ${res.count}${of} rows only: BeingDB's row limit cut the result.</p>`
     : res.hasMore
-      ? `<p>${res.count} rows (more match beyond the query's limit)</p>`
-      : `<p>${res.count} rows</p>`;
+      ? `<p>${res.count}${of} rows (more match beyond the query's limit)</p>`
+      : `<p>${res.count}${of} rows</p>`;
   return `${summary}<table><tr>${head}</tr>${rows}</table>`;
 }
 
