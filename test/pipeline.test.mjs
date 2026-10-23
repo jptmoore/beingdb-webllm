@@ -286,9 +286,13 @@ test("conflicting or unknown repair policies are rejected", async () => {
 // Run 10 (db-guided) replayed from its recorded replies: same path, BeingDB
 // diagnoses, proven repairs, repair messages and outcomes. Run 10 predates
 // BeingDB 0.1.7's unsatisfiable_comparison diagnostic, which now adds lines to
-// two recorded messages (e16, u05); only those additions are tolerated.
+// two recorded messages (e16, u05), and 0.4.1's contains hint, which extends a
+// line (h02); only those additions are tolerated.
 const NEWER_DIAGNOSTIC_LINE = /^- No \w+ fact has a value at argument \d+ satisfying .+, so the query returns no rows\./;
+// BeingDB 0.4.1 may append a contains hint to a recorded diagnostic line.
+const CONTAINS_HINT = / Values there contain ".*?" \(.*?\): put a variable there and add \w+ contains ".*?"\./;
 function assertRecordedMessage(now, was, label) {
+  if (now !== null) now = now.split("\n").map((l) => l.replace(CONTAINS_HINT, "")).join("\n");
   if (now === was || now === null || was === null) return assert.equal(now, was, label);
   const nowLines = now.split("\n");
   const wasLines = was.split("\n");

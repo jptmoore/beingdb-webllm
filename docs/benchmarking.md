@@ -338,7 +338,9 @@ stored value satisfies, such as `Price > 1000` on a retailer column), and an emp
 DSL result now carries the `diagnose` fields. In the recorded Run 10 replies this
 adds lines to the repair messages of `e16` and `u05` only; outcomes, paths, calls and
 proven repairs are unchanged, and the Run 10 replay test tolerates exactly those
-added lines.
+added lines. BeingDB 0.4.1's `contains` hint (a diagnostic for a literal
+that only occurs inside values at its argument ends with advice to use `contains`)
+extends one recorded line (`h02`); the replay test strips exactly that sentence.
 
 A smoke run of the eight new v2 items with Llama 3.2 3B
 (`20261023T175241Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`, `--ids`, so
