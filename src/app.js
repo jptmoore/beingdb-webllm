@@ -6,7 +6,11 @@ const log = (msg) => ($("log").textContent += msg + "\n");
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
 export function resultsTable(res) {
-  if (!res.results.length) return "<p>0 rows</p>";
+  if (!res.results.length) {
+    const why = (res.diagnostics || []).map((d) => `<li>${esc(d.message)}</li>`).join("");
+    const verdict = res.provablyEmpty ? `<p class="warn">BeingDB proved this query cannot match:</p>` : "";
+    return `<p>0 rows</p>${why ? `${verdict}<ul>${why}</ul>` : ""}`;
+  }
   const head = res.variables.map((v) => `<th>${esc(v)}</th>`).join("");
   const rows = res.results
     .map((r) => `<tr>${res.variables.map((v) => `<td>${r[v] ? esc(r[v].value) : "<i>null</i>"}</td>`).join("")}</tr>`)

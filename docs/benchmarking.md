@@ -309,6 +309,13 @@ before). The prompt is unchanged, so `config.prompt.sha256` stays the same: tell
 such runs apart by `provenance.repositories.beingdb` / `beingdb-wasm` commits.
 Execute responses also gain `hasMore` and `truncated`, which scoring ignores.
 
+BeingDB 0.1.7 adds the `unsatisfiable_comparison` diagnostic (a comparison no
+stored value satisfies, such as `Price > 1000` on a retailer column), and an empty
+DSL result now carries the `diagnose` fields. In the recorded Run 10 replies this
+adds lines to the repair messages of `e16` and `u05` only; outcomes, paths, calls and
+proven repairs are unchanged, and the Run 10 replay test tolerates exactly those
+added lines.
+
 ### Timing caveats
 
 Timings depend on the GPU, memory bandwidth and unified memory size. They are
