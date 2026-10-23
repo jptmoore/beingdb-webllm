@@ -73,7 +73,11 @@ function term(text) {
 
 export function parseDsl(dsl) {
   const lines = (dsl || "").split("\n");
-  const find = (lines[0].match(/^find\s+(?:distinct\s+)?(.*)$/)?.[1] || "").split(",").map((s) => s.trim()).filter(Boolean);
+  // count(Var) projects Var's count: for these checks Var counts as projected.
+  const find = (lines[0].match(/^find\s+(?:distinct\s+)?(.*)$/)?.[1] || "")
+    .split(",")
+    .map((s) => s.trim().replace(/^count\(\s*([A-Z][A-Za-z0-9_]*)\s*\)$/i, "$1"))
+    .filter(Boolean);
   const clauses = [];
   const orderBy = [];
   let block = null;

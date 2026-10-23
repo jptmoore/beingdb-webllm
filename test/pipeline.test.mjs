@@ -6,6 +6,8 @@ import { ask, MAX_DETERMINISTIC_PASSES } from "../src/pipeline.js";
 import { buildSchema } from "../src/schema.js";
 import { buildPrompt } from "../src/prompt.js";
 import { loadBeingDB } from "../eval/node-beingdb.mjs";
+import { scoreItem } from "../src/score.js";
+import { buildGrammar } from "../src/grammar.js";
 
 const { db } = await loadBeingDB();
 const schema = buildSchema(db);
@@ -59,6 +61,33 @@ test("a correct candidate costs one model call in both conditions", async () => 
     assert.deepEqual(n, dbGuided ? { query: 1, diagnose: 1 } : { query: 1, diagnose: 0 });
     assert.deepEqual(r.path, dbGuided ? ["model", "diagnose", "execute"] : ["model", "query"]);
   }
+});
+
+// Counting suite (BeingDB 0.3.0 count(Var)): u03 became c01.
+const countingSuite = new Map(JSON.parse(readFileSync("eval/questions-counting.json", "utf8")).items.map((i) => [i.id, i]));
+
+test("a count query runs end to end and scores against the counting suite", async () => {
+  const c01 = countingSuite.get("c01");
+  for (const repairPolicy of ["model", "db-guided", "proven-only"]) {
+    // Variable names are free: count(W) matches the reference's count(Work).
+    const { r } = await run(["find count(W)\nwhere\n  created_by(W, george_barber)"], { repairPolicy });
+    assert.equal(r.outcome, "ok", repairPolicy);
+    assert.equal(scoreItem(c01, r, db).correct, true, repairPolicy);
+  }
+  // Listing the works is not an answer to "how many".
+  const { r } = await run(["find Work\nwhere\n  created_by(Work, george_barber)"]);
+  assert.equal(scoreItem(c01, r, db).correct, false);
+  // A zero count from a misspelling is invalid as an answer.
+  const { r: zero } = await run(["find count(W)\nwhere\n  created_by(W, george_barbr)"]);
+  assert.equal(scoreItem(c01, zero, db).correct, false);
+});
+
+test("the grammar allows count(Var) in find and order by", () => {
+  const grammar = buildGrammar(schema.meta);
+  assert.match(grammar, /^item ::= var \| count$/m);
+  assert.match(grammar, /^count ::= "count\(" var "\)"$/m);
+  assert.match(grammar, /"\\norder by " item dir/);
+  assert.equal(countingSuite.has("u03"), false);
 });
 
 test("a proven argument swap is applied without a model repair", async () => {
