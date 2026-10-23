@@ -308,7 +308,7 @@ and `config.nonDefault` rather than the label.
 | Annotated predicates (Run 9) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `model` | historical ablation; prompt run9 is `beingdb-webllm` 5e28dc5 |
 | Annotated + BeingDB-guided repair (Run 10) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `db-guided` | historical ablation; as Run 9 |
 | Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | previous reference condition; as Run 9 |
-| Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); not yet run |
+| Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); Llama 31/63 (below) |
 
 Saved runs of the Run 11 condition carry the labels
 `annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`, with
@@ -373,6 +373,21 @@ for "created"), as in ordinary questions. Llama 3.2 3B still never used `contain
 (`s01`-`s04`): it writes the word as an argument constant or picks a predicate by
 name similarity. Treat the `s` items as a capability measure for small models
 rather than tuning the prompt further for them.
+
+Run 12 with Llama 3.2 3B (`20261023T203430Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`,
+complete, BeingDB/`beingdb-wasm` 0.4.1, run under `caffeinate -dimsu`): 31/63
+overall, 26/51 supported, 5/12 unsupported. On the 48 items whose question text
+Run 11 shares, it scores 26/48, the same as both Run 11 Llama runs, but not on the
+same items: `e02`, `e05` (using `contains "school"`) and `m06` became correct, and
+`e09` (`Recipient = "Arts Council"`), `m05` (`contains "arts_council"` on an
+interview URL) and `m13` became wrong. The longer prompt therefore moves answers
+without a net change, and the model now uses `contains`, though not always where
+it belongs. New items: 5/15 (`c01`, `c02`, `c06`, `s05`, `u13`); `u12` (a count
+filter) was answered with a count query. No answer needed an alternative
+reference. An earlier attempt (`20261023T183426Z_…`) is kept for the record: it
+was aborted when `u05` timed out after 600 s, most likely because the machine slept
+(a Node replay of the pipeline on that reply takes milliseconds); its 54 completed
+items match the complete run exactly.
 
 ### Timing caveats
 
