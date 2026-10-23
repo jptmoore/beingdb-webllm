@@ -103,12 +103,13 @@ where
 - "not" on its own line, followed by indented clauses, excludes matches. "optional" keeps rows with no match.
 - "order by Var ascending" only when the question asks for an order.
 - For "how many", count in the query: "find count(Work)" gives one number, "find Artist, count(Work)" one per artist, and "order by count(Work) descending" ranks them. count counts distinct values.
+- To find something by part of its name or text: Title contains "video" (ignores case; quoted text only).
 - Queries cannot sum or average: such questions are unsupported.
 ```
 
 (Prompt run12. Up to run 11 the last rule read "Queries cannot count, sum,
-average or rank: such questions are unsupported.", and there was no counting
-example.)
+average or rank: such questions are unsupported.", and there were no counting or
+contains rules or examples.)
 
 Generation: temperature 0 for the first attempt, `repetition_penalty` 1.0 (the
 model default of 1.1 penalises repeating variable names, which every join needs).
@@ -125,7 +126,7 @@ query ::= "find " ("distinct ")? item (", " item){0,5} "\nwhere" line{1,8} block
 item ::= var | count
 count ::= "count(" var ")"
 line ::= "\n  " clause
-clause ::= pattern | var " " op " " value | var " between " value " and " value
+clause ::= pattern | var " " op " " value | var " between " value " and " value | var " contains " string
 pattern ::= "created_by(" (var | "_" | atom) ", " (var | "_" | atom) ")" | ... (all 168)
 ```
 
