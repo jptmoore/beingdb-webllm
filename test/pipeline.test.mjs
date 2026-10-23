@@ -236,7 +236,26 @@ test("conflicting or unknown repair policies are rejected", async () => {
 // default pipeline must reproduce Run 9's grammars, repair messages and outcomes.
 
 // Run 10 (db-guided) replayed from its recorded replies: same path, BeingDB
-// diagnoses, proven repairs, repair messages and outcomes.
+// diagnoses, proven repairs, repair messages and outcomes. Run 10 predates
+// BeingDB 0.1.7's unsatisfiable_comparison diagnostic, which now adds lines to
+// two recorded messages (e16, u05); only those additions are tolerated.
+const NEWER_DIAGNOSTIC_LINE = /^- No \w+ fact has a value at argument \d+ satisfying .+, so the query returns no rows\./;
+function assertRecordedMessage(now, was, label) {
+  if (now === was || now === null || was === null) return assert.equal(now, was, label);
+  const nowLines = now.split("\n");
+  const wasLines = was.split("\n");
+  let k = 0;
+  for (const line of nowLines) {
+    if (k < wasLines.length && line === wasLines[k]) k++;
+    else
+      assert.ok(
+        NEWER_DIAGNOSTIC_LINE.test(line) || ["BeingDB also found:", "Relevant predicates:"].includes(line) || line.startsWith("  "),
+        `${label}: unexpected line ${JSON.stringify(line)}`,
+      );
+  }
+  assert.equal(k, wasLines.length, `${label}: recorded lines missing`);
+  assert.ok(nowLines.some((l) => NEWER_DIAGNOSTIC_LINE.test(l)), `${label}: differs without a newer diagnostic`);
+}
 test("db-guided repair reproduces Run 10 exactly from its recorded replies", async () => {
   const records = recordsOf("20261006T164839Z");
   assert.equal(records.length, 50);
@@ -245,7 +264,8 @@ test("db-guided repair reproduces Run 10 exactly from its recorded replies", asy
     const id = rec.question.id;
     assert.equal(r.outcome, rec.outcome, `${id} outcome`);
     assert.deepEqual(generator.calls.map((c) => c.grammar), rec.attempts.map((a) => a.grammar), `${id} grammars`);
-    assert.deepEqual(r.attempts.map((a) => a.feedback ?? null), rec.attempts.map((a) => a.feedback), `${id} repair messages`);
+    assert.equal(r.attempts.length, rec.attempts.length, `${id} attempts`);
+    r.attempts.forEach((a, i) => assertRecordedMessage(a.feedback ?? null, rec.attempts[i].feedback ?? null, `${id} repair message ${i}`));
     assert.deepEqual(r.attempts.map((a) => a.reply.dsl ?? null), rec.attempts.map((a) => a.reply.dsl ?? null), `${id} judged queries`);
     assert.deepEqual(r.attempts.map((a) => a.db?.status ?? null), rec.attempts.map((a) => a.beingdb?.status ?? null), `${id} BeingDB status`);
     assert.deepEqual(r.path, rec.efficiency.path, `${id} path`);
