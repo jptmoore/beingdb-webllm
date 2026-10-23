@@ -298,6 +298,17 @@ Saved runs of the reference condition carry the labels
 identical settings and hashes. Results per condition:
 [experiment log](internals.md#later-runs-npm-run-benchmark-chrome-154155).
 
+From BeingDB 0.1.5 (`beingdb-wasm` built from it), a diagnostic for a constant
+that occurs nowhere in its predicate can end with `Did you mean <value>?` (0.1.6
+only suggests values that are close in spelling or share most of their words). Only the
+`db-guided` policy (Run 10) shows diagnostic messages to the model, so its repair
+messages can differ from runs on older builds, although the recorded Run 10
+replies still reproduce exactly (`test/pipeline.test.mjs`); `model` and
+`proven-only` are unaffected (`proven-only` applies the same proven repairs as
+before). The prompt is unchanged, so `config.prompt.sha256` stays the same: tell
+such runs apart by `provenance.repositories.beingdb` / `beingdb-wasm` commits.
+Execute responses also gain `hasMore` and `truncated`, which scoring ignores.
+
 ### Timing caveats
 
 Timings depend on the GPU, memory bandwidth and unified memory size. They are
