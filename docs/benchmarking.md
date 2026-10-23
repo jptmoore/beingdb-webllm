@@ -351,6 +351,15 @@ was not treated as empty). The v2 references, the run12 rules and examples (a
 grouped count; `contains` on an atom column) and the pipeline (`provablyEmpty`) were
 changed after it, so that run predates the final v2 suite and prompt.
 
+A second smoke run on the final v2 suite and prompt
+(`20261023T180602Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`, partial) got
+2/8: the grouped-count example fixed `c02`, while `c03`/`c04` still fail on the
+predicate or entity (a misspelled atom in the wrong argument; `collaborated_with`
+for "created"), as in ordinary questions. Llama 3.2 3B still never used `contains`
+(`s01`-`s04`): it writes the word as an argument constant or picks a predicate by
+name similarity. Treat the `s` items as a capability measure for small models
+rather than tuning the prompt further for them.
+
 ### Timing caveats
 
 Timings depend on the GPU, memory bandwidth and unified memory size. They are
