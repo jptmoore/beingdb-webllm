@@ -3,7 +3,7 @@
 // over the db.query() wrapper, shared by the browser benchmark and Node
 // re-analysis. No model is involved in any judgement here.
 import { predicatesIn } from "./prompt.js";
-import { judge, matchColumns, scoreItem } from "./score.js";
+import { judge, matchColumns, referenceResult, scoreItem } from "./score.js";
 
 // Bump when classification rules change, so runs record which rules produced their categories.
 export const ANALYSIS_VERSION = "taxonomy/1";
@@ -433,7 +433,13 @@ async function serialiseAttempt(a, i, item, ref) {
   let verdict = null;
   if (item.reference && a.db?.status === "ok") {
     const v = judge(item, ref, a.db.response);
-    verdict = { correct: v.correct, orderWrong: !!v.orderWrong, exactProjection: !!v.exactProjection, matchedColumns: matchColumns(ref, item.key || ref.variables, a.db.response) };
+    verdict = {
+      correct: v.correct,
+      orderWrong: !!v.orderWrong,
+      exactProjection: !!v.exactProjection,
+      matchedColumns: v.matchedColumns ?? matchColumns(ref, item.key || ref.variables, a.db.response),
+      alternative: v.alternative ?? null,
+    };
   }
   return {
     n: i + 1,
@@ -461,6 +467,7 @@ function questionInfo(item) {
     supported: !!item.reference,
     text: item.question,
     reference: item.reference ?? null,
+    alternatives: item.alternatives ?? [],
     predicates: item.predicates ?? [],
     key: item.key ?? null,
     orderBy: item.orderBy ?? null,
@@ -470,8 +477,7 @@ function questionInfo(item) {
 
 async function referenceInfo(item, db) {
   if (!item.reference) return { ref: null, info: null };
-  const r = db.query(item.reference);
-  if (r.status !== "ok") throw new Error(`reference ${item.id} is not valid: ${JSON.stringify(r.response)}`);
+  const r = referenceResult(item, db);
   const ref = r.response;
   const keys = item.key || ref.variables;
   return {

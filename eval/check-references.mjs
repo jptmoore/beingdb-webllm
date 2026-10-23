@@ -72,6 +72,15 @@ for (const item of items) {
   const self = scoreItem(item, fake(item.reference), db);
   assert.ok(self.correct && self.firstCorrect, `${item.id}: reference not judged correct`);
   assert.equal(classifyAttempt(item, r.response, fake(item.reference).attempts[0], db, ctx, { final: true }), null, `${item.id}: reference got a failure category`);
+  // ...and accept every alternative, each of which must be a different answer with the same key columns.
+  for (const [n, alt] of (item.alternatives || []).entries()) {
+    const a = db.query(alt);
+    assert.equal(a.status, "ok", `${item.id} alternative ${n + 1}: ${JSON.stringify(a.response)}`);
+    assert.ok(keys.every((k) => a.response.variables.includes(k)), `${item.id} alternative ${n + 1} lacks key columns ${keys}`);
+    assert.ok(!matchColumns(r.response, keys, a.response), `${item.id} alternative ${n + 1} returns the same rows as the reference`);
+    const alts = scoreItem(item, fake(alt), db);
+    assert.ok(alts.correct && alts.alternative === n + 1, `${item.id}: alternative ${n + 1} not judged correct`);
+  }
   // ...and reject it with a binary pattern's arguments swapped (when that changes the answer).
   const lines = item.reference.split("\n");
   const i = lines.findIndex((l) => /^\s*[a-z_]+\([^,()]+,\s*[^,()]+\)\s*$/.test(l));
@@ -85,7 +94,7 @@ for (const item of items) {
       assert.ok(["wrong_argument_order", "wrong_ordering"].includes(c?.category), `${item.id}: swap categorised as ${c?.category}`);
     }
   }
-  console.log(`${item.id} ok  ${String(distinct).padStart(4)} rows  ${item.question}`);
+  console.log(`${item.id} ok  ${String(distinct).padStart(4)} rows  ${item.question}${item.alternatives ? `  (+${item.alternatives.length} alternative${item.alternatives.length > 1 ? "s" : ""})` : ""}`);
 }
 assert.deepEqual(countMismatches, [], "expectCount mismatches");
 console.log(`\n${items.length} questions (${supported} supported, ${items.length - supported} unsupported); references, examples and scorer OK`);

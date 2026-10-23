@@ -30,12 +30,38 @@ function orderMatches(ref, gen, keys, sel, orderBy) {
   return a.length === b.length && a.every((x, i) => x === b[i]);
 }
 
-export function judge(item, ref, gen) {
+function judgeOne(item, ref, gen) {
   const keys = item.key || ref.variables;
   const sel = matchColumns(ref, keys, gen);
   if (!sel) return { correct: false };
-  if (item.orderBy && !orderMatches(ref, gen, keys, sel, item.orderBy)) return { correct: false, orderWrong: true };
-  return { correct: true, exactProjection: gen.variables.length === keys.length };
+  if (item.orderBy && !orderMatches(ref, gen, keys, sel, item.orderBy)) return { correct: false, orderWrong: true, matchedColumns: sel };
+  return { correct: true, exactProjection: gen.variables.length === keys.length, matchedColumns: sel };
+}
+
+// `ref` is a reference response from referenceResult(); when the question has
+// several defensible answers (the data names one entity in more than one way),
+// a match against any of item.alternatives also counts as correct.
+export function judge(item, ref, gen) {
+  const v = judgeOne(item, ref, gen);
+  if (v.correct) return v;
+  for (const [i, alt] of (ref.alternatives || []).entries()) {
+    const a = judgeOne(item, alt, gen);
+    if (a.correct) return { ...a, alternative: i + 1 };
+  }
+  return v;
+}
+
+// Run the reference (and any alternatives); the response carries the
+// alternative responses so judge() can use them.
+export function referenceResult(item, db) {
+  const run = db.query(item.reference);
+  if (run.status !== "ok") throw new Error(`reference ${item.id} is not valid: ${JSON.stringify(run.response)}`);
+  const alternatives = (item.alternatives || []).map((dsl, i) => {
+    const r = db.query(dsl);
+    if (r.status !== "ok") throw new Error(`alternative ${i + 1} of ${item.id} is not valid: ${JSON.stringify(r.response)}`);
+    return r.response;
+  });
+  return { ...run, response: alternatives.length ? { ...run.response, alternatives } : run.response };
 }
 
 const PATTERN_LINE = /^(\s*)([a-z][a-z0-9_]*)\(\s*([^,()]+?)\s*,\s*([^,()]+?)\s*\)\s*$/;
@@ -90,9 +116,7 @@ export function scoreItem(item, run, db) {
     if (!s.correct) s.failure = run.outcome === "ok" ? "fabricated a query" : "no valid query (not flagged unsupported)";
     return s;
   }
-  const refRun = db.query(item.reference);
-  if (refRun.status !== "ok") throw new Error(`reference ${item.id} is not valid: ${JSON.stringify(refRun.response)}`);
-  const ref = refRun.response;
+  const ref = referenceResult(item, db).response;
   const verdict = (a) => (a && a.db && a.db.status === "ok" ? judge(item, ref, a.db.response) : { correct: false });
 
   s.firstValid = first.db?.status === "ok";
@@ -101,6 +125,7 @@ export function scoreItem(item, run, db) {
   const v2 = verdict(last);
   s.firstCorrect = v1.correct;
   s.correct = v2.correct;
+  if (v2.alternative) s.alternative = v2.alternative;
   s.exactProjection = !!v2.exactProjection;
   const dsl = last.reply.dsl || "";
   s.predicatesOk = s.finalValid && item.predicates.every((p) => predicatesIn(dsl).includes(p));

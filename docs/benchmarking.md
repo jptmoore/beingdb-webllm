@@ -106,7 +106,16 @@ changes it even when no fact changes.
   add a grouped count, a count that must be distinct through a join (21 work-venue
   rows, 12 works) and a ranking by count. Text search (`contains`): `s01`-`s04` find
   things by part of a value or an atom's name, one of them combined with a count.
-  57 items: 46 supported, 11 unsupported. Pass it with `--questions`.
+  An audit before Run 12 added `alternatives`: further reference queries that are
+  also correct because the pack names one entity in several ways (`arts_council`,
+  `arts_council_of_great_britain` and `received_funding_from` in `e09`/`m05`/`h01`;
+  the three Tate atoms in `e15`/`h06`; `educated_at`/`studied_at` in `m06`;
+  `year_created` subjects that are not works in `c02`/`c06`). An answer is correct
+  if it matches the reference or any alternative, and the verdict records which
+  (`alternative`, 1-based). `u12` ("Which artist has made the most works?") had
+  become answerable and duplicated `c04`, so it now asks for a count filter; `m15`
+  (earliest year), `c05`-`c06`, `s05`-`s06` and `u13` (a ratio) were added.
+  63 items: 51 supported, 12 unsupported. Pass it with `--questions`.
 - `npm run check-eval -- --questions <file>` checks references, examples and
   the scorer against the linked build for any of these files.
 
@@ -307,12 +316,15 @@ identical settings and hashes.
 
 Prompt run12 lets the model write `count(Var)` and `Var contains "text"`: the
 decoding grammar accepts `count(Var)` in `find` and `order by` and `contains` with
-quoted text as a clause, the rules say to count "how many" in the query (sums and
-averages stay unsupported) and, when a question gives only a word or part of a
+quoted text as a clause, the rules say to count "how many" in the query (sums,
+averages, ratios and filters on a count stay unsupported) and, when a question gives only a word or part of a
 name, to use `contains` instead of guessing an atom, and two examples of each show
 them (an overall and a per-group count; `contains` on a text column and on an atom
 column), none of them eval questions or eval predicates' answers. It changes the prompt for every question, so compare
-Run 12 with Run 11 on the 49 items they share as well as on the new items. For
+Run 12 with Run 11 on the 48 items whose question text they share (`u03` became
+`c01` and `u12` was replaced) as well as on the new items; `e09`, `e15`, `m05`,
+`m06`, `h01` and `h06` also accept their alternatives in Run 12, so count those
+separately (`alternative` in the verdict) when comparing. For
 Llama:
 
 ```bash
@@ -353,7 +365,7 @@ was not treated as empty). The v2 references, the run12 rules and examples (a
 grouped count; `contains` on an atom column) and the pipeline (`provablyEmpty`) were
 changed after it, so that run predates the final v2 suite and prompt.
 
-A second smoke run on the final v2 suite and prompt
+A second smoke run on the post-smoke-1 v2 suite and prompt
 (`20261023T180602Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`, partial) got
 2/8: the grouped-count example fixed `c02`, while `c03`/`c04` still fail on the
 predicate or entity (a misspelled atom in the wrong argument; `collaborated_with`
