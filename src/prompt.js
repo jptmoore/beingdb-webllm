@@ -6,7 +6,8 @@ const UNSUPPORTED = "UNSUPPORTED: ";
 
 // Bump when RULES, EXAMPLES, the schema text, the grammar or the repair message change (benchmarks also record hashes).
 // run9: declared argument roles and descriptions from the pack (BeingDB annotations).
-export const PROMPT_VERSION = "nl2dsl-prompt/run9";
+// run12: count(Var) (BeingDB 0.3.0) in the rules, grammar and one example.
+export const PROMPT_VERSION = "nl2dsl-prompt/run12";
 
 export const RULES = `You translate questions about a BeingDB database into BeingDB queries.
 BeingDB runs your query and returns the answer, so never answer from your own knowledge.
@@ -25,7 +26,8 @@ where
 - Years are written @1979. Comparisons: =, !=, <, <=, >, >=, Y between @1975 and @1980.
 - "not" on its own line, followed by indented clauses, excludes matches. "optional" keeps rows with no match.
 - "order by Var ascending" only when the question asks for an order.
-- Queries cannot count, sum, average or rank: such questions are unsupported.`;
+- For "how many", count in the query: "find count(Work)" gives one number, "find Artist, count(Work)" one per artist, and "order by count(Work) descending" ranks them. count counts distinct values.
+- Queries cannot sum or average: such questions are unsupported.`;
 
 // Real Rewind queries (checked by eval/check-references.mjs), none of them eval questions.
 export const EXAMPLES = [
@@ -41,6 +43,7 @@ export const EXAMPLES = [
     q: "Which works by Kevin Atherton have never been exhibited?",
     a: "find Work\nwhere\n  created_by(Work, kevin_atherton)\n  not\n    exhibited_at(Work, _)",
   },
+  { q: "How many works did David Hall create?", a: "find count(Work)\nwhere\n  created_by(Work, david_hall)" },
   { q: "What price did Tape Tape sell for?", a: `${UNSUPPORTED}No predicate records prices.` },
   { q: "Where does Kevin Atherton live now?", a: `${UNSUPPORTED}No predicate records where people live.` },
   { q: "What is the total running time of Judith Goddard's works?", a: `${UNSUPPORTED}Queries cannot sum values.` },
@@ -72,8 +75,13 @@ export function parseReply(text) {
 
 const PREDICATE_RE = /\b([a-z][a-z0-9_]*)\s*\(/g;
 
+// Only clause lines name predicates: count(...) in find/order by is not one.
 export function predicatesIn(dsl) {
-  return [...new Set([...dsl.matchAll(PREDICATE_RE)].map((m) => m[1]))];
+  const clauses = dsl
+    .split("\n")
+    .filter((l) => !/^\s*(find|order by)\b/.test(l))
+    .join("\n");
+  return [...new Set([...clauses.matchAll(PREDICATE_RE)].map((m) => m[1]))];
 }
 
 // One-line reminders of the DSL rule behind each BeingDB error code.

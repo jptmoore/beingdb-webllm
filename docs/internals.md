@@ -102,8 +102,13 @@ where
 - Years are written @1979. Comparisons: =, !=, <, <=, >, >=, Y between @1975 and @1980.
 - "not" on its own line, followed by indented clauses, excludes matches. "optional" keeps rows with no match.
 - "order by Var ascending" only when the question asks for an order.
-- Queries cannot count, sum, average or rank: such questions are unsupported.
+- For "how many", count in the query: "find count(Work)" gives one number, "find Artist, count(Work)" one per artist, and "order by count(Work) descending" ranks them. count counts distinct values.
+- Queries cannot sum or average: such questions are unsupported.
 ```
+
+(Prompt run12. Up to run 11 the last rule read "Queries cannot count, sum,
+average or rank: such questions are unsupported.", and there was no counting
+example.)
 
 Generation: temperature 0 for the first attempt, `repetition_penalty` 1.0 (the
 model default of 1.1 penalises repeating variable names, which every join needs).
@@ -116,7 +121,9 @@ The reply is constrained with WebLLM's `response_format: {type: "grammar"}`
 ```
 root ::= query | unsupported
 unsupported ::= "UNSUPPORTED: " [^\n]{1,200}
-query ::= "find " ("distinct ")? var (", " var){0,5} "\nwhere" line{1,8} block{0,3} tail
+query ::= "find " ("distinct ")? item (", " item){0,5} "\nwhere" line{1,8} block{0,3} tail
+item ::= var | count
+count ::= "count(" var ")"
 line ::= "\n  " clause
 clause ::= pattern | var " " op " " value | var " between " value " and " value
 pattern ::= "created_by(" (var | "_" | atom) ", " (var | "_" | atom) ")" | ... (all 168)
