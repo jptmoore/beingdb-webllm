@@ -2,13 +2,13 @@
 
 Can a **small local browser LLM** act as a natural-language interface to
 BeingDB? This repository holds a demo and a benchmark harness that compares
-WebLLM models, machines and settings on a fixed 50-question task.
+WebLLM models, machines and settings on a fixed set of 63 questions.
 
 | | |
 |---|---|
 | **Reference model** | `Llama-3.2-3B-Instruct-q4f16_1-MLC` |
-| **Reference condition** | annotated question set + current pack, prompt `nl2dsl-prompt/run9`, `--repair-policy proven-only`, default decoding ([details](#reference-model-and-reference-condition)) |
-| **Reference result** | 28/50 questions translated to a correct query (query-generation accuracy, one trial; [hardware](#hardware-provenance-and-caveats)) |
+| **Reference condition** | v2 question set + current pack, prompt `nl2dsl-prompt/run12`, `--repair-policy proven-only`, default decoding ([details](#reference-model-and-reference-condition)) |
+| **Reference result** | 31/63 questions translated to a correct query (query-generation accuracy, one trial; [hardware](#hardware-provenance-and-caveats)) |
 | **Runtime that executes queries** | `beingdb-wasm` (BeingDB compiled to WebAssembly), in the browser |
 | **Detailed docs** | [docs/benchmarking.md](docs/benchmarking.md), [docs/internals.md](docs/internals.md) |
 
@@ -25,8 +25,8 @@ question
 **The LLM interprets the question; BeingDB determines the answer.** The model
 never sees or edits result rows.
 
-**What is tested** is the model's translation step. The task has 50 questions
-over the Rewind dataset: 38 answerable and 12 deliberately unsupported.
+**What is tested** is the model's translation step. The task has 63 questions
+over the Rewind dataset: 51 answerable and 12 deliberately unsupported.
 - An answerable question is correct if BeingDB returns the same answer rows
   for the generated query as for a trusted reference query.
 - An unsupported question is correct if the model replies `UNSUPPORTED`.
@@ -38,8 +38,8 @@ component of an iterative LLM/RAG loop. It validates a query, returns
 diagnostics or facts actually in its store, and lets the wider system repair,
 reformulate, rerun or extend retrieval before an LLM writes the final answer.
 The benchmark runs only a bounded part of that loop (proven repairs plus at
-most two model repairs). So 28/50 means 28 questions were turned into the
-right query under this condition, not that BeingDB answers 56% of questions
+most two model repairs). So 31/63 means 31 questions were turned into the
+right query under this condition, not that BeingDB answers 49% of questions
 correctly. Models do still write valid but wrong queries, which is what the
 benchmark measures, and further iteration can recover some of these but does
 not guarantee correctness.
@@ -93,15 +93,15 @@ npm run serve    # http://localhost:8010/
 
 ```sh
 npm test                                                         # schema/prompt/pipeline tests against the linked build
-npm run check-eval -- --questions eval/questions-annotated.json  # reference queries + scorer against the linked pack
+npm run check-eval -- --questions eval/questions-v2.json         # reference queries + scorer against the linked pack
 ```
 
 ## Run a model interactively
 
 - <http://localhost:8010/>: demo. Load a model, ask a question, and see the
   DSL, BeingDB's verdict, any repairs, timings and the rows.
-- <http://localhost:8010/eval.html>: runs the 50 questions in the page and
-  saves a report to `eval/results/`.
+- <http://localhost:8010/eval.html>: runs the original 50 questions in the
+  page and saves a report to `eval/results/`.
 
 **The interactive default model is not the reference model.** Both pages
 default to `Qwen2.5-1.5B-Instruct-q4f16_1-MLC`, the original small model
@@ -131,7 +131,7 @@ npm run models -- --filter qwen
 
 ```sh
 npm run benchmark -- --probe --model <MODEL-ID> \
-  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-annotated.json
+  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v2.json
 ```
 
 The probe ends with status `probe_ok`. Otherwise it reports `incompatible` or
@@ -145,9 +145,9 @@ the cache is reused.
 npm run benchmark -- \
   --model <MODEL-ID> \
   --machine "<MACHINE DESCRIPTION>" \
-  --questions eval/questions-annotated.json \
+  --questions eval/questions-v2.json \
   --repair-policy proven-only \
-  --condition annotated-predicates-proven-repairs
+  --condition annotated-v2-proven-repairs
 ```
 
 **Run the reference model** with the same command and
@@ -175,19 +175,19 @@ values, as recorded in the current reference run:
 
 | | |
 |---|---|
-| Questions | `eval/questions-annotated.json` (50 items; sha256 `921ede38…`) |
-| Pack | annotated Rewind pack from `beingdb-wasm` d376be1 (fingerprint `sha256:72f26c19…`) |
-| Schema context and prompt | declared predicate roles and descriptions; `nl2dsl-prompt/run9` (system prompt sha256 `d33e0c0c…`) |
-| Output grammar | generated from the predicate list (sha256 `4c9f1092…`) |
+| Questions | `eval/questions-v2.json` (63 items; sha256 `6082a88d…`) |
+| Pack | annotated Rewind pack from `beingdb-wasm` 11aced4, BeingDB 0.4.1 (fingerprint `sha256:72f26c19…`) |
+| Schema context and prompt | declared predicate roles and descriptions; `nl2dsl-prompt/run12` (system prompt sha256 `78740d0d…`) |
+| Output grammar | generated from the predicate list (sha256 `1590cab8…`) |
 | Repair policy | `proven-only` (`proven-repairs-only/1`) |
 | Decoding | defaults: greedy first attempt; repairs at temperature 0.7, seed 1; 200 max tokens; repetition penalty 1; at most 2 model repairs |
-| Runtime | WebLLM 0.2.85; `beingdb-webllm` 6119082; `beingdb` dd8c4fe |
+| Runtime | WebLLM 0.2.85; `beingdb-webllm` 914e392; `beingdb` 19187d7 |
 
 **Model comparisons are only meaningful when this condition is kept fixed.**
 `--condition` is just a label and changes nothing. The settings that define
 the condition are recorded in each `run.json` (`config.nonDefault`,
 `config.prompt.sha256`, `config.pipeline`); check them before comparing.
-Earlier conditions (baseline, Run 9, Run 10) are listed in
+Earlier conditions (baseline, Runs 9-11) are listed in
 [conditions in the saved results](docs/benchmarking.md#conditions-in-the-saved-results).
 
 **Repair, in brief.** When BeingDB rejects a query, the model can be asked to
@@ -205,13 +205,13 @@ comparisons**. Details:
 
 | | |
 |---|---|
-| Run | [`20261009T102014Z_…`](eval/results/benchmarks/20261009T102014Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/) (clean commits) |
-| Overall correct | **28/50** |
-| Supported correct: first attempt / after repair | 21/38 / **22/38** |
-| Valid DSL after repair | 36/38 |
-| Unsupported recognised | 6/12 |
-| Model calls | 60 (10 model repairs); 5 proven BeingDB repairs |
-| Median end-to-end per question | 22.1 s, on a MacBook Air M1 8 GB, Chrome 155, mains power. Machine-specific: the identical earlier run (Run 11) took 28.0 s |
+| Run | [`20261023T203430Z_…`](eval/results/benchmarks/20261023T203430Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC/) (Run 12, clean commits) |
+| Overall correct | **31/63** |
+| Supported correct: first attempt / after repair | 25/51 / **26/51** |
+| Valid DSL after repair | 50/51 |
+| Unsupported recognised | 5/12 |
+| Model calls | 76 (13 model repairs); 3 proven BeingDB repairs |
+| Median end-to-end per question | 23.4 s, on a MacBook Air M1 8 GB, Chrome 155 (machine-specific) |
 
 ### Models tested so far
 
@@ -219,11 +219,12 @@ All runs are single trials. Under the reference condition:
 
 | Model | Overall | Supported correct | Valid DSL | Unsupported recognised | False refusals |
 |---|---|---|---|---|---|
-| Llama-3.2-3B-Instruct (reference) | 28/50 | 22/38 | 36/38 | 6/12 | 0 |
-| Hermes-3-Llama-3.2-3B | 27/50 | 19/38 | 28/38 | 8/12 | 3 |
+| Llama-3.2-3B-Instruct (reference) | 31/63 | 26/51 | 50/51 | 5/12 | 0 |
 
-Qwen2.5-1.5B, Qwen2.5-3B, Qwen3.5-2B and an earlier Llama-3.2-3B were tested
-only under older conditions. Those scores are not comparable with this table.
+Under the previous 50-question condition (Run 11), Llama-3.2-3B scored 28/50
+and Hermes-3-Llama-3.2-3B 27/50. Qwen2.5-1.5B, Qwen2.5-3B, Qwen3.5-2B and an
+earlier Llama-3.2-3B were tested only under older conditions. Those scores are
+not comparable with this table.
 See the [experiment log](docs/internals.md#experiment-log) and
 [`eval/results/benchmarks/`](eval/results/benchmarks/).
 

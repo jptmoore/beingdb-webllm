@@ -73,16 +73,17 @@ Built at startup from BeingDB only (about 10-30 ms in the browser):
 Change the pack and the context, grammar and signatures change with it. The
 `environmentFingerprint` is checked against `eval/questions.json` (or the file
 given with `--questions`; `eval/questions-annotated.json` holds the same
-questions for the annotated pack's fingerprint).
+questions for the annotated pack's fingerprint, and `eval/questions-v2.json`
+is the current 63-question set).
 
 Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 
 ## Prompt
 
-System message: short rules (below) followed by the schema. Then nine example
-question/answer pairs as chat turns (six queries, three `UNSUPPORTED`), all
+System message: short rules (below) followed by the schema. Then 13 example
+question/answer pairs as chat turns (ten queries, three `UNSUPPORTED`), all
 over real Rewind data and checked by `npm run check-eval`; none is an
-evaluation question. About 2,520 prompt tokens in total (Llama 3.2 3B tokenizer; 1,940 in prompt run 8, before the pack declared roles and descriptions).
+evaluation question. About 2,760 prompt tokens in total (Llama 3.2 3B tokenizer; 2,520 in prompt run 9 with nine examples, 1,940 in prompt run 8, before the pack declared roles and descriptions).
 
 ```
 You translate questions about a BeingDB database into BeingDB queries.
@@ -216,7 +217,9 @@ The three policies are one option, `--repair-policy model|db-guided|proven-only`
 
 ## Evaluation method
 
-`eval/questions.json`: 50 questions. Each supported item has a reference query
+`eval/questions.json`: 50 questions; `eval/questions-v2.json`, the current set,
+has 63 (51 supported, 12 unsupported; see
+[question sets](benchmarking.md#question-sets-data-fingerprints-and-prompt-versions)). Each supported item has a reference query
 (checked by `npm run check-eval` to be valid, non-empty, and to return the
 recorded number of rows), the predicates it needs, tags, and optionally `key`
 (the reference variables that form the answer; others may be omitted) and
@@ -224,7 +227,8 @@ recorded number of rows), the predicates it needs, tags, and optionally `key`
 
 A generated query is **correct** if BeingDB's distinct result rows, projected
 onto some choice of its columns, equal the reference's distinct rows on the
-key columns. Variable names, column order, extra columns and `distinct` do not
+key columns (or of any `alternatives` reference). Variable names, column
+order, extra columns and `distinct` do not
 matter; values and types do. With `orderBy`, the generated rows must also be in
 the reference order on that column. Syntactically valid but wrong queries fail.
 
@@ -399,7 +403,7 @@ model reply of every attempt was identical to run 8, in Chrome 154 instead of
 VS Code's Chromium 150. That run used the pre-annotation pack (`beingdb-wasm`
 41c0d8d) and prompt run 8 (the prompt up to `beingdb-webllm` c15963d):
 [`20261001T120717Z_…`](../eval/results/benchmarks/20261001T120717Z_macbook-air-m1-8gb_Qwen2.5-1.5B-Instruct-q4f16_1-MLC/).
-The current code uses prompt run 9 with the annotated pack, so it no longer
+The current code uses prompt run 12 with the annotated pack, so it no longer
 reproduces these replies.
 
 ### Other models with the run-8 prompt (baseline condition)
@@ -666,7 +670,7 @@ come from model time per call, not BeingDB; the machine had about 10 GB of
 swap in use, and in Run 11 the model produced the same replies as in Run 9.
 This suggests the deterministic layer is the valuable part of Run 10, but one
 model, one trial and 50 questions are not statistically conclusive. This
-condition became the [reference condition](../README.md#reference-model-and-reference-condition).
+condition was the reference condition until Run 12.
 
 ```sh
 npm run benchmark -- \
@@ -683,7 +687,7 @@ Reports:
 (clean commits: `beingdb-webllm` 7729741 and e2f50d8, `beingdb-wasm`
 d376be1, `beingdb` dd8c4fe).
 
-### Reference-condition runs in Chrome 155 (Llama rerun, Hermes 3)
+### Run 11 condition in Chrome 155 (Llama rerun, Hermes 3)
 
 Both on the run-11 code (clean commits: `beingdb-webllm` 6119082,
 `beingdb-wasm` d376be1, `beingdb` dd8c4fe), with the Run 11 settings
@@ -715,6 +719,15 @@ more unsupported questions but falsely refused 3 supported ones (`e11`,
 Reports:
 [Llama rerun](../eval/results/benchmarks/20261009T102014Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
 [Hermes 3](../eval/results/benchmarks/20261009T095637Z_macbook-air-m1-8gb_Hermes-3-Llama-3.2-3B-q4f16_1-MLC/).
+
+### Run 12: counting and text search (current reference condition)
+
+63 questions (`eval/questions-v2.json`), prompt run 12 (`count` and `contains`),
+`proven-only`, BeingDB/`beingdb-wasm` 0.4.1. Llama-3.2-3B scored 31/63: 26/51
+supported, 5/12 unsupported, 50/51 valid after repair. On the 48 questions
+shared with Run 11 it scored 26/48, as before, though not on the same items.
+Details: [Run 12](benchmarking.md#conditions-in-the-saved-results);
+[report](../eval/results/benchmarks/20261023T203430Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
 
 ## Performance (8 GB M1 MacBook Air)
 
@@ -770,7 +783,7 @@ background windows heavily; keep the evaluation tab visible.
 
 No BeingDB change was needed for the first milestones. Predicate declarations
 (descriptions, argument roles, semantic types) were added to BeingDB later and
-are used by prompt run 9; carrying them to the browser needed a one-line
+are used from prompt run 9 on; carrying them to the browser needed a one-line
 `beingdb-wasm` change (`Session.predicates` now uses BeingDB's own
 `Query_environment.to_json`). Other things that surfaced and may be worth a
 look in BeingDB itself:
@@ -800,8 +813,9 @@ look in BeingDB itself:
 
 - A different model family first, rather than a bigger Qwen: the 3B model was
   worse and twice as slow. Llama-3.2-3B has since been run (20/50 overall, 23/50
-  with predicate annotations, 28/50 with proven BeingDB repairs) and is the
-  reference model; Hermes-3-Llama-3.2-3B scored 27/50 in the same condition.
+  with predicate annotations, 28/50 with proven BeingDB repairs, 31/63 on the
+  v2 set) and is the reference model; Hermes-3-Llama-3.2-3B scored 27/50 in the
+  Run 11 condition.
   Remaining candidates on WebLLM: Qwen2.5-Coder-3B, Qwen3-1.7B/4B (with
   thinking disabled), Phi-3.5-mini.
 - Predicate annotations for more of the schema: descriptions are shown only for

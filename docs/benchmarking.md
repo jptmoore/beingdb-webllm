@@ -396,7 +396,7 @@ inflated by memory pressure: the report warns when more than 1 GB of swap is
 in use at the start or swap grows during the run. Battery power, Low Power
 Mode, thermal state and hidden windows also affect them. Almost all
 end-to-end time is prompt prefill; BeingDB takes milliseconds per question.
-For example, the reference condition gave identical replies on the M1 Air in
+For example, the Run 11 condition gave identical replies on the M1 Air in
 Run 11 and in its Chrome 155 rerun, with medians of 28.0 s and 22.1 s per
 question.
 
