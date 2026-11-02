@@ -90,7 +90,7 @@ async function ensureServer(port) {
 function checkVendor() {
   const v = vendorPaths();
   for (const f of [path.join(v.wasmDir, "main.bc.wasm.js"), path.join(v.wasmDir, "rewind.browser.json"), path.join(v.webllmDir, "index.js")])
-    if (!existsSync(f)) throw new BenchmarkError("setup_failed", `missing ${path.relative(root, f)}: run 'npm install' and 'npm run link' (needs a release build of ../beingdb-wasm)`);
+    if (!existsSync(f)) throw new BenchmarkError("setup_failed", `missing ${path.relative(root, f)}: run 'npm install' and 'npm run link' (needs ../beingdb-wasm)`);
 }
 
 async function modelRecord(modelId) {

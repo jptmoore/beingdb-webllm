@@ -52,8 +52,8 @@ model weights, which the browser caches.
 ```
 beingdb          core engine: DSL, validation, planner, evaluator, introspection, diagnostics
    |   (runtime source, via symlink)
-beingdb-wasm     the same runtime compiled to WASM + the exported Rewind pack (rewind.browser.json)
-   |   (release build, via symlink: npm run link)
+beingdb-wasm     the same runtime compiled to WASM (committed prebuilt/) + the exported Rewind pack (data/)
+   |   (prebuilt runtime and data, via symlinks: npm run link)
 beingdb-webllm   WebLLM model, prompt, grammar, repair loop, evaluation and benchmark harness
 ```
 
@@ -63,14 +63,16 @@ for the demo and benchmark, and in Node for the model-free checks. No native
 
 | You want to… | You need |
 |---|---|
-| run the demo or benchmark models | `../beingdb-wasm` built with `dune build --profile release` |
-| build `beingdb-wasm` | also a `../beingdb` source checkout (its `lib/runtime` is compiled into the WASM) |
-| change the engine, introspection or diagnostics | `../beingdb`, then rebuild `beingdb-wasm` |
-| change the data or predicate annotations | `../beingdb` (pack store + native build) to re-export `beingdb-wasm/data/rewind.browser.json` ([beingdb-wasm README](../beingdb-wasm/README.md)) |
+| run the demo or benchmark models | a `../beingdb-wasm` checkout (no OCaml: its runtime and data are committed) |
+| change the engine, introspection or diagnostics | `../beingdb` and the OCaml toolchain; build `beingdb-wasm` and link it with `npm run link -- --build`, or refresh its `prebuilt/` (`npm run update-runtime` there) |
+| change the data or predicate annotations | `npm run update-demo-data` in `beingdb-wasm` (needs native `../beingdb`; [beingdb-wasm README](../beingdb-wasm/README.md#maintainer-rebuilding-the-bundled-dataset)) |
 
-The exported pack is committed in `beingdb-wasm`, so routine experiments never
-rebuild it. If `../beingdb` is present, benchmark reports also record its
-commit as provenance. More detail:
+The runtime and the exported pack are committed in `beingdb-wasm` and tested
+there, so routine experiments never build either. Benchmark reports record
+which runtime was linked, its BeingDB commit (from `prebuilt/runtime.json`)
+and the dataset's fingerprint and source commits (from
+`data/rewind.browser.meta.json`); if `../beingdb` is present, they also
+record its current commit. More detail:
 [consuming beingdb-wasm](docs/internals.md#consuming-beingdb-wasm).
 
 ## Quick start
@@ -79,20 +81,26 @@ Requirements:
 - Node 22 or later.
 - A WebGPU browser with `shader-f16`. The benchmark drives an installed
   Chrome or Edge.
-- `../beingdb-wasm`, plus `../beingdb` to build it.
+- `../beingdb-wasm` (a plain checkout; nothing to build).
 
 ```sh
-(cd ../beingdb-wasm && dune build --profile release)   # one .wasm module (+ rewind.browser.json) in _build/default/web
+git clone https://github.com/jptmoore/beingdb-wasm.git ../beingdb-wasm
 npm install
-npm run link     # vendor/beingdb-wasm -> ../beingdb-wasm/_build/default/web; vendor/web-llm -> node_modules
+npm run link     # vendor/beingdb-wasm/* -> ../beingdb-wasm/{prebuilt,data}/; vendor/web-llm -> node_modules
 npm run serve    # http://localhost:8010/
 ```
 
-`npm run link` copies nothing. It refuses a dev build, which has more than one
-`.wasm` file. Model-free checks:
+`npm run link` copies nothing. It links `beingdb-wasm`'s committed prebuilt
+runtime (one release `.wasm` module, which Safari needs) and bundled REWIND
+dataset, after checking both against their metadata, and prints the
+dataset's fingerprint. To use a local build of the runtime instead (when
+changing BeingDB itself), run `dune build --profile release` in
+`../beingdb-wasm`, then `npm run link -- --build`; it refuses a dev build,
+which has more than one `.wasm` file. After `git pull` in `../beingdb-wasm`,
+the links pick up the new files automatically. Model-free checks:
 
 ```sh
-npm test                                                         # schema/prompt/pipeline tests against the linked build
+npm test                                                         # schema/prompt/pipeline tests against the linked runtime
 npm run check-eval -- --questions eval/questions-v2.json         # reference queries + scorer against the linked pack
 ```
 

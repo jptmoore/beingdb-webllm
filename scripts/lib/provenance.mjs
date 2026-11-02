@@ -55,18 +55,32 @@ export function vendorPaths() {
   const wasmDir = path.join(root, "vendor", "beingdb-wasm");
   const webllmDir = path.join(root, "vendor", "web-llm");
   const real = (p) => (existsSync(p) ? realpathSync(p) : null);
-  const wasmReal = real(wasmDir);
-  // beingdb-wasm vendors the BeingDB runtime through a symlink to ../beingdb.
+  // Resolved through the loader: vendor/beingdb-wasm is a directory of links into
+  // ../beingdb-wasm/{prebuilt,data} (npm run link) or a link to its _build/default/web (--build).
+  const loaderReal = real(path.join(wasmDir, "main.bc.wasm.js"));
+  const wasmReal = loaderReal ? path.dirname(loaderReal) : null;
   const wasmRepo = wasmReal ? exec("git", ["rev-parse", "--show-toplevel"], wasmReal) : null;
+  const runtimeKind = !wasmReal ? null : path.basename(wasmReal) === "prebuilt" ? "prebuilt" : "build";
+  // beingdb-wasm vendors the BeingDB runtime through a symlink to ../beingdb.
   const beingdbRuntime = wasmRepo ? real(path.join(wasmRepo, "vendor", "beingdb_runtime")) : null;
-  return { wasmDir, webllmDir, wasmReal, wasmRepo, beingdbRuntime };
+  return { wasmDir, webllmDir, wasmReal, wasmRepo, runtimeKind, beingdbRuntime };
 }
+
+const readJson = (p) => {
+  try {
+    return JSON.parse(readFileSync(p, "utf8"));
+  } catch {
+    return null;
+  }
+};
 
 export function provenance() {
   const v = vendorPaths();
-  const assets = v.wasmReal ? path.join(v.wasmReal, "main.bc.wasm.assets") : null;
-  const wasmModules = assets && existsSync(assets) ? readdirSync(assets).filter((f) => f.endsWith(".wasm")) : [];
+  const assets = path.join(v.wasmDir, "main.bc.wasm.assets");
+  const wasmModules = existsSync(assets) ? readdirSync(assets).filter((f) => f.endsWith(".wasm")) : [];
   const file = (p) => (p && existsSync(p) ? sha256File(p) : null);
+  const runtime = v.runtimeKind === "prebuilt" ? readJson(path.join(v.wasmDir, "runtime.json")) : null;
+  const dataMeta = readJson(path.join(v.wasmDir, "rewind.browser.meta.json"));
   return {
     repositories: {
       "beingdb-webllm": gitInfo(root, "beingdb-webllm"),
@@ -75,9 +89,21 @@ export function provenance() {
     },
     // The build actually served to the browser (may predate the repositories' current commits).
     artefacts: {
-      beingdbWasmLoaderSha256: file(v.wasmReal && path.join(v.wasmReal, "main.bc.wasm.js")),
+      // "prebuilt": beingdb-wasm's committed runtime (npm run link); "build": a local build (--build).
+      beingdbWasmRuntime: v.runtimeKind,
+      // prebuilt/runtime.json: the BeingDB commit, toolchain and runtime-sources hash it was built from.
+      beingdbWasmPrebuilt: runtime && { beingdb: runtime.beingdb, sources: runtime.sources, toolchain: runtime.toolchain },
+      beingdbWasmLoaderSha256: file(path.join(v.wasmDir, "main.bc.wasm.js")),
       beingdbWasmModules: Object.fromEntries(wasmModules.map((f) => [f, sha256File(path.join(assets, f))])),
-      rewindDataSha256: file(v.wasmReal && path.join(v.wasmReal, "rewind.browser.json")),
+      rewindDataSha256: file(path.join(v.wasmDir, "rewind.browser.json")),
+      // data/rewind.browser.meta.json: the dataset's fingerprint and the facts/BeingDB commits it was built from.
+      rewindDataMeta: dataMeta && {
+        environmentFingerprint: dataMeta.environmentFingerprint,
+        predicates: dataMeta.predicates,
+        facts: dataMeta.facts,
+        source: dataMeta.source,
+        beingdb: dataMeta.beingdb,
+      },
     },
     packages: {
       "@mlc-ai/web-llm": packageVersion("@mlc-ai/web-llm"),
