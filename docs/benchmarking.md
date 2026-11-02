@@ -168,7 +168,10 @@ environment   { observed { host (Node: OS, CPU, RAM, hardware model, power),
                            chromeGpu (chrome://gpu feature status + GPU/driver rows) } }
 compatibility { ok, checks [...], model { vramRequiredMB, lowResourceRequired, requiredFeatures, overrides } }
 provenance    { repositories { beingdb-webllm, beingdb-wasm, beingdb: {commit, branch, describe, commitDate,
-                remote, dirty, changedFiles, diffSha256} }, artefacts { wasm loader/module/data sha256 },
+                remote, dirty, changedFiles, diffSha256} },
+                artefacts { beingdbWasmRuntime ("prebuilt" | "build"), beingdbWasmPrebuilt (prebuilt/runtime.json:
+                            beingdb commit, sources, toolchain), wasm loader/module/data sha256,
+                            rewindDataMeta (fingerprint, counts, facts and BeingDB commits) },
                 packages { @mlc-ai/web-llm, playwright-core }, node }
 beingdb       { predicates, facts, environmentFingerprint, languageVersion, timings }
 warnings      [...]

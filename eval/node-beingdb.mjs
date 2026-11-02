@@ -1,4 +1,4 @@
-// Load the beingdb-wasm release build and the Rewind export in Node (no model).
+// Load the linked beingdb-wasm runtime (prebuilt by default) and the Rewind export in Node (no model).
 // Used by the reference checker/scorer; the browser app loads the same artefacts.
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";

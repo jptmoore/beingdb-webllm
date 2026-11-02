@@ -24,11 +24,20 @@ be a new `generator.js`. BeingDB integration does not depend on the model.
 
 ## Consuming beingdb-wasm
 
-`npm run link` creates two symlinks (nothing is copied):
+`npm run link` creates symlinks (nothing is copied):
 
-- `vendor/beingdb-wasm -> ../../beingdb-wasm/_build/default/web` (release build:
-  `main.bc.wasm.js`, one `.wasm` module, `rewind.browser.json`). The script
-  refuses a dev build (more than one `.wasm`), which Safari cannot load.
+- `vendor/beingdb-wasm/`, a directory of links into `beingdb-wasm`'s committed
+  artefacts, so the loader, its `.wasm` and the data sit side by side:
+  `main.bc.wasm.js` and `main.bc.wasm.assets` (one release `.wasm` module)
+  from `prebuilt/`, `runtime.json` (`prebuilt/runtime.json`),
+  `rewind.browser.json` and `rewind.browser.meta.json` from `data/`. The
+  script checks the files against `runtime.json` and the metadata first.
+  `beingdb-wasm`'s own tests run the same prebuilt runtime against the native
+  goldens and fail if it is stale, so no OCaml toolchain is needed here.
+- With `--build`: `vendor/beingdb-wasm -> ../../beingdb-wasm/_build/default/web`
+  instead, a local release build (`main.bc.wasm.js`, one `.wasm` module,
+  `rewind.browser.json`), for changing BeingDB itself. The script refuses a dev
+  build (more than one `.wasm`), which Safari cannot load.
 - `vendor/web-llm -> ../node_modules/@mlc-ai/web-llm/lib` (self-contained ES module).
 
 The browser API used is exactly the one `beingdb-wasm` documents:
@@ -762,7 +771,7 @@ every new question re-reads the ~2,000-token system prompt and examples.
 
 ## Browser support
 
-BeingDB WASM compatibility is unchanged from `beingdb-wasm` (release build):
+BeingDB WASM compatibility is unchanged from `beingdb-wasm` (release build, as in its `prebuilt/`):
 it loaded and answered in every browser below. The model needs WebGPU.
 Results on the 8 GB M1 Air, final code, 10-question smoke test
 (`eval/results/smoke-*.json`; a compatibility and determinism check, not an
