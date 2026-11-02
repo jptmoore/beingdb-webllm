@@ -1,0 +1,2274 @@
+{
+ "schema": "beingdb-webllm-benchmark/v1#summary",
+ "runId": "20261102T134230Z_macbook-air-m1-8gb_Llama-3.2-1B-Instruct-q4f16_1-MLC",
+ "status": "complete",
+ "model": "Llama-3.2-1B-Instruct-q4f16_1-MLC",
+ "labels": {
+  "machine": "MacBook Air M1 8GB",
+  "modelLabel": null,
+  "condition": "annotated-v2-proven-repairs",
+  "notes": null
+ },
+ "suite": "rewind-nl2dsl-annotated-v2",
+ "pipeline": {
+  "version": "proven-repairs-only/1",
+  "repairPolicy": "proven-only",
+  "dbGuidedRepair": false,
+  "maxModelRepairs": 2,
+  "maxDeterministicPasses": 2,
+  "description": "BeingDB.diagnose first; proven repairs applied without a model call; then run 9's path (BeingDB.query, run 9 repair messages). An empty result never triggers a model call (run 11)."
+ },
+ "trials": 1,
+ "counts": {
+  "questions": {
+   "values": [
+    63
+   ],
+   "mean": 63,
+   "min": 63,
+   "max": 63
+  },
+  "supported": {
+   "values": [
+    51
+   ],
+   "mean": 51,
+   "min": 51,
+   "max": 51
+  },
+  "unsupported": {
+   "values": [
+    12
+   ],
+   "mean": 12,
+   "min": 12,
+   "max": 12
+  },
+  "firstValid": {
+   "values": [
+    32
+   ],
+   "mean": 32,
+   "min": 32,
+   "max": 32
+  },
+  "finalValid": {
+   "values": [
+    40
+   ],
+   "mean": 40,
+   "min": 40,
+   "max": 40
+  },
+  "firstCorrect": {
+   "values": [
+    5
+   ],
+   "mean": 5,
+   "min": 5,
+   "max": 5
+  },
+  "finalCorrect": {
+   "values": [
+    5
+   ],
+   "mean": 5,
+   "min": 5,
+   "max": 5
+  },
+  "repairedToValid": {
+   "values": [
+    8
+   ],
+   "mean": 8,
+   "min": 8,
+   "max": 8
+  },
+  "repairedToCorrect": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "predicateSelectionCorrect": {
+   "values": [
+    30
+   ],
+   "mean": 30,
+   "min": 30,
+   "max": 30
+  },
+  "falseRefusals": {
+   "values": [
+    1
+   ],
+   "mean": 1,
+   "min": 1,
+   "max": 1
+  },
+  "unsupportedDetected": {
+   "values": [
+    7
+   ],
+   "mean": 7,
+   "min": 7,
+   "max": 7
+  },
+  "unsupportedFirstAttempt": {
+   "values": [
+    7
+   ],
+   "mean": 7,
+   "min": 7,
+   "max": 7
+  },
+  "fabricated": {
+   "values": [
+    4
+   ],
+   "mean": 4,
+   "min": 4,
+   "max": 4
+  },
+  "overallCorrect": {
+   "values": [
+    12
+   ],
+   "mean": 12,
+   "min": 12,
+   "max": 12
+  },
+  "runtimeFailures": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  },
+  "questionsRepaired": {
+   "values": [
+    19
+   ],
+   "mean": 19,
+   "min": 19,
+   "max": 19
+  },
+  "repairAttempts": {
+   "values": [
+    32
+   ],
+   "mean": 32,
+   "min": 32,
+   "max": 32
+  }
+ },
+ "rates": {
+  "firstValid": {
+   "values": [
+    0.6275
+   ],
+   "mean": 0.63,
+   "min": 0.63,
+   "max": 0.63
+  },
+  "finalValid": {
+   "values": [
+    0.7843
+   ],
+   "mean": 0.78,
+   "min": 0.78,
+   "max": 0.78
+  },
+  "firstCorrect": {
+   "values": [
+    0.098
+   ],
+   "mean": 0.1,
+   "min": 0.1,
+   "max": 0.1
+  },
+  "finalCorrect": {
+   "values": [
+    0.098
+   ],
+   "mean": 0.1,
+   "min": 0.1,
+   "max": 0.1
+  },
+  "predicateSelectionCorrect": {
+   "values": [
+    0.5882
+   ],
+   "mean": 0.59,
+   "min": 0.59,
+   "max": 0.59
+  },
+  "falseRefusals": {
+   "values": [
+    0.0196
+   ],
+   "mean": 0.02,
+   "min": 0.02,
+   "max": 0.02
+  },
+  "unsupportedDetected": {
+   "values": [
+    0.5833
+   ],
+   "mean": 0.58,
+   "min": 0.58,
+   "max": 0.58
+  },
+  "unsupportedFirstAttempt": {
+   "values": [
+    0.5833
+   ],
+   "mean": 0.58,
+   "min": 0.58,
+   "max": 0.58
+  },
+  "fabricated": {
+   "values": [
+    0.3333
+   ],
+   "mean": 0.33,
+   "min": 0.33,
+   "max": 0.33
+  },
+  "overallCorrect": {
+   "values": [
+    0.1905
+   ],
+   "mean": 0.19,
+   "min": 0.19,
+   "max": 0.19
+  },
+  "runtimeFailures": {
+   "values": [
+    0
+   ],
+   "mean": 0,
+   "min": 0,
+   "max": 0
+  }
+ },
+ "failureCategories": {
+  "wrong_predicate": {
+   "values": [
+    14
+   ],
+   "mean": 14,
+   "min": 14,
+   "max": 14
+  },
+  "validation_repair_failed": {
+   "values": [
+    10
+   ],
+   "mean": 10,
+   "min": 10,
+   "max": 10
+  },
+  "missing_constraint": {
+   "values": [
+    7
+   ],
+   "mean": 7,
+   "min": 7,
+   "max": 7
+  },
+  "unsupported_not_detected": {
+   "values": [
+    5
+   ],
+   "mean": 5,
+   "min": 5,
+   "max": 5
+  },
+  "unclassified": {
+   "values": [
+    4
+   ],
+   "mean": 4,
+   "min": 4,
+   "max": 4
+  },
+  "entity_grounding": {
+   "values": [
+    3
+   ],
+   "mean": 3,
+   "min": 3,
+   "max": 3
+  },
+  "wrong_constraint": {
+   "values": [
+    2
+   ],
+   "mean": 2,
+   "min": 2,
+   "max": 2
+  },
+  "wrong_projection": {
+   "values": [
+    2
+   ],
+   "mean": 2,
+   "min": 2,
+   "max": 2
+  },
+  "literal_vs_variable": {
+   "values": [
+    1
+   ],
+   "mean": 1,
+   "min": 1,
+   "max": 1
+  },
+  "supported_marked_unsupported": {
+   "values": [
+    1
+   ],
+   "mean": 1,
+   "min": 1,
+   "max": 1
+  },
+  "wrong_argument_order": {
+   "values": [
+    1
+   ],
+   "mean": 1,
+   "min": 1,
+   "max": 1
+  },
+  "wrong_join": {
+   "values": [
+    1
+   ],
+   "mean": 1,
+   "min": 1,
+   "max": 1
+  }
+ },
+ "timing": {
+  "model": {
+   "msPerCall": {
+    "n": 95,
+    "mean": 6620.57,
+    "median": 8393.9,
+    "min": 686.1,
+    "max": 13160,
+    "p90": 8944.4,
+    "p95": 10518.7
+   },
+   "firstAttemptMs": {
+    "n": 63,
+    "mean": 8729.47,
+    "median": 8459.8,
+    "min": 8070.8,
+    "max": 13160,
+    "p90": 9128.7,
+    "p95": 10518.7
+   },
+   "repairAttemptMs": {
+    "n": 32,
+    "mean": 2468.69,
+    "median": 1179.1,
+    "min": 686.1,
+    "max": 11733.8,
+    "p90": 8477.7,
+    "p95": 9096.4
+   },
+   "msPerQuestion": {
+    "n": 63,
+    "mean": 9983.4,
+    "median": 8632.3,
+    "min": 8070.8,
+    "max": 29679.8,
+    "p90": 12460.9,
+    "p95": 17654.4
+   },
+   "firstAttemptPromptTokens": {
+    "n": 63,
+    "mean": 2757.16,
+    "median": 2756,
+    "min": 2751,
+    "max": 2765,
+    "p90": 2761,
+    "p95": 2762
+   },
+   "repairPromptTokens": {
+    "n": 32,
+    "mean": 319.34,
+    "median": 55,
+    "min": 35,
+    "max": 2887,
+    "p90": 86,
+    "p95": 2833
+   },
+   "completionTokens": {
+    "n": 95,
+    "mean": 30.68,
+    "median": 21,
+    "min": 9,
+    "max": 165,
+    "p90": 42,
+    "p95": 125
+   },
+   "firstAttemptTtftMs": {
+    "n": 63,
+    "mean": 7852.07,
+    "median": 7818.6,
+    "min": 7734.7,
+    "max": 8687.4,
+    "p90": 7948.7,
+    "p95": 8056.5
+   },
+   "firstAttemptPrefillMs": {
+    "n": 63,
+    "mean": 7843.77,
+    "median": 7805.5,
+    "min": 7708.4,
+    "max": 8687.3,
+    "p90": 7948.7,
+    "p95": 8056.5
+   },
+   "decodeMs": {
+    "n": 95,
+    "mean": 1239.76,
+    "median": 691.4,
+    "min": 290.5,
+    "max": 24090.6,
+    "p90": 2627.3,
+    "p95": 4660.5
+   },
+   "firstAttemptPrefillTokPerS": {
+    "n": 63,
+    "mean": 351.24,
+    "median": 352.67,
+    "min": 317.47,
+    "max": 356.43,
+    "p90": 355.02,
+    "p95": 355.95
+   },
+   "decodeTokPerS": {
+    "n": 95,
+    "mean": 31.19,
+    "median": 31.44,
+    "min": 14.79,
+    "max": 33.31,
+    "p90": 32.25,
+    "p95": 32.81
+   },
+   "grammarInitMs": {
+    "n": 54,
+    "mean": 130.63,
+    "median": 15.65,
+    "min": 0.1,
+    "max": 6249,
+    "p90": 28.6,
+    "p95": 43.1
+   },
+   "calls": 95
+  },
+  "beingdb": {
+   "msPerQuery": {
+    "n": 87,
+    "mean": 0.35,
+    "median": 0.2,
+    "min": 0,
+    "max": 1.8,
+    "p90": 0.9,
+    "p95": 1.5
+   },
+   "firstAttemptQueryMs": {
+    "n": 55,
+    "mean": 0.41,
+    "median": 0.2,
+    "min": 0,
+    "max": 1.8,
+    "p90": 1.2,
+    "p95": 1.7
+   },
+   "repairQueryMs": {
+    "n": 32,
+    "mean": 0.26,
+    "median": 0.1,
+    "min": 0,
+    "max": 1.7,
+    "p90": 0.5,
+    "p95": 0.9
+   },
+   "msPerQuestion": {
+    "n": 63,
+    "mean": 2.34,
+    "median": 1.6,
+    "min": 0,
+    "max": 24.3,
+    "p90": 4.7,
+    "p95": 5.6
+   },
+   "referenceQueryMs": {
+    "n": 51,
+    "mean": 0.54,
+    "median": 0.2,
+    "min": 0,
+    "max": 5.9,
+    "p90": 1,
+    "p95": 2.8
+   },
+   "queries": 87
+  },
+  "totalMsPerQuestion": {
+   "n": 63,
+   "mean": 10021.65,
+   "median": 8686.4,
+   "min": 8070.8,
+   "max": 29830.2,
+   "p90": 12523.8,
+   "p95": 17703.2
+  },
+  "page": {
+   "hiddenMs": 0,
+   "questionsWhileHidden": 0
+  }
+ },
+ "determinism": {
+  "questions": 63,
+  "identicalAcrossTrials": 63,
+  "differing": []
+ },
+ "perQuestion": [
+  {
+   "id": "e01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e02",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e03",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unclassified": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e04",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "entity_grounding": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e05",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e06",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "missing_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e07",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e08",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "missing_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e09",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "literal_vs_variable": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e10",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e11",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "supported_marked_unsupported": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e12",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e13",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_argument_order": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e14",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "missing_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e15",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e16",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e17",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "e18",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "missing_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "missing_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m02",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_projection": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m03",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "entity_grounding": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m04",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m05",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m06",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m07",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m08",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m09",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m10",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "missing_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m11",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m12",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "missing_constraint": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m13",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m14",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "m15",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unclassified": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "h01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "h02",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "h03",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_projection": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "h04",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "h05",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_join": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "h06",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "c01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "c02",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unclassified": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "c03",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "c04",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "c05",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "c06",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unclassified": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "s01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "s02",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "s03",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "s04",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "validation_repair_failed": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "s05",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "entity_grounding": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "s06",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "wrong_predicate": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u01",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unsupported_not_detected": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u02",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u04",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u05",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unsupported_not_detected": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u06",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u07",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unsupported_not_detected": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u08",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u09",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unsupported_not_detected": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u10",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u11",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u12",
+   "trials": 1,
+   "correct": 0,
+   "firstCorrect": 0,
+   "categories": {
+    "unsupported_not_detected": 1
+   },
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  },
+  {
+   "id": "u13",
+   "trials": 1,
+   "correct": 1,
+   "firstCorrect": 1,
+   "categories": {},
+   "finalDslVariants": 1,
+   "identicalAcrossTrials": true
+  }
+ ],
+ "perTrial": [
+  {
+   "counts": {
+    "questions": 63,
+    "supported": 51,
+    "unsupported": 12,
+    "firstValid": 32,
+    "finalValid": 40,
+    "firstCorrect": 5,
+    "finalCorrect": 5,
+    "repairedToValid": 8,
+    "repairedToCorrect": 0,
+    "predicateSelectionCorrect": 30,
+    "falseRefusals": 1,
+    "unsupportedDetected": 7,
+    "unsupportedFirstAttempt": 7,
+    "fabricated": 4,
+    "overallCorrect": 12,
+    "runtimeFailures": 0,
+    "questionsRepaired": 19,
+    "repairAttempts": 32
+   },
+   "rates": {
+    "firstValid": 0.6275,
+    "finalValid": 0.7843,
+    "firstCorrect": 0.098,
+    "finalCorrect": 0.098,
+    "predicateSelectionCorrect": 0.5882,
+    "falseRefusals": 0.0196,
+    "unsupportedDetected": 0.5833,
+    "unsupportedFirstAttempt": 0.5833,
+    "fabricated": 0.3333,
+    "overallCorrect": 0.1905,
+    "runtimeFailures": 0
+   },
+   "failureCategories": {
+    "wrong_predicate": 14,
+    "validation_repair_failed": 10,
+    "missing_constraint": 7,
+    "unsupported_not_detected": 5,
+    "unclassified": 4,
+    "entity_grounding": 3,
+    "wrong_constraint": 2,
+    "wrong_projection": 2,
+    "literal_vs_variable": 1,
+    "supported_marked_unsupported": 1,
+    "wrong_argument_order": 1,
+    "wrong_join": 1
+   },
+   "firstAttemptFailureCategories": {
+    "invalid_query": 18,
+    "wrong_predicate": 11,
+    "unsupported_not_detected": 5,
+    "missing_constraint": 4,
+    "entity_grounding": 3,
+    "unclassified": 3,
+    "wrong_constraint": 2,
+    "literal_vs_variable": 1,
+    "supported_marked_unsupported": 1,
+    "wrong_argument_order": 1,
+    "wrong_join": 1,
+    "wrong_projection": 1
+   },
+   "byLevelAndTag": {
+    "easy": {
+     "n": 18,
+     "firstCorrect": 2,
+     "finalCorrect": 2
+    },
+    "constant": {
+     "n": 28,
+     "firstCorrect": 2,
+     "finalCorrect": 2
+    },
+    "medium": {
+     "n": 21,
+     "firstCorrect": 2,
+     "finalCorrect": 2
+    },
+    "join": {
+     "n": 17,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "range": {
+     "n": 7,
+     "firstCorrect": 2,
+     "finalCorrect": 2
+    },
+    "order": {
+     "n": 4,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "hard": {
+     "n": 12,
+     "firstCorrect": 1,
+     "finalCorrect": 1
+    },
+    "negation": {
+     "n": 2,
+     "firstCorrect": 1,
+     "finalCorrect": 1
+    },
+    "optional": {
+     "n": 1,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "self-join": {
+     "n": 1,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "disjunction": {
+     "n": 1,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "aggregation": {
+     "n": 8,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    },
+    "text-search": {
+     "n": 6,
+     "firstCorrect": 1,
+     "finalCorrect": 1
+    },
+    "alternatives": {
+     "n": 1,
+     "firstCorrect": 0,
+     "finalCorrect": 0
+    }
+   },
+   "timing": {
+    "model": {
+     "msPerCall": {
+      "n": 95,
+      "mean": 6620.57,
+      "median": 8393.9,
+      "min": 686.1,
+      "max": 13160,
+      "p90": 8944.4,
+      "p95": 10518.7
+     },
+     "firstAttemptMs": {
+      "n": 63,
+      "mean": 8729.47,
+      "median": 8459.8,
+      "min": 8070.8,
+      "max": 13160,
+      "p90": 9128.7,
+      "p95": 10518.7
+     },
+     "repairAttemptMs": {
+      "n": 32,
+      "mean": 2468.69,
+      "median": 1179.1,
+      "min": 686.1,
+      "max": 11733.8,
+      "p90": 8477.7,
+      "p95": 9096.4
+     },
+     "msPerQuestion": {
+      "n": 63,
+      "mean": 9983.4,
+      "median": 8632.3,
+      "min": 8070.8,
+      "max": 29679.8,
+      "p90": 12460.9,
+      "p95": 17654.4
+     },
+     "firstAttemptPromptTokens": {
+      "n": 63,
+      "mean": 2757.16,
+      "median": 2756,
+      "min": 2751,
+      "max": 2765,
+      "p90": 2761,
+      "p95": 2762
+     },
+     "repairPromptTokens": {
+      "n": 32,
+      "mean": 319.34,
+      "median": 55,
+      "min": 35,
+      "max": 2887,
+      "p90": 86,
+      "p95": 2833
+     },
+     "completionTokens": {
+      "n": 95,
+      "mean": 30.68,
+      "median": 21,
+      "min": 9,
+      "max": 165,
+      "p90": 42,
+      "p95": 125
+     },
+     "firstAttemptTtftMs": {
+      "n": 63,
+      "mean": 7852.07,
+      "median": 7818.6,
+      "min": 7734.7,
+      "max": 8687.4,
+      "p90": 7948.7,
+      "p95": 8056.5
+     },
+     "firstAttemptPrefillMs": {
+      "n": 63,
+      "mean": 7843.77,
+      "median": 7805.5,
+      "min": 7708.4,
+      "max": 8687.3,
+      "p90": 7948.7,
+      "p95": 8056.5
+     },
+     "decodeMs": {
+      "n": 95,
+      "mean": 1239.76,
+      "median": 691.4,
+      "min": 290.5,
+      "max": 24090.6,
+      "p90": 2627.3,
+      "p95": 4660.5
+     },
+     "firstAttemptPrefillTokPerS": {
+      "n": 63,
+      "mean": 351.24,
+      "median": 352.67,
+      "min": 317.47,
+      "max": 356.43,
+      "p90": 355.02,
+      "p95": 355.95
+     },
+     "decodeTokPerS": {
+      "n": 95,
+      "mean": 31.19,
+      "median": 31.44,
+      "min": 14.79,
+      "max": 33.31,
+      "p90": 32.25,
+      "p95": 32.81
+     },
+     "grammarInitMs": {
+      "n": 54,
+      "mean": 130.63,
+      "median": 15.65,
+      "min": 0.1,
+      "max": 6249,
+      "p90": 28.6,
+      "p95": 43.1
+     },
+     "calls": 95
+    },
+    "beingdb": {
+     "msPerQuery": {
+      "n": 87,
+      "mean": 0.35,
+      "median": 0.2,
+      "min": 0,
+      "max": 1.8,
+      "p90": 0.9,
+      "p95": 1.5
+     },
+     "firstAttemptQueryMs": {
+      "n": 55,
+      "mean": 0.41,
+      "median": 0.2,
+      "min": 0,
+      "max": 1.8,
+      "p90": 1.2,
+      "p95": 1.7
+     },
+     "repairQueryMs": {
+      "n": 32,
+      "mean": 0.26,
+      "median": 0.1,
+      "min": 0,
+      "max": 1.7,
+      "p90": 0.5,
+      "p95": 0.9
+     },
+     "msPerQuestion": {
+      "n": 63,
+      "mean": 2.34,
+      "median": 1.6,
+      "min": 0,
+      "max": 24.3,
+      "p90": 4.7,
+      "p95": 5.6
+     },
+     "referenceQueryMs": {
+      "n": 51,
+      "mean": 0.54,
+      "median": 0.2,
+      "min": 0,
+      "max": 5.9,
+      "p90": 1,
+      "p95": 2.8
+     },
+     "queries": 87
+    },
+    "totalMsPerQuestion": {
+     "n": 63,
+     "mean": 10021.65,
+     "median": 8686.4,
+     "min": 8070.8,
+     "max": 29830.2,
+     "p90": 12523.8,
+     "p95": 17703.2
+    },
+    "page": {
+     "hiddenMs": 0,
+     "questionsWhileHidden": 0
+    }
+   },
+   "efficiency": {
+    "repairPolicies": {
+     "proven-only": 63
+    },
+    "modelCalls": 95,
+    "firstAttemptCalls": 63,
+    "modelRepairCalls": 32,
+    "modelCallsPerQuestion": 1.508,
+    "modelCallsPerSupportedQuestion": 1.588,
+    "beingdbCalls": 178,
+    "diagnoseCalls": 91,
+    "executeCalls": 87,
+    "beingdbMsTotal": 147.7,
+    "diagnoseMsTotal": 117.2,
+    "deterministicRepairs": 4,
+    "questionsRepairedDeterministically": 4,
+    "questionsRepairedDeterministicallyCorrect": 1,
+    "questionsWithModelRepair": 19,
+    "correctWithOneModelCall": 12,
+    "rates": {
+     "solvedWithOneModelCall": 0.19,
+     "repairedDeterministically": 0.063,
+     "requiringModelRepair": 0.302
+    },
+    "correctPerModelCall": 0.126,
+    "supportedCorrectPerModelCall": 0.062,
+    "medianTotalMs": 8686.4,
+    "correctWithinBudget": {
+     "30s": 12,
+     "60s": 12
+    },
+    "diagnosticCodes": {
+     "singleton_variable": 26,
+     "unsatisfiable_comparison": 15,
+     "unbound_projection": 13,
+     "disjoint_join": 11,
+     "disconnected_query": 7,
+     "contradictory_negation": 4,
+     "unknown_constant": 4,
+     "constant_not_at_position": 3,
+     "invalid_contains": 3,
+     "unbound_order_variable": 2,
+     "unsafe_negation": 2,
+     "comparison_type_mismatch": 1,
+     "role_name_mismatch": 1
+    },
+    "deterministicRepairKinds": {
+     "replace_variable": 4
+    }
+   },
+   "schema": {
+    "predicateConfusions": {
+     "created_by -> (none)": {
+      "count": 5,
+      "questions": [
+       "m04",
+       "m14",
+       "h02",
+       "c03",
+       "c05"
+      ]
+     },
+     "created_by -> person": {
+      "count": 3,
+      "questions": [
+       "e02",
+       "h06",
+       "c01"
+      ]
+     },
+     "created_by -> artist_in_residence": {
+      "count": 2,
+      "questions": [
+       "e02",
+       "c01"
+      ]
+     },
+     "created_by -> contains_photograph_of": {
+      "count": 1,
+      "questions": [
+       "s02"
+      ]
+     },
+     "created_by -> contributed_text": {
+      "count": 1,
+      "questions": [
+       "c04"
+      ]
+     },
+     "created_by -> year_started": {
+      "count": 1,
+      "questions": [
+       "m09"
+      ]
+     },
+     "educated_at -> (none)": {
+      "count": 1,
+      "questions": [
+       "m06"
+      ]
+     },
+     "educated_at -> studied_at": {
+      "count": 1,
+      "questions": [
+       "e05"
+      ]
+     },
+     "exhibited_at -> (none)": {
+      "count": 1,
+      "questions": [
+       "m08"
+      ]
+     },
+     "exhibited_at -> contains_photograph_of": {
+      "count": 1,
+      "questions": [
+       "s06"
+      ]
+     },
+     "exhibited_at -> person": {
+      "count": 1,
+      "questions": [
+       "h06"
+      ]
+     },
+     "exhibited_at -> used_equipment": {
+      "count": 1,
+      "questions": [
+       "s06"
+      ]
+     },
+     "exhibition -> exhibited_at": {
+      "count": 1,
+      "questions": [
+       "e10"
+      ]
+     },
+     "funded_by -> person": {
+      "count": 1,
+      "questions": [
+       "h01"
+      ]
+     },
+     "in_collection -> contains_photograph_of": {
+      "count": 1,
+      "questions": [
+       "e07"
+      ]
+     },
+     "interviewed_artist -> person": {
+      "count": 1,
+      "questions": [
+       "h06"
+      ]
+     },
+     "interviewee -> (none)": {
+      "count": 1,
+      "questions": [
+       "m13"
+      ]
+     },
+     "performed_at -> (none)": {
+      "count": 1,
+      "questions": [
+       "e11"
+      ]
+     },
+     "uses_medium -> (none)": {
+      "count": 1,
+      "questions": [
+       "s01"
+      ]
+     }
+    },
+    "reversedArguments": {
+     "influenced_by": {
+      "swapFixes": 1,
+      "reversedVsReference": 0,
+      "atomOnlyAtOtherPosition": 0,
+      "questions": [
+       "e13"
+      ]
+     }
+    },
+    "entityGroundingFailures": [
+     {
+      "id": "e04",
+      "category": "entity_grounding",
+      "evidence": {
+       "missing": [
+        "peter_donebauer"
+       ],
+       "unknownAtoms": [
+        "funder"
+       ]
+      }
+     },
+     {
+      "id": "e09",
+      "category": "literal_vs_variable",
+      "evidence": {
+       "constants": [
+        "arts_council"
+       ],
+       "variables": [
+        "Arts_Council_of_Great_Br"
+       ]
+      }
+     },
+     {
+      "id": "m03",
+      "category": "entity_grounding",
+      "evidence": {
+       "unknownAtoms": [
+        "artist_or_work"
+       ]
+      }
+     },
+     {
+      "id": "s05",
+      "category": "entity_grounding",
+      "evidence": {
+       "unknownAtoms": [
+        "festival"
+       ]
+      }
+     }
+    ],
+    "unknownAtoms": {
+     "funder": [
+      "e04"
+     ],
+     "artist_or_work": [
+      "m03"
+     ],
+     "festival": [
+      "s05"
+     ]
+    },
+    "failedDespiteCorrectPredicates": [
+     {
+      "id": "e01",
+      "category": "wrong_constraint"
+     },
+     {
+      "id": "e03",
+      "category": "unclassified"
+     },
+     {
+      "id": "e04",
+      "category": "entity_grounding"
+     },
+     {
+      "id": "e06",
+      "category": "missing_constraint"
+     },
+     {
+      "id": "e08",
+      "category": "missing_constraint"
+     },
+     {
+      "id": "e09",
+      "category": "literal_vs_variable"
+     },
+     {
+      "id": "e13",
+      "category": "wrong_argument_order"
+     },
+     {
+      "id": "e14",
+      "category": "missing_constraint"
+     },
+     {
+      "id": "e15",
+      "category": "validation_repair_failed"
+     },
+     {
+      "id": "e16",
+      "category": "wrong_constraint"
+     },
+     {
+      "id": "e18",
+      "category": "missing_constraint"
+     },
+     {
+      "id": "m01",
+      "category": "missing_constraint"
+     },
+     {
+      "id": "m02",
+      "category": "wrong_projection"
+     },
+     {
+      "id": "m03",
+      "category": "entity_grounding"
+     },
+     {
+      "id": "m05",
+      "category": "validation_repair_failed"
+     },
+     {
+      "id": "m07",
+      "category": "validation_repair_failed"
+     },
+     {
+      "id": "m10",
+      "category": "missing_constraint"
+     },
+     {
+      "id": "m12",
+      "category": "missing_constraint"
+     },
+     {
+      "id": "m15",
+      "category": "unclassified"
+     },
+     {
+      "id": "h03",
+      "category": "wrong_projection"
+     },
+     {
+      "id": "h05",
+      "category": "wrong_join"
+     },
+     {
+      "id": "c02",
+      "category": "unclassified"
+     },
+     {
+      "id": "c06",
+      "category": "unclassified"
+     },
+     {
+      "id": "s04",
+      "category": "validation_repair_failed"
+     },
+     {
+      "id": "s05",
+      "category": "entity_grounding"
+     }
+    ],
+    "unsupportedMappedTo": {
+     "artist_in_residence": 1,
+     "contains_photograph_of": 1,
+     "contributed_text": 1,
+     "country": 1,
+     "exhibited_at": 1,
+     "sold_at": 1,
+     "worked_at": 1,
+     "year_created": 1,
+     "year_joined": 1,
+     "year_moved": 1,
+     "year_started": 1,
+     "year_started_using_technology": 1,
+     "year_travelled": 1
+    },
+    "unsupportedMappedQuestions": [
+     {
+      "id": "u01",
+      "predicates": [
+       "exhibited_at"
+      ],
+      "valid": true
+     },
+     {
+      "id": "u05",
+      "predicates": [
+       "sold_at"
+      ],
+      "valid": false
+     },
+     {
+      "id": "u07",
+      "predicates": [
+       "worked_at"
+      ],
+      "valid": true
+     },
+     {
+      "id": "u09",
+      "predicates": [
+       "year_created",
+       "contains_photograph_of"
+      ],
+      "valid": true
+     },
+     {
+      "id": "u12",
+      "predicates": [
+       "contributed_text",
+       "country",
+       "artist_in_residence",
+       "year_started_using_technology",
+       "year_joined",
+       "year_moved",
+       "year_started",
+       "year_travelled"
+      ],
+      "valid": true
+     }
+    ],
+    "predicateUsage": {
+     "artist_in_residence": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 2,
+      "exampleInPrompt": false,
+      "facts": 1
+     },
+     "collaborated_with": {
+      "required": 2,
+      "present": 2,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": true,
+      "facts": 133
+     },
+     "contains_photograph_of": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 3,
+      "exampleInPrompt": false,
+      "facts": 2
+     },
+     "contributed_text": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": false,
+      "facts": 1
+     },
+     "country": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 2,
+      "exampleInPrompt": false,
+      "facts": 1
+     },
+     "created_by": {
+      "required": 19,
+      "present": 8,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 2,
+      "exampleInPrompt": true,
+      "facts": 137
+     },
+     "curated_by": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 20
+     },
+     "duration_minutes": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": false,
+      "facts": 2
+     },
+     "educated_at": {
+      "required": 2,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 21
+     },
+     "employed_by": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 1,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 34
+     },
+     "exhibited_at": {
+      "required": 10,
+      "present": 7,
+      "correctQuestions": 2,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": true,
+      "facts": 120
+     },
+     "exhibition": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 45
+     },
+     "funded_by": {
+      "required": 5,
+      "present": 4,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 35
+     },
+     "in_collection": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": false,
+      "facts": 3
+     },
+     "influenced_by": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": false,
+      "facts": 3
+     },
+     "interviewed_artist": {
+      "required": 7,
+      "present": 6,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 10
+     },
+     "interviewee": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 10
+     },
+     "made_at": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 1,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 26
+     },
+     "organised_by": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": false,
+      "facts": 3
+     },
+     "performed_at": {
+      "required": 1,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 12
+     },
+     "person": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 4,
+      "exampleInPrompt": true,
+      "facts": 280
+     },
+     "soundtrack_by": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 7
+     },
+     "source_url": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 10
+     },
+     "studied_at": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": true,
+      "facts": 5
+     },
+     "used_equipment": {
+      "required": 1,
+      "present": 1,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 2,
+      "exampleInPrompt": true,
+      "facts": 5
+     },
+     "uses_medium": {
+      "required": 2,
+      "present": 1,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 62
+     },
+     "year_created": {
+      "required": 11,
+      "present": 11,
+      "correctQuestions": 2,
+      "usedWhenNotRequired": 0,
+      "exampleInPrompt": true,
+      "facts": 38
+     },
+     "year_exhibited": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": false,
+      "facts": 2
+     },
+     "year_joined": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": false,
+      "facts": 1
+     },
+     "year_left": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": false,
+      "facts": 1
+     },
+     "year_moved": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": false,
+      "facts": 1
+     },
+     "year_started": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 2,
+      "exampleInPrompt": false,
+      "facts": 1
+     },
+     "year_travelled": {
+      "required": 0,
+      "present": 0,
+      "correctQuestions": 0,
+      "usedWhenNotRequired": 1,
+      "exampleInPrompt": false,
+      "facts": 1
+     }
+    }
+   },
+   "legacy": {
+    "questions": 63,
+    "supported": 51,
+    "unsupported": 12,
+    "firstValid": "32/51 (63%)",
+    "firstCorrect": "5/51 (10%)",
+    "finalValid": "40/51 (78%)",
+    "finalCorrect": "5/51 (10%)",
+    "repairedToValid": 8,
+    "repairedToCorrect": 0,
+    "predicatesOk": "26/51 (51%)",
+    "exactProjection": "5/5 (100%)",
+    "falseRefusals": 1,
+    "unsupportedDetected": "7/12 (58%)",
+    "unsupportedFirstAttempt": "7/12 (58%)",
+    "fabricatedQueries": 4,
+    "overallCorrect": "12/63 (19%)",
+    "byTag": {
+     "easy": "first 2/18 (11%), final 2/18 (11%)",
+     "constant": "first 2/28 (7%), final 2/28 (7%)",
+     "medium": "first 2/21 (10%), final 2/21 (10%)",
+     "join": "first 0/17 (0%), final 0/17 (0%)",
+     "range": "first 2/7 (29%), final 2/7 (29%)",
+     "order": "first 0/4 (0%), final 0/4 (0%)",
+     "hard": "first 1/12 (8%), final 1/12 (8%)",
+     "negation": "first 1/2 (50%), final 1/2 (50%)",
+     "optional": "first 0/1 (0%), final 0/1 (0%)",
+     "self-join": "first 0/1 (0%), final 0/1 (0%)",
+     "disjunction": "first 0/1 (0%), final 0/1 (0%)",
+     "aggregation": "first 0/8 (0%), final 0/8 (0%)",
+     "text-search": "first 1/6 (17%), final 1/6 (17%)",
+     "alternatives": "first 0/1 (0%), final 0/1 (0%)"
+    },
+    "failures": {
+     "other (join/semantics)": 6,
+     "invalid (unsafe_negation, disconnected_query)": 1,
+     "constant/bound (peter_donebauer)": 1,
+     "wrong predicate": 14,
+     "constant/bound (judith_goddard)": 1,
+     "constant/bound (cultural_quarter)": 1,
+     "constant/bound (arts_council)": 1,
+     "refused (said unsupported)": 1,
+     "argument order (influenced_by)": 1,
+     "constant/bound (david_critchley)": 1,
+     "invalid (unbound_projection, disconnected_query)": 3,
+     "constant/bound (scratch_video_volume_1)": 1,
+     "constant/bound (delia_derbyshire)": 1,
+     "constant/bound (1975, 1980)": 1,
+     "missing output variable": 4,
+     "invalid (disconnected_query)": 1,
+     "invalid (unbound_projection)": 5,
+     "constant/bound (10)": 1,
+     "constant/bound (kevin_atherton)": 1,
+     "fabricated a query": 4,
+     "no valid query (not flagged unsupported)": 1
+    },
+    "llmMsPerCall": {
+     "median": 8394,
+     "p90": 8944,
+     "calls": 95
+    },
+    "dbMsPerQuery": {
+     "median": 0.2,
+     "p90": 0.9,
+     "max": 1.8,
+     "queries": 87
+    },
+    "totalMsPerQuestion": {
+     "median": 8686
+    }
+   }
+  }
+ ]
+}
