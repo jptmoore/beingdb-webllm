@@ -20,6 +20,12 @@ export async function setupDatabase(log) {
 }
 
 export const modelIdFromURL = () => new URLSearchParams(location.search).get("model") || DEFAULT_MODEL;
+
+// WebLLM compiles each output grammar on first use (~10 s); do it now rather than on the first question.
+export async function warmUp(generator, prompt) {
+  for (const format of [prompt.format, prompt.fixFormat])
+    await generator.complete([{ role: "user", content: "warm up" }], format, { maxTokens: 1 });
+}
 export const modelIsCached = () => new WebLLMGenerator(modelIdFromURL()).isCached();
 
 export async function setupModel(log, progress) {

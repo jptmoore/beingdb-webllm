@@ -53,6 +53,7 @@ export async function ask({
   repairPolicy,
   dbGuided = false,
   maxDeterministicPasses = MAX_DETERMINISTIC_PASSES,
+  onProgress,
 }) {
   const policy = resolveRepairPolicy({ repairPolicy, dbGuided });
   const t0 = performance.now();
@@ -63,6 +64,7 @@ export async function ask({
   for (let i = 0; i <= maxRepairs; i++) {
     const grammar = format === prompt.format ? "query_or_unsupported" : "query_only";
     let gen;
+    onProgress?.({ attempt: i + 1, repair: i > 0 });
     try {
       gen = await generator.complete(messages, format, { temperature: i === 0 ? temperature : repairTemperature });
     } catch (e) {

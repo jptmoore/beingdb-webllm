@@ -12,7 +12,7 @@
     BeingDB (WASM, in this tab) checks it, applies any repair it can prove, and runs it over the REWIND interview facts.
     The results below come from BeingDB, not from the model. <a href="https://github.com/jptmoore/beingdb-webllm">Source and benchmark</a></p>
 
-  <pre id="log" class="log"></pre>
+  <p id="state" class="state">Loading BeingDB…</p>
   <p><button id="load" disabled>Load model</button> <progress id="progress" max="1" value="0" hidden></progress> <span id="progress-text"></span></p>
 
   <label for="question">Question</label>
@@ -20,6 +20,7 @@
   <p>
     <select id="samples"><option value="">Sample questions…</option></select>
     <button id="ask" disabled>Ask BeingDB</button>
+    <span id="ask-status" class="note">Load the model first.</span>
   </p>
 
   <section id="answer" hidden>
@@ -35,6 +36,7 @@
   </section>
 
   <details><summary>Model instructions (built from the live BeingDB schema)</summary><pre id="prompt"></pre></details>
+  <details><summary>Log</summary><pre id="log" class="log"></pre></details>
 
   <script type="module" src="src/app.js"></script>
 </body>

@@ -45,14 +45,14 @@ export class WebLLMGenerator {
   }
 
   // format: a WebLLM response_format (here an xgrammar EBNF grammar).
-  async complete(messages, format, { temperature = 0 } = {}) {
-    const { seed, maxTokens, repetitionPenalty, topP } = this.options;
+  async complete(messages, format, { temperature = 0, maxTokens } = {}) {
+    const { seed, maxTokens: defaultMaxTokens, repetitionPenalty, topP } = this.options;
     const request = {
       temperature,
       seed,
       // Queries must repeat variable names; the model default (1.05-1.1) penalises that.
       repetition_penalty: repetitionPenalty,
-      max_tokens: maxTokens,
+      max_tokens: maxTokens ?? defaultMaxTokens,
       ...(topP !== undefined ? { top_p: topP } : {}),
       ...modelSpecificRequest(this.modelId),
     };
