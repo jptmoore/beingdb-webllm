@@ -26,7 +26,7 @@ question
 never sees or edits result rows.
 
 **What is tested** is the model's translation step. The task has 63 questions
-over the Rewind dataset: 51 answerable and 12 deliberately unsupported.
+over the REWIND dataset: 51 answerable and 12 deliberately unsupported.
 - An answerable question is correct if BeingDB returns the same answer rows
   for the generated query as for a trusted reference query.
 - An unsupported question is correct if the model replies `UNSUPPORTED`.
@@ -52,7 +52,7 @@ model weights, which the browser caches.
 ```
 beingdb          core engine: DSL, validation, planner, evaluator, introspection, diagnostics
    |   (runtime source, via symlink)
-beingdb-wasm     the same runtime compiled to WASM (committed prebuilt/) + the exported Rewind pack (data/)
+beingdb-wasm     the same runtime compiled to WASM (committed prebuilt/) + the exported REWIND pack (data/)
    |   (prebuilt runtime and data, via symlinks: npm run link)
 beingdb-webllm   WebLLM model, prompt, grammar, repair loop, evaluation and benchmark harness
 ```
@@ -65,7 +65,7 @@ for the demo and benchmark, and in Node for the model-free checks. No native
 |---|---|
 | run the demo or benchmark models | a `../beingdb-wasm` checkout (no OCaml: its runtime and data are committed) |
 | change the engine, introspection or diagnostics | `../beingdb` and the OCaml toolchain; build `beingdb-wasm` and link it with `npm run link -- --build`, or refresh its `prebuilt/` (`npm run update-runtime` there) |
-| change the data or predicate annotations | `npm run update-demo-data` in `beingdb-wasm` (needs native `../beingdb`; [beingdb-wasm README](../beingdb-wasm/README.md#maintainer-rebuilding-the-bundled-dataset)) |
+| change the data or predicate annotations | `npm run update-demo-data` in `beingdb-wasm` (needs native `../beingdb`; [beingdb-wasm README](../beingdb-wasm/README.md#the-bundled-rewind-dataset)) |
 
 The runtime and the exported pack are committed in `beingdb-wasm` and tested
 there, so routine experiments never build either. Benchmark reports record
@@ -184,7 +184,7 @@ values, as recorded in the current reference run:
 | | |
 |---|---|
 | Questions | `eval/questions-v2.json` (63 items; sha256 `6082a88d…`) |
-| Pack | annotated Rewind pack from `beingdb-wasm` 11aced4, BeingDB 0.4.1 (fingerprint `sha256:72f26c19…`) |
+| Pack | annotated REWIND pack from `beingdb-wasm` 11aced4, BeingDB 0.4.1 (fingerprint `sha256:72f26c19…`) |
 | Schema context and prompt | declared predicate roles and descriptions; `nl2dsl-prompt/run12` (system prompt sha256 `78740d0d…`) |
 | Output grammar | generated from the predicate list (sha256 `1590cab8…`) |
 | Repair policy | `proven-only` (`proven-repairs-only/1`) |
