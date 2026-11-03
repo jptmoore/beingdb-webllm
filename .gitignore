@@ -1,4 +1,5 @@
 node_modules/
 vendor/
+dist/
 eval/results/*.status.json
 eval/results/export/

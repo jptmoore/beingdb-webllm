@@ -8,6 +8,7 @@
   "scripts": {
     "link": "node scripts/link.mjs",
     "serve": "node scripts/serve.mjs",
+    "build:site": "node scripts/build-site.mjs",
     "check-eval": "node eval/check-references.mjs",
     "test": "node --test test/*.test.mjs eval/test/*.test.mjs",
     "benchmark": "node eval/scripts/benchmark.mjs",

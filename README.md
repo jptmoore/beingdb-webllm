@@ -21,7 +21,14 @@ download of the model weights, which the browser caches.
 It currently runs over the [REWIND interviews](https://github.com/jptmoore/beingdb-rewind-interviews)
 facts bundled with beingdb-wasm.
 
-## Run it
+## Try it
+
+**<https://jptmoore.github.io/beingdb-webllm/>**: nothing to install. You
+need a browser with WebGPU and `shader-f16` (current Chrome or Edge on a
+desktop or laptop), and about 2 GB of disk and GPU memory: the first
+**Load model** downloads the model once, and the browser caches it.
+
+## Run it locally
 
 You need Node 22 or later, a browser with WebGPU and `shader-f16` (current
 Chrome or Edge), and about 2 GB of disk and GPU memory for the default model.
@@ -36,6 +43,10 @@ npm run serve    # http://localhost:8010/
 Open <http://localhost:8010/>, click **Load model**, and ask a question or
 pick a sample. The page shows the query the model wrote, BeingDB's verdict,
 any repairs, timings and the rows.
+
+`npm run build:site` builds the same page as a static site in `dist/site/`,
+which [.github/workflows/pages.yml](.github/workflows/pages.yml) publishes
+to GitHub Pages on every push to `main`.
 
 The default model is `Llama-3.2-3B-Instruct-q4f16_1-MLC`, the best-measured
 model so far (see [benchmarking](docs/benchmarking.md#reference-model-and-reference-condition)).

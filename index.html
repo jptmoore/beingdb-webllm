@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>BeingDB + WebLLM</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
   <h1>Ask BeingDB</h1>
   <p class="note">A local model (WebLLM, in this tab) translates your question into a BeingDB query.
     BeingDB (WASM, in this tab) checks it, applies any repair it can prove, and runs it over the REWIND interview facts.
-    The results below come from BeingDB, not from the model. <a href="eval/eval.html">Evaluation</a></p>
+    The results below come from BeingDB, not from the model. <a href="https://github.com/jptmoore/beingdb-webllm">Source and benchmark</a></p>
 
   <pre id="log" class="log"></pre>
   <p><button id="load" disabled>Load model</button> <progress id="progress" max="1" value="0" hidden></progress> <span id="progress-text"></span></p>
