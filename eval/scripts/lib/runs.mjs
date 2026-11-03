@@ -3,7 +3,7 @@
 // which is re-analysed in Node with the same analysis code and BeingDB build.
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
-import { root } from "./server.mjs";
+import { root } from "../../../scripts/lib/server.mjs";
 import { aggregate } from "./summary.mjs";
 import { loadSuite } from "./suite.mjs";
 
@@ -58,8 +58,8 @@ export async function loadRun(p) {
 let nodeContext;
 async function nodeAnalysis() {
   if (nodeContext) return nodeContext;
-  const { loadBeingDB } = await import("../../eval/node-beingdb.mjs");
-  const { buildSchema } = await import("../../src/schema.js");
+  const { loadBeingDB } = await import("../../node-beingdb.mjs");
+  const { buildSchema } = await import("../../../src/schema.js");
   const { buildAnalysisContext } = await import("../../src/analysis.js");
   const { db, summary } = await loadBeingDB();
   const schema = buildSchema(db);

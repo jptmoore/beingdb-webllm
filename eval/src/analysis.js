@@ -2,7 +2,7 @@
 // predicate / argument / entity evidence and result signatures. Pure functions
 // over the db.query() wrapper, shared by the browser benchmark and Node
 // re-analysis. No model is involved in any judgement here.
-import { predicatesIn } from "./prompt.js";
+import { predicatesIn } from "../../src/prompt.js";
 import { judge, matchColumns, referenceResult, scoreItem } from "./score.js";
 
 // Bump when classification rules change, so runs record which rules produced their categories.

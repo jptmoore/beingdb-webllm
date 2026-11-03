@@ -2,7 +2,7 @@
 //   npm run models                         all prebuilt chat models
 //   npm run models -- --filter qwen        substring filter
 //   npm run models -- --check <id> ...     exit 1 if any id is unknown
-//   npm run models -- --validate models/benchmark-models.json
+//   npm run models -- --validate eval/models/benchmark-models.json
 //   npm run models -- --json
 import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
@@ -12,7 +12,7 @@ const { values, positionals } = parseArgs({
   options: { filter: { type: "string" }, check: { type: "boolean" }, validate: { type: "string" }, json: { type: "boolean" }, all: { type: "boolean" } },
   allowPositionals: true,
 });
-const version = JSON.parse(readFileSync(new URL("../node_modules/@mlc-ai/web-llm/package.json", import.meta.url), "utf8")).version;
+const version = JSON.parse(readFileSync(new URL("../../node_modules/@mlc-ai/web-llm/package.json", import.meta.url), "utf8")).version;
 // The benchmark prompt is ~2,000 tokens and repairs add up to ~900 more.
 const MIN_CONTEXT = 3000;
 

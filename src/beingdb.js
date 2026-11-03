@@ -24,7 +24,7 @@ export function wrapBeingDB(BeingDB) {
   };
 }
 
-export async function loadBeingDB(base = "vendor/beingdb-wasm/") {
+export async function loadBeingDB(base = new URL("../vendor/beingdb-wasm/", import.meta.url).href) {
   const t0 = performance.now();
   const BeingDB = await new Promise((resolve, reject) => {
     window.onBeingDBReady = resolve;

@@ -5,7 +5,7 @@ import { buildPrompt } from "./prompt.js";
 import { WebLLMGenerator, DEFAULT_MODEL, webgpuInfo } from "./generator.js";
 
 export async function setupDatabase(log) {
-  log("Loading BeingDB WASM and Rewind data…");
+  log("Loading BeingDB WASM and REWIND data…");
   const { db, summary, timings } = await loadBeingDB();
   const t = performance.now();
   const schema = buildSchema(db);

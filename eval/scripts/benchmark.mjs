@@ -2,7 +2,7 @@
 import { parseArgs } from "node:util";
 import { pathToFileURL } from "node:url";
 import { runBenchmark, DEFAULTS } from "./lib/runner.mjs";
-import { resolveRepairPolicy } from "../src/pipeline.js";
+import { resolveRepairPolicy } from "../../src/pipeline.js";
 
 export const OPTIONS = {
   model: { type: "string" },

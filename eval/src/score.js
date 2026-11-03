@@ -1,7 +1,7 @@
 // Scoring: compare what BeingDB returns for the generated query with what it
 // returns for the trusted reference query. Pure functions over a db.query()
 // wrapper, so the same code runs in the browser eval and in Node.
-import { predicatesIn } from "./prompt.js";
+import { predicatesIn } from "../../src/prompt.js";
 
 const cell = (v) => (v ? `${v.type}:${v.value}` : "null");
 const rowSet = (rows, cols) => new Set(rows.map((r) => JSON.stringify(cols.map((c) => cell(r[c])))));

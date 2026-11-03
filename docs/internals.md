@@ -5,22 +5,22 @@ Technical notes and the experiment log. See the [README](../README.md) for usage
 ## Execution path
 
 ```
-index.html / eval.html
+index.html / eval/eval.html
   src/beingdb.js    loads vendor/beingdb-wasm/main.bc.wasm.js + rewind.browser.json -> BeingDB.load
   src/schema.js     BeingDB.predicates() + BeingDB queries -> schema text, signatures
   src/grammar.js    BeingDB.predicates() -> xgrammar EBNF for the reply
   src/prompt.js     rules + schema + few-shot turns; parse reply; repair message
   src/generator.js  WebLLM engine (the only model-specific module)
   src/pipeline.js   ask(): generate -> BeingDB.query -> bounded repair
-  src/score.js      compare BeingDB results of generated vs reference queries
+  eval/src/score.js compare BeingDB results of generated vs reference queries (evaluation only)
 ```
 
 `pipeline.ask()` only needs `generator.complete(messages, format, {temperature})`,
 so another WebLLM model is a URL parameter (`?model=`), and another runtime would
 be a new `generator.js`. BeingDB integration does not depend on the model.
 
-`benchmark.html` (driven by `npm run benchmark`) uses the same modules plus
-`src/analysis.js`; see [benchmarking.md](benchmarking.md).
+`eval/benchmark.html` (driven by `npm run benchmark`) uses the same modules plus
+`eval/src/analysis.js`; see [benchmarking.md](benchmarking.md).
 
 ## Consuming beingdb-wasm
 
@@ -261,7 +261,7 @@ real rows, but for a question that was not asked).
 Scoring runs in the browser and, from a saved report, in Node against the same
 WASM build (`node eval/check-references.mjs report.json`); both agree.
 `node eval/show-run.mjs report.json` prints every question, attempt and
-BeingDB error of an `eval.html` report.
+BeingDB error of an `eval/eval.html` report.
 
 ## Experiment log
 
@@ -389,15 +389,17 @@ has not produced a correct answer in the final configuration (1 in runs 3 and
 7). The model fixes the reported symptom (e.g. drops the unbound `order by`)
 rather than the underlying mistake, or repeats the rejected query.
 
-### Default demo model (Qwen2.5-1.5B) and the harness reproduction of run 8
+### Former default model (Qwen2.5-1.5B) and the harness reproduction of run 8
 
-The demo and `eval.html` still default to `Qwen2.5-1.5B-Instruct-q4f16_1-MLC`
-(`DEFAULT_MODEL` in `src/generator.js`). It was chosen for an 8 GB M1 MacBook
+The chatbot and `eval/eval.html` defaulted to `Qwen2.5-1.5B-Instruct-q4f16_1-MLC`
+until they moved to the reference model, Llama-3.2-3B (`DEFAULT_MODEL` in
+`src/generator.js`). Qwen2.5-1.5B was chosen for an 8 GB M1 MacBook
 Air: among WebLLM's 1-3B models it combines a small footprint (869 MB download,
 ~1.6 GB GPU memory; WebLLM marks it `low_resource_required`) with good
-instruction following for its size. Sub-1B models were not tried. The
-benchmark experiments have since moved to Llama-3.2-3B as the reference model
-(see the [README](../README.md#reference-model-and-reference-condition)).
+instruction following for its size. Sub-1B models were not tried. It remains
+the lighter option for machines without the memory for Llama-3.2-3B
+(`?model=Qwen2.5-1.5B-Instruct-q4f16_1-MLC`; see
+[reference model and reference condition](benchmarking.md#reference-model-and-reference-condition)).
 
 Run 8 characterised the 1.5B model as follows. It reliably handles
 single-predicate lookups, simple year ranges and a negation pattern it has

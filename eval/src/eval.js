@@ -1,5 +1,5 @@
-import { setupDatabase, setupModel } from "./setup.js";
-import { ask, MAX_REPAIRS } from "./pipeline.js";
+import { setupDatabase, setupModel } from "../../src/setup.js";
+import { ask, MAX_REPAIRS } from "../../src/pipeline.js";
 import { scoreItem, summarise } from "./score.js";
 
 const params = new URLSearchParams(location.search);
@@ -10,7 +10,7 @@ const status = (force) => {
   if (!params.get("save") || (!force && Date.now() - lastStatus < 3000)) return;
   lastStatus = Date.now();
   const body = JSON.stringify({ log: $("log").textContent, progress: $("progress-text").textContent, userAgent: navigator.userAgent });
-  fetch(`eval/results/${params.get("save")}.status.json`, { method: "PUT", body }).catch(() => {});
+  fetch(`results/${params.get("save")}.status.json`, { method: "PUT", body }).catch(() => {});
 };
 const log = (msg) => {
   $("log").textContent += msg + "\n";
@@ -20,14 +20,14 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const mark = (b) => (b === undefined ? "" : b ? '<span class="ok">✓</span>' : '<span class="bad">✗</span>');
 
 const { db, summary: dbSummary, timings: dbTimings, schema, prompt } = await setupDatabase(log);
-const { items, environmentFingerprint } = await (await fetch("eval/questions.json")).json();
+const { items, environmentFingerprint } = await (await fetch("questions.json")).json();
 if (dbSummary.environmentFingerprint !== environmentFingerprint) log("Warning: dataset fingerprint differs from questions.json");
 const ids = params.get("ids")?.split(",");
 const selected = ids ? items.filter((i) => ids.includes(i.id)) : items;
 const maxRepairs = params.has("repairs") ? Number(params.get("repairs")) : MAX_REPAIRS;
 
 const save = (name, body) =>
-  fetch(`eval/results/${name}.json`, { method: "PUT", body: JSON.stringify(body, null, 1) }).catch(() => null);
+  fetch(`results/${name}.json`, { method: "PUT", body: JSON.stringify(body, null, 1) }).catch(() => null);
 
 let generator, info;
 try {

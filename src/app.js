@@ -87,7 +87,7 @@ try {
   $("ask").addEventListener("click", async () => {
     $("ask").disabled = true;
     try {
-      render(await ask({ question: $("question").value.trim(), generator, db, schema, prompt }));
+      render(await ask({ question: $("question").value.trim(), generator, db, schema, prompt, repairPolicy: "proven-only" }));
     } catch (e) {
       log(`Error: ${e.message}`);
     }
@@ -98,7 +98,7 @@ try {
   $("load").addEventListener("click", loadModel);
   if (!navigator.gpu) log("WebGPU is not available in this browser: BeingDB works, the local model cannot run.");
   else if (await modelIsCached()) loadModel();
-  else log("Click 'Load model' to download the model (about 1 GB, once; cached by the browser).");
+  else log("Click 'Load model' to download the model (about 2 GB, once; cached by the browser).");
 } catch (e) {
   log(`Startup failed: ${e.message}`);
 }
