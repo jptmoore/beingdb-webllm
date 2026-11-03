@@ -45,19 +45,29 @@ export class WebLLMGenerator {
   }
 
   // format: a WebLLM response_format (here an xgrammar EBNF grammar).
-  async complete(messages, format, { temperature = 0, maxTokens } = {}) {
-    const { seed, maxTokens: defaultMaxTokens, repetitionPenalty, topP } = this.options;
+  async complete(messages, format, { temperature = 0 } = {}) {
+    const { seed, maxTokens, repetitionPenalty, topP } = this.options;
     const request = {
       temperature,
       seed,
       // Queries must repeat variable names; the model default (1.05-1.1) penalises that.
       repetition_penalty: repetitionPenalty,
-      max_tokens: maxTokens ?? defaultMaxTokens,
+      max_tokens: maxTokens,
       ...(topP !== undefined ? { top_p: topP } : {}),
       ...modelSpecificRequest(this.modelId),
     };
     const t = performance.now();
-    const r = await this.engine.chat.completions.create({ messages, response_format: format, ...request });
+    const create = () => this.engine.chat.completions.create({ messages, response_format: format, ...request });
+    let r;
+    try {
+      r = await create();
+    } catch (e) {
+      // WebLLM 0.2.85 can leave a disposed grammar matcher behind; reloading the model resets it.
+      if (!this.options.recoverGrammarErrors || !/deleted object|GrammarMatcher/i.test(String(e?.message ?? e))) throw e;
+      this.options.onRecover?.(e);
+      await this.engine.reload(this.modelId);
+      r = await create();
+    }
     return { text: r.choices[0].message.content, finish: r.choices[0].finish_reason, ms: performance.now() - t, usage: r.usage, request };
   }
 }

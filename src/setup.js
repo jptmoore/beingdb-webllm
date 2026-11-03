@@ -20,20 +20,14 @@ export async function setupDatabase(log) {
 }
 
 export const modelIdFromURL = () => new URLSearchParams(location.search).get("model") || DEFAULT_MODEL;
-
-// WebLLM compiles each output grammar on first use (~10 s); do it now rather than on the first question.
-export async function warmUp(generator, prompt) {
-  for (const format of [prompt.format, prompt.fixFormat])
-    await generator.complete([{ role: "user", content: "warm up" }], format, { maxTokens: 1 });
-}
 export const modelIsCached = () => new WebLLMGenerator(modelIdFromURL()).isCached();
 
-export async function setupModel(log, progress) {
+export async function setupModel(log, progress, generatorOptions = {}) {
   const modelId = modelIdFromURL();
   const gpu = await webgpuInfo();
   if (!gpu.ok) throw new Error("WebGPU is not available in this browser, so the local model cannot run.");
   if (!gpu.f16 && modelId.includes("q4f16")) log("Warning: this GPU lacks shader-f16; a q4f32 model may be required.");
-  const generator = new WebLLMGenerator(modelId);
+  const generator = new WebLLMGenerator(modelId, generatorOptions);
   const cached = await generator.isCached();
   log(`Loading ${modelId} (${cached ? "from browser cache" : "first download"}, ~${Math.round(generator.record.vram_required_MB)} MB VRAM)…`);
   await generator.load((p) => progress(p));

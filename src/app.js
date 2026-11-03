@@ -1,4 +1,4 @@
-import { setupDatabase, setupModel, modelIsCached, warmUp } from "./setup.js";
+import { setupDatabase, setupModel, modelIsCached } from "./setup.js";
 import { ask } from "./pipeline.js";
 
 const $ = (id) => document.getElementById(id);
@@ -26,6 +26,7 @@ export function resultsTable(res) {
 
 let generator;
 let modelInfo;
+let stage = "";
 
 const setState = (text, cls = "") => {
   $("state").textContent = text;
@@ -47,13 +48,15 @@ async function loadModel() {
     ({ generator, info: modelInfo } = await setupModel(log, (p) => {
       $("progress").value = p.progress;
       $("progress-text").textContent = p.text;
+    }, {
+      recoverGrammarErrors: true,
+      onRecover: (e) => {
+        log(`WebLLM grammar error (${e.message}); reloading the model and retrying`);
+        stage = "The model hit an internal error; reloading it and retrying (20-30 s)";
+      },
     }));
     $("progress").hidden = true;
     $("progress-text").textContent = "";
-    setState("Preparing the model for BeingDB queries (once per visit, about 20 s)…");
-    const t = performance.now();
-    await warmUp(generator, window.demo.prompt);
-    log(`Warm-up done in ${((performance.now() - t) / 1000).toFixed(1)} s`);
     $("ask").disabled = false;
     $("load").hidden = true;
     setState(`Ready: ${modelInfo.modelId}. Ask a question.`, "ok");
@@ -127,7 +130,7 @@ try {
     $("ask").textContent = "Working…";
     $("answer").hidden = true;
     const t0 = performance.now();
-    let stage = "The model is writing a BeingDB query";
+    stage = "The model is writing a BeingDB query";
     const tick = () => setAskStatus(`${stage}… ${((performance.now() - t0) / 1000).toFixed(0)} s`);
     tick();
     const timer = setInterval(tick, 500);
