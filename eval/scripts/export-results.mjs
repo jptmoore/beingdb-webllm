@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { listRuns, loadRun, RESULTS_DIR } from "./lib/runs.mjs";
-import { root } from "./lib/server.mjs";
+import { root } from "../../scripts/lib/server.mjs";
 
 const { values, positionals } = parseArgs({ options: { format: { type: "string" }, out: { type: "string" } }, allowPositionals: true });
 const format = values.format || "csv";

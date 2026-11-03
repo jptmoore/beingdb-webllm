@@ -1,4 +1,4 @@
-// npm run benchmark:matrix -- --models models/benchmark-models.json [benchmark options]
+// npm run benchmark:matrix -- --models eval/models/benchmark-models.json [benchmark options]
 // Runs the same benchmark for each model in turn (a fresh browser per model),
 // continuing past incompatible models, and writes a matrix index next to the runs.
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";

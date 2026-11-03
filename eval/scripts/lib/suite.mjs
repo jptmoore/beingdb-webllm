@@ -1,7 +1,7 @@
 // Benchmark suite identity: the question file, its hash and the suite id in eval/suite.json.
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { root } from "./server.mjs";
+import { root } from "../../../scripts/lib/server.mjs";
 import { sha256Text } from "./provenance.mjs";
 
 export const DEFAULT_QUESTIONS = path.join(root, "eval", "questions.json");

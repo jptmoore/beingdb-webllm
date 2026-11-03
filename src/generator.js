@@ -3,7 +3,7 @@
 // Face, via WebLLM's prebuilt config), cached by the browser and run locally on WebGPU.
 import * as webllm from "../vendor/web-llm/index.js";
 
-export const DEFAULT_MODEL = "Qwen2.5-1.5B-Instruct-q4f16_1-MLC";
+export const DEFAULT_MODEL = "Llama-3.2-3B-Instruct-q4f16_1-MLC";
 
 // topP undefined = the model's own mlc-chat-config default (irrelevant at temperature 0).
 export const DEFAULT_GENERATION = { seed: 1, maxTokens: 200, repetitionPenalty: 1.0, topP: undefined };

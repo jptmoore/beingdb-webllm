@@ -1,31 +1,253 @@
-# Benchmark harness internals
+# Benchmarking the chatbot
+
+The benchmark measures the chatbot's translation step: how often the model
+turns a question into a query that BeingDB answers correctly. Use it to check
+whether a change to the model, prompt, grammar, schema metadata or repair
+policy makes the chatbot better or worse.
+
+## What is measured
+
+The task has 63 questions over the REWIND dataset
+(`eval/questions-v2.json`): 51 answerable and 12 deliberately unsupported.
+
+- An answerable question is correct if BeingDB returns the same answer rows
+  for the generated query as for a trusted reference query.
+- An unsupported question is correct if the model replies `UNSUPPORTED`.
+
+The score is **query-generation accuracy**: one step of the chatbot, not
+end-to-end answer accuracy. BeingDB validates a query, returns diagnostics or
+facts actually in its store, and lets the wider system repair, reformulate or
+rerun it. The benchmark runs only a bounded part of that loop (proven repairs
+plus at most two model repairs), so 31/63 means 31 questions were turned into
+the right query under this condition, not that BeingDB answers 49% of
+questions correctly. See the [evaluation method](internals.md#evaluation-method).
+
+## Running the benchmark
+
+`npm run benchmark` runs the full evaluation for one model in a real browser
+through Playwright, using the same code as the chatbot. It checks
+compatibility, loads the model, runs and scores every question, and writes a
+self-describing run directory. Leave the browser window in the foreground:
+hidden pages are throttled, and the report flags them. See
+`npm run benchmark -- --help` for every option. It needs an installed Chrome
+or Edge with WebGPU and `shader-f16`.
+
+Model-free checks, which need no GPU:
+
+```sh
+npm test                                                         # chatbot and summary tests against the linked runtime
+npm run check-eval -- --questions eval/questions-v2.json         # reference queries + scorer against the linked pack
+```
+
+**List models**
+
+```sh
+npm run models                     # VRAM estimate, f16 requirement, context window; flags models too small for the prompt
+npm run models -- --filter qwen
+```
+
+**Probe a model** (does it load, fit and generate?) before a full run:
+
+```sh
+npm run benchmark -- --probe --model <MODEL-ID> \
+  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v2.json
+```
+
+The probe ends with status `probe_ok`. Otherwise it reports `incompatible` or
+`model_load_failed` (exit code 2) with the reason. Weights are cached in
+`~/.cache/beingdb-webllm/browser-profiles/`; keep the default port, 8010, so
+the cache is reused.
+
+**Run a candidate model** under the reference condition:
+
+```sh
+npm run benchmark -- \
+  --model <MODEL-ID> \
+  --machine "<MACHINE DESCRIPTION>" \
+  --questions eval/questions-v2.json \
+  --repair-policy proven-only \
+  --condition annotated-v2-proven-repairs
+```
+
+**Run the reference model** with the same command and
+`--model Llama-3.2-3B-Instruct-q4f16_1-MLC`. Do this on every new machine and
+after any meaningful change to the pack, prompt, grammar, pipeline or WebLLM
+version.
+
+**Several models** in one go: `npm run benchmark:matrix -- --models eval/models/benchmark-models.json`,
+with the same options minus `--model`.
+
+The bare form, `npm run benchmark -- --model <MODEL-ID>`, uses the historical
+baseline question file. That file is pinned to the pre-annotation pack, so it
+stops as `incompatible` with the current `beingdb-wasm`, by design.
+
+`eval/eval.html` (served by `npm run serve`) runs the original 50 questions
+interactively in the page and saves a report to `eval/results/`. It uses the
+`model` repair policy and `eval/questions.json`; use it for exploring, and
+`npm run benchmark` for comparisons.
+
+## Reference model and reference condition
+
+The **reference model** is `Llama-3.2-3B-Instruct-q4f16_1-MLC`, also the
+chatbot's default. It is a stable comparison point, not necessarily the best
+model.
+- Every new model is compared against it under the same condition, ideally on
+  the same machine.
+- Rerun it whenever the condition changes.
+
+The **reference condition** is everything besides the model and machine. Its
+values, as recorded in the current reference run:
+
+| | |
+|---|---|
+| Questions | `eval/questions-v2.json` (63 items; sha256 `6082a88d…`) |
+| Pack | annotated REWIND pack from `beingdb-wasm` 11aced4, BeingDB 0.4.1 (fingerprint `sha256:72f26c19…`) |
+| Schema context and prompt | declared predicate roles and descriptions; `nl2dsl-prompt/run12` (system prompt sha256 `78740d0d…`) |
+| Output grammar | generated from the predicate list (sha256 `1590cab8…`) |
+| Repair policy | `proven-only` (`proven-repairs-only/1`), also the chatbot's default |
+| Decoding | defaults: greedy first attempt; repairs at temperature 0.7, seed 1; 200 max tokens; repetition penalty 1; at most 2 model repairs |
+| Runtime | WebLLM 0.2.85; `beingdb-webllm` 914e392; `beingdb` 19187d7 |
+
+**Model comparisons are only meaningful when this condition is kept fixed.**
+`--condition` is just a label and changes nothing. The settings that define
+the condition are recorded in each `run.json` (`config.nonDefault`,
+`config.prompt.sha256`, `config.pipeline`); check them before comparing.
+Earlier conditions (baseline, Runs 9-11) are listed in
+[conditions in the saved results](#conditions-in-the-saved-results).
+
+**Repair, in brief.** When BeingDB rejects a query, the model can be asked to
+repair it. Under `proven-only`, BeingDB first applies its own repairs, but
+only rewrites it can prove from the data, such as a uniquely determined
+argument swap. These cost no model call. After that, the model is asked to
+repair only queries BeingDB still rejects, exactly as under the `model`
+policy. An empty result never triggers a retry. `summary.json` counts proven
+repairs and model repairs separately. Proven repairs help some models more
+than others, so **keep the repair policy fixed across model comparisons**.
+Details: [repair policies](#pipeline-conditions-and-cost-metrics).
+
+### Current reference result
+
+| | |
+|---|---|
+| Run | [`20261023T203430Z_…`](../eval/results/benchmarks/20261023T203430Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC/) (Run 12, clean commits) |
+| Overall correct | **31/63** |
+| Supported correct: first attempt / after repair | 25/51 / **26/51** |
+| Valid DSL after repair | 50/51 |
+| Unsupported recognised | 5/12 |
+| Model calls | 76 (13 model repairs); 3 proven BeingDB repairs |
+| Median end-to-end per question | 23.4 s, on a MacBook Air M1 8 GB, Chrome 155 (machine-specific) |
+
+### Models tested so far
+
+All runs are single trials. Under the reference condition:
+
+| Model | Overall | Supported correct | Valid DSL | Unsupported recognised | False refusals |
+|---|---|---|---|---|---|
+| Llama-3.2-3B-Instruct (reference) | 31/63 | 26/51 | 50/51 | 5/12 | 0 |
+
+Under the previous 50-question condition (Run 11), Llama-3.2-3B scored 28/50
+and Hermes-3-Llama-3.2-3B 27/50. Qwen2.5-1.5B, Qwen2.5-3B, Qwen3.5-2B and an
+earlier Llama-3.2-3B were tested only under older conditions. Those scores are
+not comparable with this table.
+See the [experiment log](internals.md#experiment-log) and
+[`eval/results/benchmarks/`](../eval/results/benchmarks/).
+
+## Keeping comparisons fair
+
+When comparing models, keep fixed:
+
+- question set
+- BeingDB pack and data
+- schema metadata
+- prompt
+- grammar
+- repair policy
+- decoding settings
+- WebLLM version
+- browser and browser version, where practical
+
+Record with each run:
+
+- `--machine "<model, chip, RAM>"`
+- `--condition <label>`
+- `--notes` for anything unusual, e.g. power state or other load
+
+The harness records the model, OS, RAM, swap, power source, browser and WebGPU
+adapter itself. Run the reference model on the same machine in the same
+session where possible. Use `--runs N` to see timing spread; replies are
+deterministic on one machine.
+
+## Results, comparison and export
+
+Each run writes `eval/results/benchmarks/<UTC time>_<machine>_<model>/`:
+
+| File | Content |
+|---|---|
+| `run.json` | status, labels, condition settings, environment, provenance |
+| `questions.jsonl` | every question and attempt: DSL, BeingDB errors, repairs, timings, failure category |
+| `summary.json` | accuracy, cost per correct answer, timing statistics, failure categories |
+| `browser.log` | page console |
+
+```sh
+npm run compare -- eval/results/benchmarks/<runA> eval/results/benchmarks/<runB>
+npm run export-results -- --format csv     # all runs -> eval/results/export/, one row per run x question
+```
+
+Schemas, metrics and the failure taxonomy are
+[below](#result-files-and-schema-beingdb-webllm-benchmarkv1).
+
+## Hardware, provenance and caveats
+
+**Hardware so far.** Every saved run was made on one machine: a MacBook Air M1
+(`MacBookAir10,1`, 8 GB unified memory, macOS 27), mostly in Chrome 154-155.
+That is where the experiments happened to run, not a requirement or a
+recommendation. The harness exists to compare models across machines. Larger
+candidates are listed in [`eval/models/benchmark-models.json`](../eval/models/benchmark-models.json).
+
+**Provenance.** Every report records:
+
+- commits and dirty state of `beingdb-webllm`, `beingdb-wasm` and `beingdb`;
+- WASM, data and question-suite hashes, and the BeingDB data fingerprint;
+- prompt and grammar hashes;
+- the WebLLM version;
+- machine, OS, RAM, swap, power, browser and WebGPU adapter details;
+- all benchmark parameters.
+
+The benchmark deliberately refuses incompatible environments, such as a
+question file whose fingerprint does not match the loaded pack, or a software
+GPU. See [compatibility checks](#compatibility-checks-fail-fast).
+
+**Timings are machine-specific.** They depend on GPU, memory and power state,
+and on the 8 GB machine heavy swap use inflated them. Compare timings only
+under controlled conditions. See [timing caveats](#timing-caveats).
+
+# Harness internals
 
 How `npm run benchmark` works, what it records, and how results are judged.
-Usage is in the [README](../README.md#systematic-benchmarking).
 
 ## Architecture
 
 ```
-scripts/benchmark.mjs          CLI (options, exit codes)
-  scripts/lib/runner.mjs       one run: server, browser, page driving, files
-    scripts/lib/server.mjs     the same static server as `npm run serve` (started or reused)
-    scripts/lib/provenance.mjs git state, package versions, artefact hashes, host facts
-    scripts/lib/suite.mjs      question file -> suite id + sha256 (eval/suite.json)
-    playwright-core            launches the locally installed Chrome/Edge (no bundled browser)
-      benchmark.html           thin page exposing window.bench
-        src/benchmark.js       load model, smoke check, run one question, report environment
-        src/environment.js     navigator / WebGPU adapter facts
-        src/pipeline.js        ask(): the same generate -> BeingDB -> repair loop as the demo
-        src/score.js           the same semantic scorer as eval.html
-        src/analysis.js        deterministic failure category + predicate/argument/entity evidence
-  scripts/lib/summary.mjs      per-trial and aggregate metrics (Node, from questions.jsonl)
-scripts/benchmark-matrix.mjs   several models in sequence (fresh browser per model)
-scripts/compare.mjs            two runs side by side
-scripts/export-results.mjs     flat CSV/JSONL, one row per run x trial x question
-scripts/models.mjs             list/validate WebLLM model ids from the installed package
+eval/scripts/benchmark.mjs          CLI (options, exit codes)
+  eval/scripts/lib/runner.mjs       one run: server, browser, page driving, files
+    scripts/lib/server.mjs          the same static server as `npm run serve` (started or reused)
+    eval/scripts/lib/provenance.mjs git state, package versions, artefact hashes, host facts
+    eval/scripts/lib/suite.mjs      question file -> suite id + sha256 (eval/suite.json)
+    playwright-core                 launches the locally installed Chrome/Edge (no bundled browser)
+      eval/benchmark.html           thin page exposing window.bench
+        eval/src/benchmark.js       load model, smoke check, run one question, report environment
+        src/environment.js          navigator / WebGPU adapter facts
+        src/pipeline.js             ask(): the same generate -> BeingDB -> repair loop as the chatbot
+        eval/src/score.js           the same semantic scorer as eval/eval.html
+        eval/src/analysis.js        deterministic failure category + predicate/argument/entity evidence
+  eval/scripts/lib/summary.mjs      per-trial and aggregate metrics (Node, from questions.jsonl)
+eval/scripts/benchmark-matrix.mjs   several models in sequence (fresh browser per model)
+eval/scripts/compare.mjs            two runs side by side
+eval/scripts/export-results.mjs     flat CSV/JSONL, one row per run x trial x question
+eval/scripts/models.mjs             list/validate WebLLM model ids from the installed package
 ```
 
-The demo (`index.html`), the interactive evaluation (`eval.html`) and the
+The chatbot (`index.html`), the interactive evaluation (`eval/eval.html`) and the
 benchmark all call the same `setupDatabase`, `WebLLMGenerator`, `ask` and
 `scoreItem`. The benchmark adds only orchestration and extra analysis; it does
 not have its own NL->DSL path.
@@ -39,7 +261,7 @@ interrupted run keeps everything completed so far.
 - The browser is a locally installed Chromium-based browser launched headed
   through `playwright-core` (`channel: "chrome"` by default). Playwright's
   WebKit is not Safari and is not used; Safari and Firefox remain manual checks
-  via `eval.html`.
+  via `eval/eval.html`.
 - `--browser chromium` uses Playwright's own Chromium build, which must be
   downloaded once with `npx playwright-core install chromium`; `chrome`,
   `chrome-beta`, `chrome-canary`, `edge` and `edge-beta` use installed browsers,
@@ -427,7 +649,7 @@ cache first to measure a real download; normal runs reuse the cache.
 
 ## Failure taxonomy
 
-Assigned by `src/analysis.js`, in this order, with the rule that fired and its
+Assigned by `eval/src/analysis.js`, in this order, with the rule that fired and its
 evidence. No model is involved; BeingDB re-runs queries where needed.
 
 Supported questions:
@@ -456,7 +678,7 @@ query was valid, i.e. fabricated, and which predicates it used). Any question:
 
 The categories are heuristics over deterministic evidence, not ground truth.
 The older free-text diagnosis is kept as `score.legacyFailure`. The rule set
-is versioned (`ANALYSIS_VERSION` in `src/analysis.js`, recorded as
+is versioned (`ANALYSIS_VERSION` in `eval/src/analysis.js`, recorded as
 `config.analysisVersion`).
 
 ### Manual annotations

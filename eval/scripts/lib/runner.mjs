@@ -8,14 +8,14 @@
 import { appendFileSync, createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { root, startServer } from "./server.mjs";
+import { root, startServer } from "../../../scripts/lib/server.mjs";
 import { hostInfo, memorySnapshot, provenance, vendorPaths } from "./provenance.mjs";
 import { loadSuite, DEFAULT_QUESTIONS } from "./suite.mjs";
 import { aggregate } from "./summary.mjs";
 import { RESULT_SCHEMA, RESULTS_DIR, groupByTrial } from "./runs.mjs";
-import { modelSpecificRequest } from "../../src/generator.js";
+import { modelSpecificRequest } from "../../../src/generator.js";
 import { ANALYSIS_VERSION } from "../../src/analysis.js";
-import { REPAIR_POLICIES, MAX_DETERMINISTIC_PASSES, resolveRepairPolicy } from "../../src/pipeline.js";
+import { REPAIR_POLICIES, MAX_DETERMINISTIC_PASSES, resolveRepairPolicy } from "../../../src/pipeline.js";
 
 // Defaults reproduce the final experiment configuration (run 8).
 export const DEFAULTS = {
@@ -68,9 +68,9 @@ class BenchmarkError extends Error {
 }
 
 async function ensureServer(port) {
-  const local = readFileSync(path.join(root, "src", "benchmark.js"), "utf8");
+  const local = readFileSync(path.join(root, "eval", "src", "benchmark.js"), "utf8");
   try {
-    const res = await fetch(`http://127.0.0.1:${port}/src/benchmark.js`);
+    const res = await fetch(`http://127.0.0.1:${port}/eval/src/benchmark.js`);
     if (res.ok && (await res.text()) === local) return { reused: true, close: async () => {} };
     throw new BenchmarkError("setup_failed", `port ${port} is in use by another server (not this checkout); stop it or pass --port`);
   } catch (e) {
@@ -348,7 +348,7 @@ export async function runBenchmark(options, { log = console.log, signal } = {}) 
     page.on("console", (m) => browserLog.write(`[${m.type()}] ${m.text()}\n`));
     page.on("pageerror", (e) => browserLog.write(`[pageerror] ${e.message}\n`));
     page.on("crash", () => (crashed = true));
-    await page.goto(`${origin}/benchmark.html`);
+    await page.goto(`${origin}/eval/benchmark.html`);
     await page.bringToFront();
     await page.waitForFunction(() => window.bench);
     await page.evaluate(() => window.bench.ready);

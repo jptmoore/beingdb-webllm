@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, realpathSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { root } from "./server.mjs";
+import { root } from "../../../scripts/lib/server.mjs";
 
 const exec = (cmd, args, cwd) => {
   try {

@@ -2,19 +2,19 @@
   "name": "beingdb-webllm",
   "version": "0.0.1",
   "private": true,
-  "description": "Experiment: a small local WebLLM model as a natural-language interface to BeingDB (via beingdb-wasm).",
+  "description": "A browser chatbot over BeingDB facts: a local WebLLM model writes the query, BeingDB WASM checks and answers it. Includes a benchmark for improving it.",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "link": "node scripts/link.mjs",
     "serve": "node scripts/serve.mjs",
     "check-eval": "node eval/check-references.mjs",
-    "test": "node --test test/*.test.mjs",
-    "benchmark": "node scripts/benchmark.mjs",
-    "benchmark:matrix": "node scripts/benchmark-matrix.mjs",
-    "models": "node scripts/models.mjs",
-    "compare": "node scripts/compare.mjs",
-    "export-results": "node scripts/export-results.mjs"
+    "test": "node --test test/*.test.mjs eval/test/*.test.mjs",
+    "benchmark": "node eval/scripts/benchmark.mjs",
+    "benchmark:matrix": "node eval/scripts/benchmark-matrix.mjs",
+    "models": "node eval/scripts/models.mjs",
+    "compare": "node eval/scripts/compare.mjs",
+    "export-results": "node eval/scripts/export-results.mjs"
   },
   "dependencies": {
     "@mlc-ai/web-llm": "0.2.85"

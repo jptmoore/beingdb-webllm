@@ -1,12 +1,12 @@
-// Browser side of the reproducible benchmark (scripts/benchmark.mjs drives it
-// through Playwright). The same setup, pipeline and scorer as the demo and
+// Browser side of the reproducible benchmark (eval/scripts/benchmark.mjs drives it
+// through Playwright). The same setup, pipeline and scorer as the chatbot and
 // eval pages; this page only exposes them as window.bench for automation.
-import { setupDatabase } from "./setup.js";
-import { WebLLMGenerator, prebuiltModels } from "./generator.js";
-import { ask } from "./pipeline.js";
+import { setupDatabase } from "../../src/setup.js";
+import { WebLLMGenerator, prebuiltModels } from "../../src/generator.js";
+import { ask } from "../../src/pipeline.js";
 import { analyseQuestion, analyseError, buildAnalysisContext, sha256 } from "./analysis.js";
-import { EXAMPLES, RULES, PROMPT_VERSION } from "./prompt.js";
-import { collectEnvironment } from "./environment.js";
+import { EXAMPLES, RULES, PROMPT_VERSION } from "../../src/prompt.js";
+import { collectEnvironment } from "../../src/environment.js";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);

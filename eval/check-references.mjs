@@ -9,9 +9,9 @@ import assert from "node:assert/strict";
 import { loadBeingDB } from "./node-beingdb.mjs";
 import { EXAMPLES, predicatesIn, buildPrompt } from "../src/prompt.js";
 import { buildSchema } from "../src/schema.js";
-import { scoreItem, summarise, matchColumns } from "../src/score.js";
-import { buildAnalysisContext, classifyAttempt } from "../src/analysis.js";
-import { loadSuite } from "../scripts/lib/suite.mjs";
+import { scoreItem, summarise, matchColumns } from "./src/score.js";
+import { buildAnalysisContext, classifyAttempt } from "./src/analysis.js";
+import { loadSuite } from "./scripts/lib/suite.mjs";
 
 const { values: opts, positionals } = parseArgs({
   options: { questions: { type: "string", default: fileURLToPath(new URL("./questions.json", import.meta.url)) } },

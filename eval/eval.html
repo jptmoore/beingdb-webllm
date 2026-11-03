@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <title>BeingDB + WebLLM evaluation</title>
-  <link rel="stylesheet" href="src/style.css">
+  <link rel="stylesheet" href="../src/style.css">
 </head>
 <body>
   <h1>NL → BeingDB DSL evaluation</h1>
   <p class="note">Runs every question in <code>eval/questions.json</code> through the local model and BeingDB,
     then compares BeingDB's results for the generated query with BeingDB's results for the trusted reference query.
-    Optional URL parameters: <code>?model=&lt;WebLLM id&gt;</code>, <code>?ids=e01,m01</code>, <code>?repairs=2</code>, <code>?autorun=1</code>. <a href="index.html">Demo</a></p>
+    Optional URL parameters: <code>?model=&lt;WebLLM id&gt;</code>, <code>?ids=e01,m01</code>, <code>?repairs=2</code>, <code>?autorun=1</code>. <a href="../index.html">Demo</a></p>
   <pre id="log" class="log"></pre>
   <p><button id="run" disabled>Run evaluation</button> <button id="download" disabled>Download results JSON</button>
      <progress id="progress" max="1" value="0"></progress> <span id="progress-text"></span></p>

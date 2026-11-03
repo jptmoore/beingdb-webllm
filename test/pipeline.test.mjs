@@ -6,7 +6,7 @@ import { ask, MAX_DETERMINISTIC_PASSES } from "../src/pipeline.js";
 import { buildSchema } from "../src/schema.js";
 import { buildPrompt } from "../src/prompt.js";
 import { loadBeingDB } from "../eval/node-beingdb.mjs";
-import { scoreItem } from "../src/score.js";
+import { scoreItem } from "../eval/src/score.js";
 import { buildGrammar } from "../src/grammar.js";
 
 const { db } = await loadBeingDB();
