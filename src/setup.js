@@ -43,6 +43,7 @@ export async function setupModel(log, progress, generatorOptions = {}, modelId =
   const info = {
     modelId,
     cached,
+    f16: gpu.f16,
     loadMs: generator.loadMs,
     vramMB: generator.record.vram_required_MB,
     storageMB: storage.usage ? storage.usage / 1e6 : undefined,

@@ -1,5 +1,5 @@
 import { setupDatabase, setupModel, modelIsCached, CHAT_MODELS } from "./setup.js";
-import { DEFAULT_MODEL, prebuiltModels, webgpuInfo } from "./generator.js";
+import { DEFAULT_MODEL, prebuiltModels } from "./generator.js";
 import { ask } from "./pipeline.js";
 
 const $ = (id) => document.getElementById(id);
@@ -154,7 +154,21 @@ const withTimeout = (promise, ms, fallback, what) => {
   ]).finally(() => clearTimeout(timer));
 };
 const checkCached = (id) =>
-  withTimeout(Promise.resolve().then(() => modelIsCached(id)).catch(() => false), 10000, false, `Cache check for ${id}`);
+  withTimeout(Promise.resolve().then(() => modelIsCached(id)).catch(() => false), 20000, false, `Cache check for ${id}`);
+
+// Marks the other downloaded models in the picker. Runs once, one query at a time, and only
+// while no model is loading, so it never competes with a load for the browser cache.
+let checkedOthers = false;
+async function checkOtherModels() {
+  if (checkedOthers) return;
+  checkedOthers = true;
+  for (const m of CHAT_MODELS) {
+    if (loading) return void (checkedOthers = false);
+    if (cachedModels.has(m.id)) continue;
+    if (await checkCached(m.id)) cachedModels.add(m.id);
+    renderModelPicker();
+  }
+}
 
 function addMessage(role, html) {
   const msg = document.createElement("div");
@@ -295,6 +309,7 @@ async function loadModel(bubble, switched = false) {
     }, modelId));
     window.demo.generator = generator;
     cachedModels.add(modelId);
+    gpuF16 = modelInfo.f16 ?? true;
     setStatus(`Ready: ${label} (${modelInfo.modelId}).`, "Ready", "ok");
     ready = true;
     if (switched) {
@@ -305,6 +320,7 @@ async function loadModel(bubble, switched = false) {
       greet();
     }
     $("question").focus();
+    setTimeout(checkOtherModels, 0);
   } catch (e) {
     log(`Model failed: ${e.message}`);
     const why = looksLikeDownloadFailure(e.message)
@@ -429,18 +445,9 @@ try {
   const interrupted = localStorage.getItem(LOADING_KEY) === modelId;
   localStorage.removeItem(LOADING_KEY);
   if (navigator.gpu) {
+    // Only the chosen model, as before the picker existed: in Safari, extra cache or WebGPU
+    // queries running alongside a model load can stall the load. See checkOtherModels().
     startBubble.innerHTML = `<span class="typing"><span></span><span></span><span></span></span>Checking for ${esc(label)}…`;
-    webgpuInfo().then((g) => {
-      gpuF16 = g.f16 ?? true;
-      renderModelPicker();
-    }, () => {});
-    // The other models' download status only decorates the picker; don't wait for it.
-    for (const m of CHAT_MODELS)
-      if (m.id !== modelId)
-        checkCached(m.id).then((yes) => {
-          if (yes) cachedModels.add(m.id);
-          renderModelPicker();
-        });
     if (await checkCached(modelId)) cachedModels.add(modelId);
   }
   renderModelPicker();
