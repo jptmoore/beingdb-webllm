@@ -53,7 +53,11 @@ to GitHub Pages on every push to `main`.
 
 The default model is `Llama-3.2-3B-Instruct-q4f16_1-MLC`, the best-measured
 model so far (see [benchmarking](docs/benchmarking.md#reference-model-and-reference-condition)).
-Choose another with `?model=<WebLLM id>`, for example
+The ☰ menu's **Language model** picker switches to Meta Llama 3.1 8B Instruct,
+Google Gemma 2 2B IT or Microsoft Phi-4 Mini Instruct (the list is
+`CHAT_MODELS` in [src/setup.js](src/setup.js)); the page remembers the choice.
+Only Llama 3.2 3B has been benchmarked. Any other WebLLM model can be chosen
+with `?model=<WebLLM id>`, which takes precedence over the picker, for example
 `?model=Qwen2.5-1.5B-Instruct-q4f16_1-MLC` on machines with less memory;
 `npm run models` lists the available ids.
 

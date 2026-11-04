@@ -19,11 +19,19 @@ export async function setupDatabase(log) {
   return { db, summary, timings, schema, prompt };
 }
 
-export const modelIdFromURL = () => new URLSearchParams(location.search).get("model") || DEFAULT_MODEL;
-export const modelIsCached = () => new WebLLMGenerator(modelIdFromURL()).isCached();
+// Models offered in the chatbot's model picker (all in WebLLM 0.2.85's prebuilt list).
+// downloadGB: weight files on Hugging Face (records in ndarray-cache.json).
+export const CHAT_MODELS = [
+  { id: "Llama-3.2-3B-Instruct-q4f16_1-MLC", label: "Meta Llama 3.2 3B Instruct", downloadGB: 1.8, note: "recommended" },
+  { id: "Llama-3.1-8B-Instruct-q4f16_1-MLC", label: "Meta Llama 3.1 8B Instruct", downloadGB: 4.5 },
+  { id: "gemma-2-2b-it-q4f16_1-MLC", label: "Google Gemma 2 2B IT", downloadGB: 1.5 },
+  { id: "Phi-4-mini-instruct-q4f16_1-MLC", label: "Microsoft Phi-4 Mini Instruct", downloadGB: 2.2 },
+];
 
-export async function setupModel(log, progress, generatorOptions = {}) {
-  const modelId = modelIdFromURL();
+export const modelIdFromURL = () => new URLSearchParams(location.search).get("model") || DEFAULT_MODEL;
+export const modelIsCached = (modelId = modelIdFromURL()) => new WebLLMGenerator(modelId).isCached();
+
+export async function setupModel(log, progress, generatorOptions = {}, modelId = modelIdFromURL()) {
   const gpu = await webgpuInfo();
   if (!gpu.ok) throw new Error("WebGPU is not available in this browser, so the local model cannot run.");
   if (!gpu.f16 && modelId.includes("q4f16")) log("Warning: this GPU lacks shader-f16; a q4f32 model may be required.");

@@ -52,6 +52,7 @@ a { color: var(--accent); }
 .menu pre { max-height: 18rem; }
 .scrim { position: fixed; inset: 0; background: rgb(0 0 0 / 0.25); z-index: 10; }
 .switch { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; cursor: pointer; }
+.menu select { width: 100%; font: inherit; padding: 0.4rem 0.5rem; border: 1px solid var(--border); border-radius: 0.5rem; background: #fff; }
 .muted { color: var(--muted); font-size: 0.85rem; }
 .state { font-weight: 600; }
 
