@@ -26,7 +26,7 @@ facts bundled with beingdb-wasm.
 **<https://jptmoore.github.io/beingdb-webllm/>**: nothing to install. You
 need a browser with WebGPU and `shader-f16` (current Chrome or Edge on a
 desktop or laptop), and about 2 GB of disk and GPU memory: the first
-**Load model** downloads the model once, and the browser caches it.
+**Start the chatbot** downloads the model once, and the browser caches it.
 
 ## Run it locally
 
@@ -40,9 +40,12 @@ npm run link     # link beingdb-wasm's prebuilt runtime and data, and WebLLM, in
 npm run serve    # http://localhost:8010/
 ```
 
-Open <http://localhost:8010/>, click **Load model**, and ask a question or
-pick a sample. The page shows the query the model wrote, BeingDB's verdict,
-any repairs, timings and the rows.
+Open <http://localhost:8010/>, click **Start the chatbot**, and ask a question
+or pick a suggestion. The page is the **Rewind interview chatbot**: answers
+appear as plain chat replies. Open the ☰ menu to see the status, the model
+instructions and the log, and turn on **Show technical details on answers**
+to see, under each answer, the query the model wrote, BeingDB's verdict, any
+repairs, timings and the raw rows.
 
 `npm run build:site` builds the same page as a static site in `dist/site/`,
 which [.github/workflows/pages.yml](.github/workflows/pages.yml) publishes
@@ -66,7 +69,7 @@ The chatbot is a few small modules in [src/](src/):
 | `grammar.js` | a grammar built from the predicate list, so the model can only write well-formed queries over real predicates |
 | `generator.js` | the WebLLM model (the only model-specific module) |
 | `pipeline.js` | `ask()`: model -> BeingDB -> bounded repair loop |
-| `app.js` | the page |
+| `app.js`, `chat.css` | the chat page (the eval pages share `style.css`) |
 
 When BeingDB rejects a query, it first applies any repair it can prove from
 the data (for example a uniquely determined argument swap), without a model

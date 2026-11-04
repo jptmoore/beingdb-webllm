@@ -2,41 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>BeingDB + WebLLM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rewind interview chatbot</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="src/style.css">
+  <link rel="stylesheet" href="src/chat.css">
 </head>
 <body>
-  <h1>Ask BeingDB</h1>
-  <p class="note">A local model (WebLLM, in this tab) translates your question into a BeingDB query.
-    BeingDB (WASM, in this tab) checks it, applies any repair it can prove, and runs it over the REWIND interview facts.
-    The results below come from BeingDB, not from the model. <a href="https://github.com/jptmoore/beingdb-webllm">Source and benchmark</a></p>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">R</div>
+      <div>
+        <h1>Rewind interview chatbot</h1>
+        <p class="tagline">Ask about the artists, works and people in the REWIND video art interviews</p>
+      </div>
+    </div>
+    <span id="status-pill" class="pill">Starting…</span>
+    <button id="menu-button" class="icon-button" aria-label="Menu" aria-expanded="false" aria-controls="menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </header>
 
-  <p id="state" class="state">Loading BeingDB…</p>
-  <p><button id="load" disabled>Load model</button> <progress id="progress" max="1" value="0" hidden></progress> <span id="progress-text"></span></p>
+  <aside id="menu" class="menu" hidden>
+    <div class="menu-head">
+      <h2>Menu</h2>
+      <button id="menu-close" class="icon-button" aria-label="Close menu">&times;</button>
+    </div>
+    <section>
+      <h3>About</h3>
+      <p>This chatbot answers from facts drawn from the REWIND interviews. Everything runs in your browser:
+        a local language model turns your question into a database query, and
+        <a href="https://github.com/jptmoore/beingdb" target="_blank" rel="noopener">BeingDB</a> answers it from the facts.
+        The answers come from the facts, not from the model.</p>
+    </section>
+    <section>
+      <h3>Status</h3>
+      <p id="state" class="state">Loading BeingDB…</p>
+      <p class="muted">Model: <span id="model-id">not loaded</span></p>
+    </section>
+    <section>
+      <label class="switch"><input type="checkbox" id="show-tech"> Show technical details on answers</label>
+      <p class="muted">The generated query, BeingDB's verdict, repairs, timings and raw response.</p>
+      <button id="clear" class="secondary">Clear conversation</button>
+    </section>
+    <section>
+      <details><summary>Model instructions</summary><pre id="prompt"></pre></details>
+      <details><summary>Log</summary><pre id="log" class="log"></pre></details>
+    </section>
+    <section>
+      <p><a href="https://github.com/jptmoore/beingdb-webllm" target="_blank" rel="noopener">Source and benchmark</a></p>
+    </section>
+  </aside>
+  <div id="scrim" class="scrim" hidden></div>
 
-  <label for="question">Question</label>
-  <textarea id="question" rows="2">Which artists created works between 1975 and 1980?</textarea>
-  <p>
-    <select id="samples"><option value="">Sample questions…</option></select>
-    <button id="ask" disabled>Ask BeingDB</button>
-    <span id="ask-status" class="note">Load the model first.</span>
-  </p>
+  <main id="chat" class="chat" aria-live="polite"></main>
 
-  <section id="answer" hidden>
-    <p><b>Model:</b> <span id="model"></span></p>
-    <h2>Generated DSL</h2>
-    <pre id="dsl" class="dsl"></pre>
-    <p id="status"></p>
-    <p id="timing"></p>
-    <details id="attempts-box"><summary>Attempts and BeingDB feedback</summary><div id="attempts"></div></details>
-    <h2>BeingDB results</h2>
-    <div id="results"></div>
-    <details><summary>Raw BeingDB response</summary><pre id="raw"></pre></details>
-  </section>
-
-  <details><summary>Model instructions (built from the live BeingDB schema)</summary><pre id="prompt"></pre></details>
-  <details><summary>Log</summary><pre id="log" class="log"></pre></details>
+  <form id="composer" class="composer">
+    <textarea id="question" rows="1" placeholder="Ask a question about the REWIND interviews…" aria-label="Your question" disabled></textarea>
+    <button id="ask" class="send" type="submit" aria-label="Send" disabled>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 20l18-8L3 4v6l12 2-12 2z" fill="currentColor"/></svg>
+    </button>
+  </form>
 
   <script type="module" src="src/app.js"></script>
 </body>
