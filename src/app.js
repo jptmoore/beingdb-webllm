@@ -178,7 +178,7 @@ function setStatus(text, pill, cls = "") {
 function setReady(on) {
   $("question").disabled = !on || busy;
   $("ask").disabled = !on || busy;
-  $("model-select").disabled = !navigator.gpu || !db || loading || busy;
+  $("model-select").disabled = !navigator.gpu || !db || busy;
   document.querySelectorAll(".chip").forEach((c) => (c.disabled = !on || busy));
 }
 
@@ -222,7 +222,7 @@ function renderModelPicker() {
       return `<option value="${esc(id)}"${id === modelId ? " selected" : ""}${off ? " disabled" : ""}>${esc(m.label)}${extra ? ` (${esc(extra)})` : ""}</option>`;
     })
     .join("");
-  select.disabled = !navigator.gpu || !db || loading || busy;
+  select.disabled = !navigator.gpu || !db || busy;
   const state = modelInfo?.modelId === modelId ? "Loaded." : cachedModels.has(modelId) ? "Downloaded, not loaded." : "Not downloaded yet.";
   $("model-note").textContent =
     `${state} Download: ${downloadText(modelId)}; needs about ${vramGB(modelId).toFixed(1)} GB of GPU memory. ` +
@@ -230,13 +230,18 @@ function renderModelPicker() {
 }
 
 async function switchModel(id) {
-  if (id === modelId || busy || loading) return renderModelPicker();
+  if (id === modelId || busy) return renderModelPicker();
   modelId = id;
   localStorage.setItem(MODEL_KEY, id);
   const url = new URL(location.href);
   if (url.searchParams.has("model")) {
     url.searchParams.set("model", id);
     history.replaceState(null, "", url);
+  }
+  // WebLLM cannot cancel a load in progress (and a stuck one holds the GPU), so start afresh.
+  if (loading) {
+    localStorage.removeItem(LOADING_KEY);
+    return location.reload();
   }
   ready = false;
   setReady(false);
@@ -260,15 +265,27 @@ async function loadModel(bubble, switched = false) {
   loading = true;
   const label = modelChoice(modelId).label;
   renderModelPicker();
-  bubble.innerHTML = `<p>${switched ? `Switching to ${esc(label)}…` : "Getting ready…"} <span class="muted" data-progress-text></span></p><progress max="1" value="0"></progress>`;
+  bubble.innerHTML = `<p>${switched ? `Switching to ${esc(label)}…` : "Getting ready…"} <span class="muted" data-progress-text></span></p><progress max="1" value="0"></progress>
+    <p class="muted" data-stalled hidden>This is taking longer than expected. If it stays stuck, choose a smaller model from the ☰ menu or reload the page.</p>`;
   const bar = bubble.querySelector("progress");
   const progressText = bubble.querySelector("[data-progress-text]");
   setStatus(`Loading ${label}…${cachedModels.has(modelId) ? "" : ` (the first time, this downloads ${downloadText(modelId)})`}`, "Loading…");
   localStorage.setItem(LOADING_KEY, modelId);
+  const t0 = performance.now();
+  let lastProgress = t0;
+  let percent = 0;
+  const watchdog = setInterval(() => {
+    const now = performance.now();
+    progressText.textContent = `${percent}% · ${((now - t0) / 1000).toFixed(0)} s`;
+    if (now - lastProgress > 60000 && bubble.querySelector("[data-stalled]")) bubble.querySelector("[data-stalled]").hidden = false;
+  }, 1000);
   try {
     ({ generator, info: modelInfo } = await setupModel(log, (p) => {
       bar.value = p.progress;
-      progressText.textContent = `${Math.round(p.progress * 100)}%`;
+      percent = Math.round(p.progress * 100);
+      lastProgress = performance.now();
+      progressText.textContent = `${percent}% · ${((lastProgress - t0) / 1000).toFixed(0)} s`;
+      if (bubble.querySelector("[data-stalled]")) bubble.querySelector("[data-stalled]").hidden = true;
     }, {
       recoverGrammarErrors: true,
       onRecover: (e) => {
@@ -296,6 +313,7 @@ async function loadModel(bubble, switched = false) {
     setStatus(`The model could not be loaded: ${e.message}`, "Error", "bad");
     bubble.innerHTML = `<p>${why}</p><p class="muted">${esc(e.message)}</p><p><button class="primary" data-load>Try again</button></p>`;
   } finally {
+    clearInterval(watchdog);
     localStorage.removeItem(LOADING_KEY);
     loading = false;
     renderModelPicker();
