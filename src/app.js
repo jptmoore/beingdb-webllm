@@ -1,6 +1,7 @@
 import { setupDatabase, setupModel, modelIsCached, CHAT_MODELS } from "./setup.js";
 import { DEFAULT_MODEL, prebuiltModels } from "./generator.js";
 import { ask } from "./pipeline.js";
+import { displayValue, words, header, phraseAnswer, answerBlocks } from "./answer.js";
 
 const $ = (id) => document.getElementById(id);
 const log = (msg) => ($("log").textContent += msg + "\n");
@@ -26,32 +27,14 @@ export function resultsTable(res) {
   return `${summary}<div class="table-wrap"><table><tr>${head}</tr>${rows}</table></div>`;
 }
 
-// Friendly display of BeingDB values: atoms like `david_critchley` become "David Critchley".
-const SMALL_WORDS = new Set(["a", "an", "and", "at", "by", "for", "in", "of", "on", "or", "the", "to", "with"]);
-export function displayValue(cell) {
-  if (!cell) return "—";
-  if (cell.type !== "atom") return String(cell.value);
-  return String(cell.value)
-    .split("_")
-    .filter(Boolean)
-    .map((w, i) =>
-      i > 0 && SMALL_WORDS.has(w) ? w : /^[^aeiouy\d]{2,4}$/.test(w) ? w.toUpperCase() : w[0].toUpperCase() + w.slice(1),
-    )
-    .join(" ")
-    .replace(/ S\b/g, "'s");
-}
-const words = (variable) => variable.replace(/([a-z\d])([A-Z])/g, "$1 $2").replace(/_/g, " ").toLowerCase();
+// Friendly display of BeingDB values lives in answer.js (shared with the model's answer prompt).
 const plural = (w) => (/[^aeiou]y$/.test(w) ? w.slice(0, -1) + "ies" : /(s|x|ch|sh)$/.test(w) ? w + "es" : w + "s");
-const header = (variable) => {
-  const w = words(variable);
-  return w[0].toUpperCase() + w.slice(1);
-};
 
 const SHOWN = 10;
 const moreButton = (n) => (n > SHOWN ? `<button class="more" data-more>Show all ${n}</button>` : "");
 const hiddenIf = (i) => (i >= SHOWN ? " hidden data-extra" : "");
 
-export function friendlyAnswer(res) {
+export function friendlyAnswer(res, { intro: withIntro = true } = {}) {
   const n = res.results.length;
   if (!n) return `<p>I couldn't find anything in the interview facts that matches that. Try rephrasing, or ask about something else.</p>`;
   const vars = res.variables;
@@ -73,10 +56,10 @@ export function friendlyAnswer(res) {
       .join("");
     body = `<div class="table-wrap"><table class="answer-table"><tr>${head}</tr>${rows}</table></div>`;
   }
-  return `<p>${esc(intro)}</p>${body}${moreButton(n)}`;
+  return `${withIntro ? `<p>${esc(intro)}</p>` : ""}${body}${moreButton(n)}`;
 }
 
-function technicalDetails(run) {
+function technicalDetails(run, phrased) {
   const last = run.attempts.at(-1);
   const status = {
     ok: `<span class="ok">Valid: BeingDB executed the query</span>`,
@@ -99,20 +82,29 @@ function technicalDetails(run) {
     <p class="muted">LLM: ${run.llmMs.toFixed(0)} ms (${run.attempts.length} call${run.attempts.length > 1 ? "s" : ""}) ·
       BeingDB: ${run.dbMs.toFixed(1)} ms · total: ${run.totalMs.toFixed(0)} ms</p>
     <details${run.repairs > 0 ? " open" : ""}><summary>Attempts and BeingDB feedback</summary>${attempts}</details>
+    ${phrased ? `<details${phrased.ok ? "" : " open"}><summary>Written answer: ${phrased.ok ? `<span class="ok">passed the check</span>` : `<span class="warn">${phrased.skipped ? "skipped" : "rejected"} (${esc(phrased.reason)}); showing the plain list</span>`} · ${phrased.ms.toFixed(0)} ms</summary>
+      <pre>${esc(phrased.messages.at(-1).content)}</pre><pre>${esc(phrased.text || "(no text)")}</pre></details>` : ""}
     ${last.db?.status === "ok" ? `<details><summary>BeingDB rows</summary>${resultsTable(last.db.response)}</details>` : ""}
     ${last.db ? `<details><summary>Raw BeingDB response</summary><pre>${esc(JSON.stringify(last.db.response, null, 2))}</pre></details>` : ""}
   </div>`;
 }
 
-function renderRun(run) {
+function renderRun(run, phrased) {
   const last = run.attempts.at(-1);
+  const res = last.db?.response;
   const text =
     run.outcome === "ok"
-      ? friendlyAnswer(last.db.response)
+      ? phrased?.ok
+        ? `${answerBlocks(phrased.text)
+            .map((b) => (b.type === "ul" ? `<ul>${b.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : `<p>${esc(b.text)}</p>`))
+            .join("")}<details class="facts"><summary>Show the facts (${res.results.length}${
+            res.hasMore || res.truncated ? "+" : ""
+          })</summary>${friendlyAnswer(res, { intro: false })}</details>`
+        : friendlyAnswer(res)
       : run.outcome === "unsupported"
         ? `<p>Sorry, I can't answer that from the REWIND interview facts. I know about the interviewed artists, their works, and the people and organisations around them.</p>`
         : `<p>Sorry, I couldn't work out how to answer that. Could you try rephrasing the question?</p>`;
-  return text + technicalDetails(run);
+  return text + technicalDetails(run, phrased);
 }
 
 // ---- chat UI ----
@@ -358,8 +350,15 @@ async function onAsk(question) {
         if (repair) stage = "Refining my search";
       },
     });
+    const response = run.outcome === "ok" ? run.attempts.at(-1).db.response : undefined;
+    let phrased;
+    if (response?.results.length) {
+      stage = "Writing the answer";
+      phrased = await phraseAnswer({ question, response, generator, dsl: run.attempts.at(-1).reply.dsl, signatures: schema.signatures });
+      log(`Written answer ${phrased.ok ? "accepted" : `${phrased.skipped ? "skipped" : "rejected"} (${phrased.reason})`} in ${phrased.ms.toFixed(0)} ms`);
+    }
     clearInterval(timer);
-    bubble.innerHTML = renderRun(run);
+    bubble.innerHTML = renderRun(run, phrased);
   } catch (e) {
     clearInterval(timer);
     log(`Error: ${e.message}`);

@@ -12,6 +12,7 @@ index.html / eval/eval.html
   src/prompt.js     rules + schema + few-shot turns; parse reply; repair message
   src/generator.js  WebLLM engine (the only model-specific module)
   src/pipeline.js   ask(): generate -> BeingDB.query -> bounded repair
+  src/answer.js     chatbot only: rows -> model-written sentence -> check (not used by the benchmark)
   eval/src/score.js compare BeingDB results of generated vs reference queries (evaluation only)
 ```
 

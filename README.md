@@ -11,11 +11,19 @@ question
   -> local model        writes a BeingDB query, or replies UNSUPPORTED
   -> BeingDB (WASM)     validates, applies repairs it can prove, executes
   -> answer rows        straight from BeingDB
+  -> local model        writes a short answer from the rows (checked, chatbot only)
 ```
 
 **The model interprets the question; BeingDB determines the answer.** The
-model never sees or alters the result rows, so every row shown is a fact in
-the store. Nothing leaves the browser: the only network access is the one-off
+rows come only from BeingDB, so every row is a fact in the store. The chatbot
+then asks the model to phrase them as a sentence, and checks it: a sentence
+that leaves out a name (for complete results), adds a name or number that is
+in neither the rows, the question nor the query, or answers a query that
+ignores a name from the question, is discarded in favour of the plain list.
+The exact rows are always one click away (**Show the facts**). The benchmark
+scores the query and its rows only.
+
+Nothing leaves the browser: the only network access is the one-off
 download of the model weights, which the browser caches.
 
 It currently runs over the [REWIND interviews](https://github.com/jptmoore/beingdb-rewind-interviews)
@@ -73,6 +81,7 @@ The chatbot is a few small modules in [src/](src/):
 | `grammar.js` | a grammar built from the predicate list, so the model can only write well-formed queries over real predicates |
 | `generator.js` | the WebLLM model (the only model-specific module) |
 | `pipeline.js` | `ask()`: model -> BeingDB -> bounded repair loop |
+| `answer.js` | the chatbot's written answer: a second model call phrases the rows (up to 20; larger results are summarised), then a check against the rows, question and query decides whether to show it |
 | `app.js`, `chat.css` | the chat page (the eval pages share `style.css`) |
 
 When BeingDB rejects a query, it first applies any repair it can prove from

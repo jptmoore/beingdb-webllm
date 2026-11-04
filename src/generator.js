@@ -44,9 +44,10 @@ export class WebLLMGenerator {
     return this.loadMs;
   }
 
-  // format: a WebLLM response_format (here an xgrammar EBNF grammar).
-  async complete(messages, format, { temperature = 0 } = {}) {
-    const { seed, maxTokens, repetitionPenalty, topP } = this.options;
+  // format: a WebLLM response_format (here an xgrammar EBNF grammar), or undefined for free text.
+  async complete(messages, format, { temperature = 0, maxTokens: maxTokensOverride } = {}) {
+    const { seed, repetitionPenalty, topP } = this.options;
+    const maxTokens = maxTokensOverride ?? this.options.maxTokens;
     const request = {
       temperature,
       seed,
@@ -57,7 +58,7 @@ export class WebLLMGenerator {
       ...modelSpecificRequest(this.modelId),
     };
     const t = performance.now();
-    const create = () => this.engine.chat.completions.create({ messages, response_format: format, ...request });
+    const create = () => this.engine.chat.completions.create({ messages, ...(format ? { response_format: format } : {}), ...request });
     let r;
     try {
       r = await create();
