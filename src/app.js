@@ -136,6 +136,26 @@ const downloadText = (id) => (modelChoice(id).downloadGB ? `about ${modelChoice(
 const cachedModels = new Set();
 let gpuF16 = true;
 
+// Set while a model loads; still set at the next visit if the tab crashed or hung during the load
+// (typically a model too large for the GPU), so that model is not loaded automatically again.
+const LOADING_KEY = "rewind-chatbot-loading";
+
+// Browser cache and GPU queries can stall (e.g. after a GPU crash); never let them block the page.
+const withTimeout = (promise, ms, fallback, what) => {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((resolve) => {
+      timer = setTimeout(() => {
+        log(`${what} did not answer within ${ms / 1000} s; carrying on`);
+        resolve(fallback);
+      }, ms);
+    }),
+  ]).finally(() => clearTimeout(timer));
+};
+const checkCached = (id) =>
+  withTimeout(Promise.resolve().then(() => modelIsCached(id)).catch(() => false), 10000, false, `Cache check for ${id}`);
+
 function addMessage(role, html) {
   const msg = document.createElement("div");
   msg.className = `msg ${role}`;
@@ -158,7 +178,7 @@ function setStatus(text, pill, cls = "") {
 function setReady(on) {
   $("question").disabled = !on || busy;
   $("ask").disabled = !on || busy;
-  $("model-select").disabled = !navigator.gpu || loading || busy || !$("model-select").options.length;
+  $("model-select").disabled = !navigator.gpu || !db || loading || busy;
   document.querySelectorAll(".chip").forEach((c) => (c.disabled = !on || busy));
 }
 
@@ -202,7 +222,7 @@ function renderModelPicker() {
       return `<option value="${esc(id)}"${id === modelId ? " selected" : ""}${off ? " disabled" : ""}>${esc(m.label)}${extra ? ` (${esc(extra)})` : ""}</option>`;
     })
     .join("");
-  select.disabled = !navigator.gpu || loading || busy;
+  select.disabled = !navigator.gpu || !db || loading || busy;
   const state = modelInfo?.modelId === modelId ? "Loaded." : cachedModels.has(modelId) ? "Downloaded, not loaded." : "Not downloaded yet.";
   $("model-note").textContent =
     `${state} Download: ${downloadText(modelId)}; needs about ${vramGB(modelId).toFixed(1)} GB of GPU memory. ` +
@@ -223,7 +243,7 @@ async function switchModel(id) {
   document.querySelectorAll("[data-load]").forEach((b) => b.closest(".msg")?.remove());
   const old = generator;
   generator = modelInfo = undefined;
-  if (old) await old.engine.unload().catch((e) => log(`Unload failed: ${e.message}`));
+  if (old) await withTimeout(old.engine.unload().catch((e) => log(`Unload failed: ${e.message}`)), 10000, undefined, "Unloading the previous model");
   setMenu(false);
   const label = esc(modelChoice(id).label);
   const bubble = addMessage("bot", "");
@@ -244,6 +264,7 @@ async function loadModel(bubble, switched = false) {
   const bar = bubble.querySelector("progress");
   const progressText = bubble.querySelector("[data-progress-text]");
   setStatus(`Loading ${label}…${cachedModels.has(modelId) ? "" : ` (the first time, this downloads ${downloadText(modelId)})`}`, "Loading…");
+  localStorage.setItem(LOADING_KEY, modelId);
   try {
     ({ generator, info: modelInfo } = await setupModel(log, (p) => {
       bar.value = p.progress;
@@ -275,6 +296,7 @@ async function loadModel(bubble, switched = false) {
     setStatus(`The model could not be loaded: ${e.message}`, "Error", "bad");
     bubble.innerHTML = `<p>${why}</p><p class="muted">${esc(e.message)}</p><p><button class="primary" data-load>Try again</button></p>`;
   } finally {
+    localStorage.removeItem(LOADING_KEY);
     loading = false;
     renderModelPicker();
   }
@@ -371,6 +393,7 @@ $("chat").addEventListener("click", (e) => {
 });
 
 const startBubble = addMessage("bot", `<span class="typing"><span></span><span></span><span></span></span>Starting up…`);
+renderModelPicker();
 try {
   let summary;
   ({ db, schema, prompt, summary } = await setupDatabase(log));
@@ -384,20 +407,36 @@ try {
   samples = items.filter((it) => it.level !== "unsupported").map((it) => it.question);
 
   const facts = `BeingDB is ready (${summary.predicates} predicates, ${summary.facts.toLocaleString()} facts).`;
+  const label = modelChoice(modelId).label;
+  const interrupted = localStorage.getItem(LOADING_KEY) === modelId;
+  localStorage.removeItem(LOADING_KEY);
   if (navigator.gpu) {
-    gpuF16 = (await webgpuInfo()).f16 ?? true;
-    const flags = await Promise.all(CHAT_MODELS.map((m) => modelIsCached(m.id).catch(() => false)));
-    CHAT_MODELS.forEach((m, i) => flags[i] && cachedModels.add(m.id));
-    if (!CHAT_MODELS.some((m) => m.id === modelId) && (await modelIsCached(modelId))) cachedModels.add(modelId);
+    startBubble.innerHTML = `<span class="typing"><span></span><span></span><span></span></span>Checking for ${esc(label)}…`;
+    webgpuInfo().then((g) => {
+      gpuF16 = g.f16 ?? true;
+      renderModelPicker();
+    }, () => {});
+    // The other models' download status only decorates the picker; don't wait for it.
+    for (const m of CHAT_MODELS)
+      if (m.id !== modelId)
+        checkCached(m.id).then((yes) => {
+          if (yes) cachedModels.add(m.id);
+          renderModelPicker();
+        });
+    if (await checkCached(modelId)) cachedModels.add(modelId);
   }
   renderModelPicker();
   if (!navigator.gpu) {
     setStatus(`${facts} This browser has no WebGPU, so the model cannot run here.`, "Unsupported browser", "bad");
-    startBubble.innerHTML = `<p>Sorry, this browser can't run the chatbot: it needs WebGPU. Please use a current Chrome or Edge on a desktop or laptop.</p>`;
+    startBubble.innerHTML = `<p>Sorry, this browser can't run the chatbot: it needs WebGPU. Please use a current Chrome, Edge or Safari on a desktop or laptop.</p>`;
+  } else if (interrupted) {
+    setStatus(`${facts} ${label} did not finish loading last time.`, "Not started", "bad");
+    startBubble.innerHTML = `<p>Last time, ${esc(label)} didn't finish loading. It may need more memory than this device has.</p>
+      <p>Pick a smaller model from the ☰ menu, or try again.</p><p><button class="primary" data-load>Try ${esc(label)} again</button></p>`;
   } else if (cachedModels.has(modelId)) {
     loadModel(startBubble);
   } else {
-    setStatus(`${facts} ${modelChoice(modelId).label} is not downloaded yet.`, "Not started");
+    setStatus(`${facts} ${label} is not downloaded yet.`, "Not started");
     offerLoad(startBubble, "Hi! I'm the Rewind interview chatbot. I can answer questions about the artists and works in the REWIND interviews.");
   }
 } catch (e) {
