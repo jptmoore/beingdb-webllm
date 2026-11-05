@@ -82,6 +82,7 @@ The chatbot is a few small modules in [src/](src/):
 | `grammar.js` | a grammar built from the predicate list, so the model can only write well-formed queries over real predicates |
 | `generator.js` | the WebLLM model (the only model-specific module) |
 | `pipeline.js` | `ask()`: model -> BeingDB -> bounded repair loop |
+| `guard.js` | before the search, a short model call checks the message is a question about the facts (gibberish, greetings and unrelated questions get a quick reply); after it, a check that the search only names things the question mentions |
 | `answer.js` | the chatbot's written answer: a second model call phrases the rows (up to 20; larger results are summarised), then a check against the rows, question and query decides whether to show it |
 | `app.js`, `chat.css` | the chat page (the eval pages share `style.css`) |
 

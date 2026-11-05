@@ -73,7 +73,7 @@ const norm = (s) =>
     .replace(/[’']s\b/g, "")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
-const tokens = (s) => norm(s).split(" ").filter(Boolean);
+export const tokens = (s) => norm(s).split(" ").filter(Boolean);
 
 // A fact value counts as mentioned when all its words appear in the answer,
 // so "British Film Institute Bfi" matches "the British Film Institute (BFI)".

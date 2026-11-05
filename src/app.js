@@ -2,6 +2,12 @@ import { setupDatabase, setupModel, modelIsCached, CHAT_MODELS } from "./setup.j
 import { DEFAULT_MODEL, prebuiltModels } from "./generator.js";
 import { ask } from "./pipeline.js";
 import { displayValue, words, header, phraseAnswer, answerBlocks } from "./answer.js";
+import { checkRelevance, ungroundedConstants } from "./guard.js";
+
+const TOPIC =
+  "REWIND, an archive of interviews with British and international video artists: the artists, their works and when they were made, " +
+  "exhibitions and venues, collaborators, funders, broadcasters, education and employment";
+const EXAMPLE_QUESTION = "Which works did Judith Goddard create?";
 
 const $ = (id) => document.getElementById(id);
 const log = (msg) => ($("log").textContent += msg + "\n");
@@ -105,6 +111,20 @@ function renderRun(run, phrased) {
         ? `<p>Sorry, I can't answer that from the REWIND interview facts. I know about the interviewed artists, their works, and the people and organisations around them.</p>`
         : `<p>Sorry, I couldn't work out how to answer that. Could you try rephrasing the question?</p>`;
   return text + technicalDetails(run, phrased);
+}
+
+function offTopicReply(gate) {
+  return `<p>That doesn't look like a question about the REWIND interviews. I can answer questions about the interviewed artists, their works, exhibitions and the people and organisations around them, for example “${esc(EXAMPLE_QUESTION)}”</p>
+    <div class="tech"><h4>Relevance check <span class="muted">(${esc(modelInfo.modelId)})</span></h4>
+    <p class="muted">The model replied “${esc(gate.text)}” in ${gate.ms.toFixed(0)} ms, so no search was made.</p></div>`;
+}
+
+// The search used names the question never mentions, so the model probably guessed.
+function unsureReply(run, names) {
+  const res = run.attempts.at(-1).db.response;
+  const list = names.map((n) => `“${esc(words(n))}”`).join(", ");
+  return `<p>I'm not sure I understood. My search was about ${list}, which your question doesn't mention. Could you rephrase it, naming the artist, work or exhibition you mean?</p>
+    <details class="facts"><summary>Show what I found anyway</summary>${friendlyAnswer(res)}</details>${technicalDetails(run)}`;
 }
 
 // ---- chat UI ----
@@ -340,18 +360,33 @@ async function onAsk(question) {
   addMessage("user", question);
   const bubble = addMessage("bot", "");
   const t0 = performance.now();
-  stage = "Looking through the interviews";
+  stage = "Reading your question";
   const tick = () =>
     (bubble.innerHTML = `<span class="typing"><span></span><span></span><span></span></span>${esc(stage)}… <span class="muted">${((performance.now() - t0) / 1000).toFixed(0)} s</span>`);
   tick();
   const timer = setInterval(tick, 500);
   try {
+    const gate = await checkRelevance({ question, generator, topic: TOPIC });
+    log(`Relevance check: “${gate.text}”${gate.error ? ` (error: ${gate.error})` : ""} in ${gate.ms.toFixed(0)} ms`);
+    if (!gate.relevant) {
+      clearInterval(timer);
+      bubble.innerHTML = offTopicReply(gate);
+      return;
+    }
+    stage = "Looking through the interviews";
     const run = await ask({
       question, generator, db, schema, prompt, repairPolicy: "proven-only",
       onProgress: ({ repair }) => {
         if (repair) stage = "Refining my search";
       },
     });
+    const ungrounded = run.outcome === "ok" ? ungroundedConstants(question, run.attempts.at(-1).reply.dsl) : [];
+    if (ungrounded.length) {
+      log(`Search uses ${ungrounded.join(", ")}, which the question does not mention`);
+      clearInterval(timer);
+      bubble.innerHTML = unsureReply(run, ungrounded);
+      return;
+    }
     const response = run.outcome === "ok" ? run.attempts.at(-1).db.response : undefined;
     let phrased;
     if (response?.results.length) {
@@ -366,6 +401,7 @@ async function onAsk(question) {
     log(`Error: ${e.message}`);
     bubble.innerHTML = `<p>Sorry, something went wrong: ${esc(e.message)}</p>`;
   } finally {
+    clearInterval(timer);
     busy = false;
     setReady(true);
     bubble.closest(".msg").scrollIntoView({ block: "end", behavior: "smooth" });
