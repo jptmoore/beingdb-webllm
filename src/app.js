@@ -293,10 +293,10 @@ async function loadModel(bubble, switched = false) {
       progressText.textContent = `${percent}% · ${((lastProgress - t0) / 1000).toFixed(0)} s`;
       if (bubble.querySelector("[data-stalled]")) bubble.querySelector("[data-stalled]").hidden = true;
     }, {
-      recoverGrammarErrors: true,
-      onRecover: (e) => {
-        log(`WebLLM grammar error (${e.message}); resetting the grammar matcher and retrying`);
-        stage = "Hit a snag, trying again";
+      recoverErrors: true,
+      onRecover: (e, kind) => {
+        log(`WebLLM ${kind === "gpu" ? "lost the GPU" : "grammar error"} (${e.message}); ${kind === "gpu" ? "reloading the model" : "resetting the grammar matcher"} and retrying`);
+        stage = kind === "gpu" ? "The GPU was reset while the page was idle; reloading the model (about 20 s)" : "Hit a snag, trying again";
       },
     }, modelId));
     window.demo.generator = generator;

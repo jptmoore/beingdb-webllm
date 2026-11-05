@@ -39,9 +39,16 @@ export class WebLLMGenerator {
 
   async load(onProgress) {
     const t = performance.now();
+    this.onProgress = onProgress;
     this.engine = await webllm.CreateMLCEngine(this.modelId, { initProgressCallback: onProgress });
     this.loadMs = performance.now() - t;
     return this.loadMs;
+  }
+
+  // After the GPU device is lost WebLLM disposes the engine; build a new one (weights come from the cache).
+  async restart() {
+    await this.engine?.unload().catch(() => {});
+    return this.load(this.onProgress);
   }
 
   // format: a WebLLM response_format (here an xgrammar EBNF grammar), or undefined for free text.
@@ -63,11 +70,16 @@ export class WebLLMGenerator {
     try {
       r = await create();
     } catch (e) {
+      const msg = String(e?.message ?? e);
+      // The GPU was reset (sleep, long idle, driver reset): WebLLM has disposed the engine.
+      const lostGpu = e?.name === "DeviceLostError" || /disposed|device ?lost/i.test(msg);
       // WebLLM (seen in 0.2.85) can keep a reference to a grammar matcher whose native object is already deleted.
-      if (!this.options.recoverGrammarErrors || !/deleted|grammar ?matcher/i.test(String(e?.message ?? e))) throw e;
-      this.options.onRecover?.(e);
+      const staleMatcher = !lostGpu && /deleted|grammar ?matcher/i.test(msg);
+      if (!this.options.recoverErrors || !(lostGpu || staleMatcher)) throw e;
+      this.options.onRecover?.(e, lostGpu ? "gpu" : "grammar");
+      if (lostGpu) await this.restart();
       // Drop the stale matcher without disposing it again, so WebLLM builds a fresh one; reload only as a fallback.
-      if (!this.dropGrammarMatcher()) await this.engine.reload(this.modelId);
+      else if (!this.dropGrammarMatcher()) await this.engine.reload(this.modelId);
       r = await create();
     }
     return { text: r.choices[0].message.content, finish: r.choices[0].finish_reason, ms: performance.now() - t, usage: r.usage, request };
