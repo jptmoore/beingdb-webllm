@@ -1,8 +1,12 @@
 // node --test: benchmark efficiency instrumentation (scripts/lib/summary.mjs).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { efficiencySummary, callsOf } from "../scripts/lib/summary.mjs";
+
+// Two saved runs (run 9: model repair; run 10: db-guided) kept as fixtures.
+const fixture = (run, file) => fileURLToPath(new URL(`./fixtures/${run}/${file}`, import.meta.url));
 
 const rec = (id, supported, correct, calls, totalMs, extra = {}) => ({
   question: { id, supported },
@@ -44,8 +48,7 @@ test("efficiency summary counts calls, repairs and accuracy per model call", () 
 
 test("records from before run 10 derive their calls from attempts", () => {
   assert.deepEqual(callsOf({ attempts: [{ beingdb: {} }, { beingdb: {} }, { beingdb: null }] }), c(3, 0, 2, 0));
-  const dir = readdirSync("eval/results/benchmarks").find((d) => d.startsWith("20261006T135634Z"));
-  const records = readFileSync(`eval/results/benchmarks/${dir}/questions.jsonl`, "utf8").trim().split("\n").map(JSON.parse);
+  const records = readFileSync(fixture("run9-model", "questions.jsonl"), "utf8").trim().split("\n").map(JSON.parse);
   const e = efficiencySummary(records);
   assert.equal(e.modelCalls, records.reduce((n, r) => n + r.timing.llmCalls, 0));
   assert.equal(e.executeCalls, records.reduce((n, r) => n + r.timing.dbQueries, 0));
@@ -73,14 +76,11 @@ test("the repair policy is resolved from the CLI and recorded in run.json and su
     },
   );
   // Run 10's recorded config.pipeline is what db-guided records today (plus the new fields).
-  const run10 = JSON.parse(readFileSync(`eval/results/benchmarks/${readdirSync("eval/results/benchmarks").find((d) => d.startsWith("20261006T164839Z"))}/run.json`, "utf8"));
+  const run10 = JSON.parse(readFileSync(fixture("run10-db-guided", "run.json"), "utf8"));
   for (const [k, v] of Object.entries(run10.config.pipeline)) assert.deepEqual(cfg("db-guided")[k], v, k);
 
-  const load = (prefix) => {
-    const dir = readdirSync("eval/results/benchmarks").find((d) => d.startsWith(prefix));
-    return readFileSync(`eval/results/benchmarks/${dir}/questions.jsonl`, "utf8").trim().split("\n").map(JSON.parse);
-  };
-  assert.deepEqual(efficiencySummary(load("20261006T135634Z")).repairPolicies, { model: 50 });
-  assert.deepEqual(efficiencySummary(load("20261006T164839Z")).repairPolicies, { "db-guided": 50 });
+  const load = (name) => readFileSync(fixture(name, "questions.jsonl"), "utf8").trim().split("\n").map(JSON.parse);
+  assert.deepEqual(efficiencySummary(load("run9-model")).repairPolicies, { model: 50 });
+  assert.deepEqual(efficiencySummary(load("run10-db-guided")).repairPolicies, { "db-guided": 50 });
   assert.equal(policyOf({ efficiency: { pipeline: { version: "proven-repairs-only/1", repairPolicy: "proven-only" } } }), "proven-only");
 });

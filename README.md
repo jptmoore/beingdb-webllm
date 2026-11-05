@@ -59,12 +59,13 @@ repairs, timings and the raw rows.
 which [.github/workflows/pages.yml](.github/workflows/pages.yml) publishes
 to GitHub Pages on every push to `main`.
 
-The default model is `Llama-3.2-3B-Instruct-q4f16_1-MLC`, the best-measured
-model so far (see [benchmarking](docs/benchmarking.md#reference-model-and-reference-condition)).
+The default model is `Llama-3.2-3B-Instruct-q4f16_1-MLC`, which is also the
+reference model for evaluating changes (see
+[benchmarking](docs/benchmarking.md#reference-model-and-reference-condition)).
 The ☰ menu's **Language model** picker switches to Meta Llama 3.1 8B Instruct,
 Google Gemma 2 2B IT or Microsoft Phi-4 Mini Instruct (the list is
 `CHAT_MODELS` in [src/setup.js](src/setup.js)); the page remembers the choice.
-Only Llama 3.2 3B has been benchmarked. Any other WebLLM model can be chosen
+Any other WebLLM model can be chosen
 with `?model=<WebLLM id>`, which takes precedence over the picker, for example
 `?model=Qwen2.5-1.5B-Instruct-q4f16_1-MLC` on machines with less memory;
 `npm run models` lists the available ids.
@@ -104,10 +105,19 @@ npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
   --machine "<your machine>" --questions eval/questions-v2.json --repair-policy proven-only
 ```
 
-The default model currently turns 31 of the 63 questions into the right query
-(26/51 answerable, 5/12 unsupported recognised). See
+Run the reference model before and after your change, on the same machine,
+and compare the two runs (`npm run compare`). Results stay on your machine in
+`eval/results/`; they are not tracked in git, because they depend on the
+machine, browser and WebLLM version. See
 [docs/benchmarking.md](docs/benchmarking.md) for running and comparing
-benchmarks, the reference condition, results and the result format.
+benchmarks, the reference condition and the result format.
+
+## Keeping up with WebLLM
+
+WebLLM is an ordinary npm dependency. Dependabot opens a pull request for each
+new release, and the Pages workflow tests and builds it. By hand:
+`npm update @mlc-ai/web-llm && npm test`; the tests check that the default
+model still exists in the new release.
 
 ## Working on BeingDB itself
 
@@ -123,7 +133,7 @@ change the data or its predicate declarations, see
 index.html, src/     the chatbot
 scripts/             link, serve
 test/                chatbot tests
-eval/                the benchmark: questions, pages, scorer, scripts, saved results
+eval/                the benchmark: questions, pages, scorer, scripts (results go to eval/results/, untracked)
 docs/                benchmarking and internals
 ```
 

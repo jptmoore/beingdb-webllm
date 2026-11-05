@@ -18,9 +18,14 @@ The score is **query-generation accuracy**: one step of the chatbot, not
 end-to-end answer accuracy. BeingDB validates a query, returns diagnostics or
 facts actually in its store, and lets the wider system repair, reformulate or
 rerun it. The benchmark runs only a bounded part of that loop (proven repairs
-plus at most two model repairs), so 31/63 means 31 questions were turned into
-the right query under this condition, not that BeingDB answers 49% of
-questions correctly. See the [evaluation method](internals.md#evaluation-method).
+plus at most two model repairs), so a score of, say, 31/63 means 31 questions
+were turned into the right query under this condition, not that BeingDB answers
+49% of questions correctly. See the [evaluation method](internals.md#evaluation-method).
+
+Scores depend on the model, the WebLLM version, the browser and the machine,
+so treat them as a way to compare changes on your own setup rather than as
+fixed numbers. Results are written to `eval/results/`, which is not tracked in
+git.
 
 ## Running the benchmark
 
@@ -95,25 +100,25 @@ model.
   the same machine.
 - Rerun it whenever the condition changes.
 
-The **reference condition** is everything besides the model and machine. Its
-values, as recorded in the current reference run:
+The **reference condition** is everything besides the model and machine:
 
 | | |
 |---|---|
-| Questions | `eval/questions-v2.json` (63 items; sha256 `6082a88d…`) |
-| Pack | annotated REWIND pack from `beingdb-wasm` 11aced4, BeingDB 0.4.1 (fingerprint `sha256:72f26c19…`) |
-| Schema context and prompt | declared predicate roles and descriptions; `nl2dsl-prompt/run12` (system prompt sha256 `78740d0d…`) |
-| Output grammar | generated from the predicate list (sha256 `1590cab8…`) |
-| Repair policy | `proven-only` (`proven-repairs-only/1`), also the chatbot's default |
+| Questions | `eval/questions-v2.json` (63 items) |
+| Data | the REWIND export and BeingDB runtime linked from `beingdb-wasm` |
+| Prompt and grammar | the current `src/prompt.js` and `src/grammar.js`, built from the predicate declarations |
+| Repair policy | `proven-only`, also the chatbot's default |
 | Decoding | defaults: greedy first attempt; repairs at temperature 0.7, seed 1; 200 max tokens; repetition penalty 1; at most 2 model repairs |
-| Runtime | WebLLM 0.2.85; `beingdb-webllm` 914e392; `beingdb` 19187d7 |
+
+Each run records the exact versions and hashes of all of these, plus the
+WebLLM version, in its `run.json`.
 
 **Model comparisons are only meaningful when this condition is kept fixed.**
 `--condition` is just a label and changes nothing. The settings that define
 the condition are recorded in each `run.json` (`config.nonDefault`,
 `config.prompt.sha256`, `config.pipeline`); check them before comparing.
 Earlier conditions (baseline, Runs 9-11) are listed in
-[conditions in the saved results](#conditions-in-the-saved-results).
+[past conditions](#past-conditions).
 
 **Repair, in brief.** When BeingDB rejects a query, the model can be asked to
 repair it. Under `proven-only`, BeingDB first applies its own repairs, but
@@ -125,32 +130,26 @@ repairs and model repairs separately. Proven repairs help some models more
 than others, so **keep the repair policy fixed across model comparisons**.
 Details: [repair policies](#pipeline-conditions-and-cost-metrics).
 
-### Current reference result
+**Past results.** On an 8 GB M1 MacBook Air with WebLLM 0.2.85, Llama-3.2-3B
+scored 31/63 under this condition (about 23 s per question). That is a
+historical data point, not a target; the runs behind it and earlier model
+comparisons are described in the [experiment log](internals.md#experiment-log).
 
-| | |
-|---|---|
-| Run | [`20261023T203430Z_…`](../eval/results/benchmarks/20261023T203430Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC/) (Run 12, clean commits) |
-| Overall correct | **31/63** |
-| Supported correct: first attempt / after repair | 25/51 / **26/51** |
-| Valid DSL after repair | 50/51 |
-| Unsupported recognised | 5/12 |
-| Model calls | 76 (13 model repairs); 3 proven BeingDB repairs |
-| Median end-to-end per question | 23.4 s, on a MacBook Air M1 8 GB, Chrome 155 (machine-specific) |
+## Keeping up with WebLLM
 
-### Models tested so far
+`@mlc-ai/web-llm` is a normal npm dependency (`^0.2.85`), and Dependabot opens
+a pull request for each new release; the Pages workflow tests and builds it.
+To update by hand:
 
-All runs are single trials. Under the reference condition:
+```sh
+npm update @mlc-ai/web-llm
+npm test          # includes a check that the default model still exists in WebLLM
+npm run serve     # try the chatbot
+```
 
-| Model | Overall | Supported correct | Valid DSL | Unsupported recognised | False refusals |
-|---|---|---|---|---|---|
-| Llama-3.2-3B-Instruct (reference) | 31/63 | 26/51 | 50/51 | 5/12 | 0 |
-
-Under the previous 50-question condition (Run 11), Llama-3.2-3B scored 28/50
-and Hermes-3-Llama-3.2-3B 27/50. Qwen2.5-1.5B, Qwen2.5-3B, Qwen3.5-2B and an
-earlier Llama-3.2-3B were tested only under older conditions. Those scores are
-not comparable with this table.
-See the [experiment log](internals.md#experiment-log) and
-[`eval/results/benchmarks/`](../eval/results/benchmarks/).
+New WebLLM releases can change speed and replies. To see whether one helps or
+hurts, run the reference model under the reference condition before and after
+the update, on the same machine, and compare the two runs.
 
 ## Keeping comparisons fair
 
@@ -179,7 +178,9 @@ deterministic on one machine.
 
 ## Results, comparison and export
 
-Each run writes `eval/results/benchmarks/<UTC time>_<machine>_<model>/`:
+Each run writes `eval/results/benchmarks/<UTC time>_<machine>_<model>/` on
+your machine (the folder is not tracked in git; keep or share runs as you
+like):
 
 | File | Content |
 |---|---|
@@ -198,7 +199,7 @@ Schemas, metrics and the failure taxonomy are
 
 ## Hardware, provenance and caveats
 
-**Hardware so far.** Every saved run was made on one machine: a MacBook Air M1
+**Hardware of past runs.** The runs in the experiment log were all made on one machine: a MacBook Air M1
 (`MacBookAir10,1`, 8 GB unified memory, macOS 27), mostly in Chrome 154-155.
 That is where the experiments happened to run, not a requirement or a
 recommendation. The harness exists to compare models across machines. Larger
@@ -518,7 +519,7 @@ are derived from the attempts (one model call and at most one
 compare directly. Under `db-guided` and `proven-only` a "first attempt" is
 the first model reply after any proven BeingDB repair (still one model call).
 
-### Conditions in the saved results
+### Past conditions
 
 A condition is the question file and pack, schema metadata, prompt, grammar,
 repair policy, decoding settings, WebLLM version and harness code. Only the

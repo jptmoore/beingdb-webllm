@@ -1,5 +1,5 @@
 node_modules/
 vendor/
 dist/
-eval/results/*.status.json
-eval/results/export/
+# Benchmark results are local to each machine: npm run benchmark writes them here.
+eval/results/

@@ -1,7 +1,7 @@
 // node --test: the question pipeline, with scripted model replies over the linked beingdb-wasm.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { ask, MAX_DETERMINISTIC_PASSES } from "../src/pipeline.js";
 import { buildSchema } from "../src/schema.js";
 import { buildPrompt } from "../src/prompt.js";
@@ -43,11 +43,10 @@ const run = (replies, { db: inner, ...opts } = {}) => {
   return ask({ question: "q", generator, db: cdb, schema, prompt, ...opts }).then((r) => ({ r, generator, n: cdb.n }));
 };
 
-// Benchmark records (questions.jsonl) of a saved run.
-const recordsOf = (prefix) => {
-  const dir = readdirSync("eval/results/benchmarks").find((d) => d.startsWith(prefix));
-  return readFileSync(`eval/results/benchmarks/${dir}/questions.jsonl`, "utf8").trim().split("\n").map(JSON.parse);
-};
+// Benchmark records (questions.jsonl) of a saved run kept as a test fixture.
+const FIXTURES = { "20261006T135634Z": "run9-model", "20261006T164839Z": "run10-db-guided" };
+const recordsOf = (prefix) =>
+  readFileSync(new URL(`../eval/test/fixtures/${FIXTURES[prefix]}/questions.jsonl`, import.meta.url), "utf8").trim().split("\n").map(JSON.parse);
 
 test("a correct candidate costs one model call in both conditions", async () => {
   const q = "find Work\nwhere\n  made_at(Work, oval_house)";
@@ -340,8 +339,7 @@ test("db-guided repair reproduces Run 10 exactly from its recorded replies", asy
   }
 });
 test("with db-guided repair off, Run 9 is reproduced exactly from its recorded replies", async () => {
-  const dir = readdirSync("eval/results/benchmarks").find((d) => d.startsWith("20261006T135634Z"));
-  const records = readFileSync(`eval/results/benchmarks/${dir}/questions.jsonl`, "utf8").trim().split("\n").map(JSON.parse);
+  const records = recordsOf("20261006T135634Z");
   assert.equal(records.length, 50);
   for (const rec of records) {
     const { r, generator } = await run(rec.attempts.map((a) => a.raw), { maxRepairs: 2 });

@@ -1,0 +1,11 @@
+# Weekly pull requests for new WebLLM (and Playwright) releases. The Pages
+# workflow runs the tests and builds the site on each one.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    allow:
+      - dependency-name: "@mlc-ai/web-llm"
+      - dependency-name: playwright-core

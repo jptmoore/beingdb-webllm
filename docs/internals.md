@@ -266,8 +266,13 @@ BeingDB error of an `eval/eval.html` report.
 
 ## Experiment log
 
+The reports linked below were kept in the repository up to commit
+[3494218](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results);
+benchmark results are no longer tracked in git (see
+[benchmarking](benchmarking.md#results-comparison-and-export)).
+
 All runs: 50 questions, 8 GB M1 MacBook Air, VS Code's integrated Chromium 150,
-max 2 repairs. Reports for runs 2-8 are in `eval/results/` (run 1 predates saving).
+max 2 repairs. Reports for runs 2-8 were saved in `eval/results/` (run 1 predates saving).
 
 | Run | Model | Change | 1st valid | 1st correct | Final valid | Final correct | Unsupported detected | Fabricated |
 |---|---|---|---|---|---|---|---|---|
@@ -414,7 +419,7 @@ from the cache.
 model reply of every attempt was identical to run 8, in Chrome 154 instead of
 VS Code's Chromium 150. That run used the pre-annotation pack (`beingdb-wasm`
 41c0d8d) and prompt run 8 (the prompt up to `beingdb-webllm` c15963d):
-[`20261001T120717Z_…`](../eval/results/benchmarks/20261001T120717Z_macbook-air-m1-8gb_Qwen2.5-1.5B-Instruct-q4f16_1-MLC/).
+[`20261001T120717Z_…`](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261001T120717Z_macbook-air-m1-8gb_Qwen2.5-1.5B-Instruct-q4f16_1-MLC/).
 The current code uses prompt run 12 with the annotated pack, so it no longer
 reproduces these replies.
 
@@ -464,12 +469,12 @@ heavy swap use (7.7 GB for Qwen3.5, 8.6 GB for Llama) that grew during the
 run, so memory pressure may have inflated timings. The Qwen3.5 runs were on
 battery power. No question ran with the page hidden.
 
-Reports in `eval/results/benchmarks/`: Llama-3.2-3B
-[probe](../eval/results/benchmarks/20261005T160554Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[benchmark](../eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/);
+Reports: Llama-3.2-3B
+[probe](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261005T160554Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[benchmark](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/);
 Qwen3.5-2B
-[probe](../eval/results/benchmarks/20261005T152424Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/),
-[aborted benchmark](../eval/results/benchmarks/20261005T153112Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/).
+[probe](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261005T152424Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/),
+[aborted benchmark](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261005T153112Z_macbook-air-m1-8gb_Qwen3.5-2B-q4f16_1-MLC/).
 
 ### Run 9: semantic predicate metadata
 
@@ -554,8 +559,8 @@ npm run benchmark -- \
 
 `node eval/diagnose-annotations.mjs --run <run dir>` checks that a run's
 recorded prompt contains the annotations. Reports:
-[run 8 baseline](../eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[run 9 annotated](../eval/results/benchmarks/20261006T135634Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
+[run 8 baseline](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261005T160921Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 9 annotated](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261006T135634Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
 (clean commits: `beingdb-webllm` d54a43d, `beingdb-wasm` d88657a, `beingdb`
 ccccfbc).
 
@@ -635,8 +640,8 @@ npm run benchmark -- \
 ```
 
 Reports:
-[run 9 reproduced](../eval/results/benchmarks/20261006T162508Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[run 10](../eval/results/benchmarks/20261006T164839Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
+[run 9 reproduced](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261006T162508Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 10](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261006T164839Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
 (clean commits: `beingdb-webllm` 7ad5506 and 17f39ef, `beingdb-wasm` d613e8c,
 `beingdb` 7c23845). Run 10 was recorded with `--db-guided-repair`, the alias of
 `--repair-policy db-guided`.
@@ -694,8 +699,8 @@ npm run benchmark -- \
 ```
 
 Reports:
-[run 9 reproduced](../eval/results/benchmarks/20261006T174738Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[run 11](../eval/results/benchmarks/20261006T181140Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
+[run 9 reproduced](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261006T174738Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[run 11](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261006T181140Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/)
 (clean commits: `beingdb-webllm` 7729741 and e2f50d8, `beingdb-wasm`
 d376be1, `beingdb` dd8c4fe).
 
@@ -729,8 +734,8 @@ more unsupported questions but falsely refused 3 supported ones (`e11`,
 `incompatible` (data fingerprint mismatch with the annotated pack).
 
 Reports:
-[Llama rerun](../eval/results/benchmarks/20261009T102014Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
-[Hermes 3](../eval/results/benchmarks/20261009T095637Z_macbook-air-m1-8gb_Hermes-3-Llama-3.2-3B-q4f16_1-MLC/).
+[Llama rerun](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261009T102014Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
+[Hermes 3](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261009T095637Z_macbook-air-m1-8gb_Hermes-3-Llama-3.2-3B-q4f16_1-MLC/).
 
 ### Run 12: counting and text search (current reference condition)
 
@@ -738,8 +743,8 @@ Reports:
 `proven-only`, BeingDB/`beingdb-wasm` 0.4.1. Llama-3.2-3B scored 31/63: 26/51
 supported, 5/12 unsupported, 50/51 valid after repair. On the 48 questions
 shared with Run 11 it scored 26/48, as before, though not on the same items.
-Details: [Run 12](benchmarking.md#conditions-in-the-saved-results);
-[report](../eval/results/benchmarks/20261023T203430Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
+Details: [Run 12](benchmarking.md#past-conditions);
+[report](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261023T203430Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC/).
 
 ## Performance (8 GB M1 MacBook Air)
 
@@ -777,7 +782,7 @@ every new question re-reads the ~2,000-token system prompt and examples.
 BeingDB WASM compatibility is unchanged from `beingdb-wasm` (release build, as in its `prebuilt/`):
 it loaded and answered in every browser below. The model needs WebGPU.
 Results on the 8 GB M1 Air, final code, 10-question smoke test
-(`eval/results/smoke-*.json`; a compatibility and determinism check, not an
+(saved as `eval/results/smoke-*.json` up to commit 3494218; a compatibility and determinism check, not an
 accuracy measure: 8 of the 10 are questions the model gets right):
 
 | Browser | Model runs | Replies | First attempt, median | Prefill / decode | Notes |
