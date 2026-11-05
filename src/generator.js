@@ -63,13 +63,22 @@ export class WebLLMGenerator {
     try {
       r = await create();
     } catch (e) {
-      // WebLLM 0.2.85 can leave a disposed grammar matcher behind; reloading the model resets it.
-      if (!this.options.recoverGrammarErrors || !/deleted object|GrammarMatcher/i.test(String(e?.message ?? e))) throw e;
+      // WebLLM (seen in 0.2.85) can keep a reference to a grammar matcher whose native object is already deleted.
+      if (!this.options.recoverGrammarErrors || !/deleted|grammar ?matcher/i.test(String(e?.message ?? e))) throw e;
       this.options.onRecover?.(e);
-      await this.engine.reload(this.modelId);
+      // Drop the stale matcher without disposing it again, so WebLLM builds a fresh one; reload only as a fallback.
+      if (!this.dropGrammarMatcher()) await this.engine.reload(this.modelId);
       r = await create();
     }
     return { text: r.choices[0].message.content, finish: r.choices[0].finish_reason, ms: performance.now() - t, usage: r.usage, request };
+  }
+
+  dropGrammarMatcher() {
+    const pipeline = this.engine?.loadedModelIdToPipeline?.get(this.modelId);
+    if (!pipeline || !("grammarMatcher" in pipeline)) return false;
+    pipeline.grammarMatcher = undefined;
+    pipeline.responseFormatCacheKey = undefined;
+    return true;
   }
 }
 

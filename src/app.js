@@ -295,8 +295,8 @@ async function loadModel(bubble, switched = false) {
     }, {
       recoverGrammarErrors: true,
       onRecover: (e) => {
-        log(`WebLLM grammar error (${e.message}); reloading the model and retrying`);
-        stage = "Hit a snag, restarting and trying again";
+        log(`WebLLM grammar error (${e.message}); resetting the grammar matcher and retrying`);
+        stage = "Hit a snag, trying again";
       },
     }, modelId));
     window.demo.generator = generator;
