@@ -315,9 +315,11 @@ async function loadModel(bubble, switched = false) {
     setTimeout(checkOtherModels, 0);
   } catch (e) {
     log(`Model failed: ${e.message}`);
-    const why = looksLikeDownloadFailure(e.message)
-      ? `I couldn't download ${esc(label)}. A firewall or proxy may be blocking huggingface.co: try another network.`
-      : `I couldn't start ${esc(label)}. It may need more GPU memory than is available: try a smaller model from the ☰ menu.`;
+    const why = /WebGPU is not available/.test(e.message)
+      ? `The browser isn't offering its GPU to web pages right now. This often happens after the GPU was reset (for example after sleep): quit the browser completely, reopen it and try again. If it persists, check that WebGPU is enabled at chrome://gpu.`
+      : looksLikeDownloadFailure(e.message)
+        ? `I couldn't download ${esc(label)}. A firewall or proxy may be blocking huggingface.co: try another network.`
+        : `I couldn't start ${esc(label)}. It may need more GPU memory than is available: try a smaller model from the ☰ menu.`;
     setStatus(`The model could not be loaded: ${e.message}`, "Error", "bad");
     bubble.innerHTML = `<p>${why}</p><p class="muted">${esc(e.message)}</p><p><button class="primary" data-load>Try again</button></p>`;
   } finally {
