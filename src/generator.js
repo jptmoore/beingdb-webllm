@@ -2,6 +2,7 @@
 // messages into a grammar-constrained reply. Weights are fetched once (Hugging
 // Face, via WebLLM's prebuilt config), cached by the browser and run locally on WebGPU.
 import * as webllm from "../vendor/web-llm/index.js";
+import { isGpuLost } from "./errors.js";
 
 export const DEFAULT_MODEL = "Llama-3.2-3B-Instruct-q4f16_1-MLC";
 
@@ -71,8 +72,7 @@ export class WebLLMGenerator {
       r = await create();
     } catch (e) {
       const msg = String(e?.message ?? e);
-      // The GPU was reset (sleep, long idle, driver reset): WebLLM has disposed the engine.
-      const lostGpu = e?.name === "DeviceLostError" || /disposed|device ?lost/i.test(msg);
+      const lostGpu = isGpuLost(e);
       // WebLLM (seen in 0.2.85) can keep a reference to a grammar matcher whose native object is already deleted.
       const staleMatcher = !lostGpu && /deleted|grammar ?matcher/i.test(msg);
       if (!this.options.recoverErrors || !(lostGpu || staleMatcher)) throw e;

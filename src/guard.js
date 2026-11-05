@@ -1,6 +1,7 @@
 // Cheap checks around the chatbot's search: is the message a question about the facts at all
 // (one short model call), and does the search only use names that the question mentions.
 import { tokens } from "./answer.js";
+import { isGpuLost } from "./errors.js";
 
 const EXAMPLES = [
   ["Which works did Kevin Atherton make?", "YES"],
@@ -25,7 +26,7 @@ export function relevanceMessages(question, topic) {
   ];
 }
 
-// Never throws and leans to YES: a wrong NO would hide answers the facts do have.
+// Leans to YES: a wrong NO would hide answers the facts do have. Only a lost GPU is passed on.
 export async function checkRelevance({ question, generator, topic }) {
   const messages = relevanceMessages(question, topic);
   const t = performance.now();
@@ -34,6 +35,7 @@ export async function checkRelevance({ question, generator, topic }) {
     const text = (gen.text ?? "").trim();
     return { relevant: !/^no\b/i.test(text), text, ms: performance.now() - t, messages };
   } catch (e) {
+    if (isGpuLost(e)) throw e;
     return { relevant: true, text: "", error: e.message, ms: performance.now() - t, messages };
   }
 }

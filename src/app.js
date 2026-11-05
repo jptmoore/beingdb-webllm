@@ -3,6 +3,7 @@ import { DEFAULT_MODEL, prebuiltModels } from "./generator.js";
 import { ask } from "./pipeline.js";
 import { displayValue, words, header, phraseAnswer, answerBlocks } from "./answer.js";
 import { checkRelevance, ungroundedConstants } from "./guard.js";
+import { isGpuLost } from "./errors.js";
 
 const TOPIC =
   "REWIND, an archive of interviews with British and international video artists: the artists, their works and when they were made, " +
@@ -399,11 +400,19 @@ async function onAsk(question) {
   } catch (e) {
     clearInterval(timer);
     log(`Error: ${e.message}`);
-    bubble.innerHTML = `<p>Sorry, something went wrong: ${esc(e.message)}</p>`;
+    if (isGpuLost(e)) {
+      // A fresh page gets a fresh GPU device; the model comes back from the browser cache.
+      ready = false;
+      setStatus("The connection to the GPU was lost: reload the page to continue", "Reload", "bad");
+      bubble.innerHTML =
+        `<p>I lost the connection to your computer's graphics processor (GPU). This can happen after the computer sleeps or the page is left idle for a long time.</p>` +
+        `<p>Please reload the page to carry on. The model is already downloaded, so it starts again quickly.</p>` +
+        `<p><button class="primary" data-reload>Reload page</button></p><p class="muted">${esc(e.message)}</p>`;
+    } else bubble.innerHTML = `<p>Sorry, something went wrong: ${esc(e.message)}</p>`;
   } finally {
     clearInterval(timer);
     busy = false;
-    setReady(true);
+    setReady(ready);
     bubble.closest(".msg").scrollIntoView({ block: "end", behavior: "smooth" });
     $("question").focus();
   }
@@ -456,6 +465,7 @@ $("chat").addEventListener("click", (e) => {
   const chip = e.target.closest(".chip");
   if (chip && !chip.disabled) return onAsk(chip.dataset.question);
   if (e.target.closest("[data-load]")) return loadModel(e.target.closest(".bubble"), !!$("chat").querySelector(".suggestions"));
+  if (e.target.closest("[data-reload]")) return location.reload();
   const more = e.target.closest("[data-more]");
   if (more) {
     more.parentElement.querySelectorAll("[data-extra]").forEach((el) => (el.hidden = false));
