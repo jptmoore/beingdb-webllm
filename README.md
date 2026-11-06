@@ -103,7 +103,7 @@ browser, scored by comparing BeingDB's answers.
 ```sh
 npm test                                                   # model-free checks
 npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
-  --machine "<your machine>" --questions eval/questions-v3.json --repair-policy proven-only
+  --machine "<your machine>" --questions eval/questions-v4.json --repair-policy proven-only
 ```
 
 Run the reference model before and after your change, on the same machine,

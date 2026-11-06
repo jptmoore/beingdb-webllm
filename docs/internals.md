@@ -84,8 +84,8 @@ Change the pack and the context, grammar and signatures change with it. The
 `environmentFingerprint` is checked against `eval/questions.json` (or the file
 given with `--questions`; `eval/questions-annotated.json` holds the same
 questions for the annotated pack's fingerprint, `eval/questions-v2.json` the
-63-question set for BeingDB 0.4, and `eval/questions-v3.json` the current
-66-question set with aggregates).
+63-question set for BeingDB 0.4, `eval/questions-v3.json` the 66-question set
+with aggregates, and `eval/questions-v4.json` the same questions over the cleaned pack, the current set).
 
 Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 
@@ -94,7 +94,7 @@ Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 System message: short rules (below) followed by the schema. Then 15 example
 question/answer pairs as chat turns (twelve queries, three `UNSUPPORTED`), all
 over real Rewind data and checked by `npm run check-eval`; none is an
-evaluation question. About 2,920 prompt tokens in total (Llama 3.2 3B tokenizer; about 2,860 in prompt run 13, 2,520 in prompt run 9 with nine examples, 1,940 in prompt run 8, before the pack declared roles and descriptions).
+evaluation question. About 3,050 prompt tokens in total with the cleaned pack (Llama 3.2 3B tokenizer; 2,921 with the v3 data, about 2,860 in prompt run 13, 2,520 in prompt run 9 with nine examples, 1,940 in prompt run 8, before the pack declared roles and descriptions).
 
 ```
 You translate questions about a BeingDB database into BeingDB queries.
@@ -237,7 +237,7 @@ The three policies are one option, `--repair-policy model|db-guided|proven-only`
 ## Evaluation method
 
 `eval/questions.json`: 50 questions; `eval/questions-v2.json` has 63 (51
-supported, 12 unsupported) and `eval/questions-v3.json`, the current set, 66 (55
+supported, 12 unsupported) and `eval/questions-v3.json` and `eval/questions-v4.json` (the current set) 66 (55
 supported, 11 unsupported; see
 [question sets](benchmarking.md#question-sets-data-fingerprints-and-prompt-versions)). Each supported item has a reference query
 (checked by `npm run check-eval` to be valid, non-empty, and to return the

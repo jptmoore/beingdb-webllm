@@ -8,7 +8,8 @@ const UNSUPPORTED = "UNSUPPORTED: ";
 // run9: declared argument roles and descriptions from the pack (BeingDB annotations).
 // run12: count(Var) (BeingDB 0.3.0) and contains (0.4.0) in the rules, grammar and examples.
 // run13: sum/avg/min/max (BeingDB 0.5.0) in the rules, grammar and examples.
-// run14: counting is always allowed; check the predicates before refusing; a people-count example.
+// run14: counting is always allowed; check the predicates before refusing; a people-count example;
+// the "studied at a college" example uses educated_at (pack v4 merged studied_at into it).
 export const PROMPT_VERSION = "nl2dsl-prompt/run14";
 
 export const RULES = `You translate questions about a BeingDB database into BeingDB queries.
@@ -52,7 +53,7 @@ export const EXAMPLES = [
   { q: "How many collaborators did each person have?", a: "find Person, count(Other)\nwhere\n  collaborated_with(Person, Other)" },
   { q: "When did David Critchley make his first work?", a: "find min(Year)\nwhere\n  created_by(Work, david_critchley)\n  year_created(Work, Year)" },
   { q: "Who ran a cinema?", a: 'find Person, Activity\nwhere\n  ran(Person, Activity)\n  Activity contains "cinema"' },
-  { q: "Who studied at a college?", a: 'find Person, Institution\nwhere\n  studied_at(Person, Institution)\n  Institution contains "college"' },
+  { q: "Who studied at a college?", a: 'find Person, Institution\nwhere\n  educated_at(Person, Institution)\n  Institution contains "college"' },
   { q: "What price did Tape Tape sell for?", a: `${UNSUPPORTED}No predicate records prices.` },
   { q: "Where does Kevin Atherton live now?", a: `${UNSUPPORTED}No predicate records where people live.` },
   { q: "How many years passed between David Hall's first and last works?", a: `${UNSUPPORTED}Queries cannot do arithmetic.` },
