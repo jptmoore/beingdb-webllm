@@ -560,7 +560,7 @@ and `config.nonDefault` rather than the label.
 | Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | previous reference condition; as Run 9 |
 | Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); Llama 31/63 (below) |
 | Annotated v3 + proven repairs (Run 13) | `eval/questions-v3.json` | `nl2dsl-prompt/run13` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); Llama 37/66 (below) |
-| Annotated v4 + proven repairs (Run 14) | `eval/questions-v4.json` | `nl2dsl-prompt/run14` | `proven-only` | reference condition (needs `beingdb-wasm` with the cleaned REWIND data); Llama 41/66 (below) |
+| Annotated v4 + proven repairs (Run 14) | `eval/questions-v4.json` | `nl2dsl-prompt/run14` | `proven-only` | reference condition (needs `beingdb-wasm` with the cleaned REWIND data); Llama 41/66, 43/66 with BeingDB 0.5.1 (below) |
 
 Prompt run13 lets the model write `sum(Var)`, `avg(Var)`, `min(Var)` and
 `max(Var)`: the grammar accepts them wherever it accepted `count(Var)`, a rule says
@@ -641,8 +641,11 @@ occurs in no fact, extended at an underscore by exactly one atom at that
 argument, in any scope (beingdb-wasm repinned to it). Replaying Run 14's
 recorded replies through it, `e17` and `h01` become correct with one model call
 and one proven repair; `m05` gets the atom right but keeps an unrelated clause
-the model added. With the same replies Run 14 would score 43/66; a new run
-measures it.
+the model added. A new run on BeingDB 0.5.1
+(`20261106T192043Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`, complete)
+confirms it: 43/66 overall, 35/55 supported, 8/11 unsupported. Every first reply is
+identical to the earlier Run 14, and only `e17` and `h01` changed (both now
+correct), with 7 proven repairs in 7 questions (6 then correct) against 4.
 
 Saved runs of the Run 11 condition carry the labels
 `annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`, with
