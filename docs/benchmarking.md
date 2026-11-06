@@ -585,9 +585,16 @@ employed by the BBC?" with it.
 Prompt run14 targets those refusals: counting is always allowed and only arithmetic
 or a condition on a count or total is unsupported; the model is told to check the
 predicate names and descriptions before refusing; the subtraction example's reason
-becomes "Queries cannot do arithmetic"; and two examples are added, a plain count
-over people (`employed_by`) and an unsupported condition on a count. It changes the
-prompt for every question, so it needs a full v3 run:
+becomes "Queries cannot do arithmetic"; and a plain count over people (`employed_by`)
+is added as an example. A smoke check of an earlier draft
+(`20261106T155133Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`, `--ids` on
+`c01`, `c06`, `e07`, `e12`, `e13`, `u05`, `u10`, `u11`, `u12`, `u13`, so partial)
+got 7/10 against Run 13's 6/10 on the same items: `e13` became correct and refusals
+gave fitting reasons instead of the count one. That draft also had an unsupported
+example "Who had more than five collaborators?" ("Queries cannot filter on a
+count"); the model copied its reason onto `c01` and still did not refuse `u12`, so
+it was removed. The draft's prompt hashes therefore differ from the final run14. It
+changes the prompt for every question, so it needs a full v3 run:
 
 ```bash
 npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \

@@ -8,7 +8,7 @@ const UNSUPPORTED = "UNSUPPORTED: ";
 // run9: declared argument roles and descriptions from the pack (BeingDB annotations).
 // run12: count(Var) (BeingDB 0.3.0) and contains (0.4.0) in the rules, grammar and examples.
 // run13: sum/avg/min/max (BeingDB 0.5.0) in the rules, grammar and examples.
-// run14: counting is always allowed; check the predicates before refusing; each refusal reason has an example.
+// run14: counting is always allowed; check the predicates before refusing; a people-count example.
 export const PROMPT_VERSION = "nl2dsl-prompt/run14";
 
 export const RULES = `You translate questions about a BeingDB database into BeingDB queries.
@@ -56,7 +56,6 @@ export const EXAMPLES = [
   { q: "What price did Tape Tape sell for?", a: `${UNSUPPORTED}No predicate records prices.` },
   { q: "Where does Kevin Atherton live now?", a: `${UNSUPPORTED}No predicate records where people live.` },
   { q: "How many years passed between David Hall's first and last works?", a: `${UNSUPPORTED}Queries cannot do arithmetic.` },
-  { q: "Who had more than five collaborators?", a: `${UNSUPPORTED}Queries cannot filter on a count.` },
 ];
 
 export function buildPrompt(schema) {

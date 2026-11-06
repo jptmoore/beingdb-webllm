@@ -91,10 +91,10 @@ Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 
 ## Prompt
 
-System message: short rules (below) followed by the schema. Then 16 example
-question/answer pairs as chat turns (twelve queries, four `UNSUPPORTED`), all
+System message: short rules (below) followed by the schema. Then 15 example
+question/answer pairs as chat turns (twelve queries, three `UNSUPPORTED`), all
 over real Rewind data and checked by `npm run check-eval`; none is an
-evaluation question. About 2,950 prompt tokens in total (Llama 3.2 3B tokenizer; about 2,860 in prompt run 13, 2,520 in prompt run 9 with nine examples, 1,940 in prompt run 8, before the pack declared roles and descriptions).
+evaluation question. About 2,920 prompt tokens in total (Llama 3.2 3B tokenizer; about 2,860 in prompt run 13, 2,520 in prompt run 9 with nine examples, 1,940 in prompt run 8, before the pack declared roles and descriptions).
 
 ```
 You translate questions about a BeingDB database into BeingDB queries.
