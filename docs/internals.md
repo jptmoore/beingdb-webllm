@@ -91,15 +91,15 @@ Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 
 ## Prompt
 
-System message: short rules (below) followed by the schema. Then 13 example
-question/answer pairs as chat turns (ten queries, three `UNSUPPORTED`), all
+System message: short rules (below) followed by the schema. Then 16 example
+question/answer pairs as chat turns (twelve queries, four `UNSUPPORTED`), all
 over real Rewind data and checked by `npm run check-eval`; none is an
-evaluation question. About 2,760 prompt tokens in total (Llama 3.2 3B tokenizer; 2,520 in prompt run 9 with nine examples, 1,940 in prompt run 8, before the pack declared roles and descriptions).
+evaluation question. About 2,950 prompt tokens in total (Llama 3.2 3B tokenizer; about 2,860 in prompt run 13, 2,520 in prompt run 9 with nine examples, 1,940 in prompt run 8, before the pack declared roles and descriptions).
 
 ```
 You translate questions about a BeingDB database into BeingDB queries.
 BeingDB runs your query and returns the answer, so never answer from your own knowledge.
-Reply with only the query. If the predicates below cannot answer the question, reply UNSUPPORTED: <reason>.
+Reply with only the query. If no predicate below records what the question asks about, reply UNSUPPORTED: <reason>. Check the predicate names and descriptions before you do.
 
 Query format:
 find Var1, Var2
@@ -117,10 +117,15 @@ where
 - For "how many", count in the query: "find count(Work)" gives one number, "find Artist, count(Work)" one per artist, and "order by count(Work) descending" ranks them. count counts distinct values.
 - For totals, averages, earliest and latest, use sum(Var), avg(Var), min(Var), max(Var) the same way. Keep the thing being added up as a variable: duration_minutes(Work, Minutes), not duration_minutes(_, Minutes).
 - When the question gives only a word or part of a name, do not guess an atom or put the word in a clause: use a variable and add Var contains "word" (ignores case).
-- Queries cannot do arithmetic (subtract, divide, percentages) or filter on a count or total: such questions are unsupported.
+- Counting is always allowed. Only questions that need arithmetic (subtract, divide, percentages) or a condition on a count or total ("artists with more than five works") are unsupported.
 ```
 
-(Prompt run13. In run 12 there was no `sum`/`avg`/`min`/`max` rule or example,
+(Prompt run14. In run 13 the second sentence of the opening read "If the predicates
+below cannot answer the question, reply UNSUPPORTED: <reason>." and the last rule
+read "Queries cannot do arithmetic (subtract, divide, percentages) or filter on a
+count or total: such questions are unsupported."; Llama 3.2 3B then gave "Queries
+cannot filter on a count or total" as the reason for unrelated refusals and refused
+plain counts such as "How many people were employed by the BBC?". In run 12 there was no `sum`/`avg`/`min`/`max` rule or example,
 and the last rule read "Queries cannot sum, average, divide or filter on a count:
 such questions are unsupported." Up to run 11 the last rule read "Queries cannot count, sum,
 average or rank: such questions are unsupported.", and there were no counting or
