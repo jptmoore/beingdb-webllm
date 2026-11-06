@@ -560,7 +560,7 @@ and `config.nonDefault` rather than the label.
 | Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | previous reference condition; as Run 9 |
 | Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); Llama 31/63 (below) |
 | Annotated v3 + proven repairs (Run 13) | `eval/questions-v3.json` | `nl2dsl-prompt/run13` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); Llama 37/66 (below) |
-| Annotated v4 + proven repairs (Run 14) | `eval/questions-v4.json` | `nl2dsl-prompt/run14` | `proven-only` | reference condition (needs `beingdb-wasm` with the cleaned REWIND data); not yet run |
+| Annotated v4 + proven repairs (Run 14) | `eval/questions-v4.json` | `nl2dsl-prompt/run14` | `proven-only` | reference condition (needs `beingdb-wasm` with the cleaned REWIND data); Llama 41/66 (below) |
 
 Prompt run13 lets the model write `sum(Var)`, `avg(Var)`, `min(Var)` and
 `max(Var)`: the grammar accepts them wherever it accepted `count(Var)`, a rule says
@@ -619,6 +619,30 @@ npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
   --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v4.json \
   --repair-policy proven-only --condition annotated-v4-proven-repairs-run14-llama
 ```
+
+Run 14 with Llama 3.2 3B (`20261106T173129Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`,
+complete, 6.5 GB of swap in use at the start, so timings are not representative;
+3,045 prompt tokens): 41/66 overall, 33/55 supported, 8/11 unsupported, against
+Run 13's 37/66 (30/55, 7/11). It gained `e04`, `e07`, `e13`, `m07`, `c01`, `c05`,
+`a02` and `u06`: the refusals of answerable questions that run14 targets
+(`e07`, `e13`, `c01`) are gone, and `e04` benefits from the merged BFI atoms. It
+lost `e03` and `m08` (a constant put into a variable's place; an unrelated
+predicate chain) and `e17` and `h01`, whose data changed: the model guessed
+`maidstone_college` and `arts_council`, atoms the cleaned pack no longer has,
+and `m05` fails the same way. BeingDB reports each as `unknown_constant`, with
+exactly one value at that argument containing the guessed name
+(`maidstone_college_of_art`, `arts_council_of_great_britain`), but
+`proven-only` does not treat that as a proven repair, so the empty result (or,
+under `not`, the unfiltered one in `h01`) stands. Entity grounding is therefore
+the main open problem after the pack cleanup.
+
+BeingDB 0.5.1 adds the `replace_constant` repair for exactly this: an atom that
+occurs in no fact, extended at an underscore by exactly one atom at that
+argument, in any scope (beingdb-wasm repinned to it). Replaying Run 14's
+recorded replies through it, `e17` and `h01` become correct with one model call
+and one proven repair; `m05` gets the atom right but keeps an unrelated clause
+the model added. With the same replies Run 14 would score 43/66; a new run
+measures it.
 
 Saved runs of the Run 11 condition carry the labels
 `annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`, with
