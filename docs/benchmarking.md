@@ -545,7 +545,8 @@ and `config.nonDefault` rather than the label.
 | Annotated + BeingDB-guided repair (Run 10) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `db-guided` | historical ablation; as Run 9 |
 | Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | previous reference condition; as Run 9 |
 | Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); Llama 31/63 (below) |
-| Annotated v3 + proven repairs (Run 13) | `eval/questions-v3.json` | `nl2dsl-prompt/run13` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); not yet run |
+| Annotated v3 + proven repairs (Run 13) | `eval/questions-v3.json` | `nl2dsl-prompt/run13` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); Llama 37/66 (below) |
+| Annotated v3 + proven repairs (Run 14) | `eval/questions-v3.json` | `nl2dsl-prompt/run14` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); not yet run |
 
 Prompt run13 lets the model write `sum(Var)`, `avg(Var)`, `min(Var)` and
 `max(Var)`: the grammar accepts them wherever it accepted `count(Var)`, a rule says
@@ -564,6 +565,41 @@ run prompt run12 on v3 as well (check out the commit that adds
 npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
   --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v3.json \
   --repair-policy proven-only --condition annotated-v3-proven-repairs-run13-llama
+```
+
+Run 13 with Llama 3.2 3B (`20261106T150229Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`,
+complete, BeingDB/`beingdb-wasm` 0.5.0, on battery with 1.6 GB of swap in use, so
+timings are not representative): 37/66 overall, 30/55 supported, 7/11 unsupported.
+Prompt run12 on v3 was not run separately: with the run12 prompt, the first 24 v3
+questions reproduced the Run 12 v2 run (`20261106T120006Z_…`) exactly, and replaying
+that run's recorded replies through BeingDB 0.5.0 left all 62 shared questions
+unchanged. On those 62, Run 13 scores 35 against Run 12's 30. It gained `e03`,
+`e09`, `m01`, `m03`, `m10`, `m15` (`min(Year)`) and the refusals `u02`, `u05`, `u09`,
+and lost `e07`, `e13`, `c01` (refused although answerable) and `m07`
+(`Work contains "george_barber"`). Of the new items, `a01` (`avg`) and `a04` (`max`)
+are correct; `a02` picked the wrong predicate and `a03` did not group. The model gave
+"Queries cannot filter on a count or total" as the reason for unrelated refusals
+(`u05`, `u10`, `u11`, `u13`), and in the chatbot refused "How many people were
+employed by the BBC?" with it.
+
+Prompt run14 targets those refusals: counting is always allowed and only arithmetic
+or a condition on a count or total is unsupported; the model is told to check the
+predicate names and descriptions before refusing; the subtraction example's reason
+becomes "Queries cannot do arithmetic"; and a plain count over people (`employed_by`)
+is added as an example. A smoke check of an earlier draft
+(`20261106T155133Z_macbookair10-1_Llama-3.2-3B-Instruct-q4f16_1-MLC`, `--ids` on
+`c01`, `c06`, `e07`, `e12`, `e13`, `u05`, `u10`, `u11`, `u12`, `u13`, so partial)
+got 7/10 against Run 13's 6/10 on the same items: `e13` became correct and refusals
+gave fitting reasons instead of the count one. That draft also had an unsupported
+example "Who had more than five collaborators?" ("Queries cannot filter on a
+count"); the model copied its reason onto `c01` and still did not refuse `u12`, so
+it was removed. The draft's prompt hashes therefore differ from the final run14. It
+changes the prompt for every question, so it needs a full v3 run:
+
+```bash
+npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v3.json \
+  --repair-policy proven-only --condition annotated-v3-proven-repairs-run14-llama
 ```
 
 Saved runs of the Run 11 condition carry the labels
