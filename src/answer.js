@@ -18,7 +18,15 @@ export function displayValue(cell) {
     .join(" ")
     .replace(/ S\b/g, "'s");
 }
-export const words = (variable) => variable.replace(/([a-z\d])([A-Z])/g, "$1 $2").replace(/_/g, " ").toLowerCase();
+const AGGREGATE = /^(count|sum|avg|min|max)\((\w+)\)$/;
+const AGGREGATE_WORDS = { count: (w) => `${w} count`, sum: (w) => `total ${w}`, avg: (w) => `average ${w}`, min: (w) => `minimum ${w}`, max: (w) => `maximum ${w}` };
+export const isAggregate = (variable) => AGGREGATE.test(variable);
+// Variable names as words: WorkTitle -> "work title", avg(Minutes) -> "average minutes".
+export const words = (variable) => {
+  const m = variable.match(AGGREGATE);
+  if (m) return AGGREGATE_WORDS[m[1]](words(m[2]));
+  return variable.replace(/([a-z\d])([A-Z])/g, "$1 $2").replace(/_/g, " ").toLowerCase();
+};
 export const header = (variable) => {
   const w = words(variable);
   return w[0].toUpperCase() + w.slice(1);

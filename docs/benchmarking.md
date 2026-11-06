@@ -7,8 +7,8 @@ policy makes the chatbot better or worse.
 
 ## What is measured
 
-The task has 63 questions over the REWIND dataset
-(`eval/questions-v2.json`): 51 answerable and 12 deliberately unsupported.
+The task has 66 questions over the REWIND dataset
+(`eval/questions-v3.json`): 55 answerable and 11 deliberately unsupported.
 
 - An answerable question is correct if BeingDB returns the same answer rows
   for the generated query as for a trusted reference query.
@@ -41,7 +41,7 @@ Model-free checks, which need no GPU:
 
 ```sh
 npm test                                                         # chatbot and summary tests against the linked runtime
-npm run check-eval -- --questions eval/questions-v2.json         # reference queries + scorer against the linked pack
+npm run check-eval -- --questions eval/questions-v3.json         # reference queries + scorer against the linked pack
 ```
 
 **List models**
@@ -55,7 +55,7 @@ npm run models -- --filter qwen
 
 ```sh
 npm run benchmark -- --probe --model <MODEL-ID> \
-  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v2.json
+  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v3.json
 ```
 
 The probe ends with status `probe_ok`. Otherwise it reports `incompatible` or
@@ -69,9 +69,9 @@ the cache is reused.
 npm run benchmark -- \
   --model <MODEL-ID> \
   --machine "<MACHINE DESCRIPTION>" \
-  --questions eval/questions-v2.json \
+  --questions eval/questions-v3.json \
   --repair-policy proven-only \
-  --condition annotated-v2-proven-repairs
+  --condition annotated-v3-proven-repairs
 ```
 
 **Run the reference model** with the same command and
@@ -104,7 +104,7 @@ The **reference condition** is everything besides the model and machine:
 
 | | |
 |---|---|
-| Questions | `eval/questions-v2.json` (63 items) |
+| Questions | `eval/questions-v3.json` (66 items) |
 | Data | the REWIND export and BeingDB runtime linked from `beingdb-wasm` |
 | Prompt and grammar | the current `src/prompt.js` and `src/grammar.js`, built from the predicate declarations |
 | Repair policy | `proven-only`, also the chatbot's default |
@@ -131,7 +131,8 @@ than others, so **keep the repair policy fixed across model comparisons**.
 Details: [repair policies](#pipeline-conditions-and-cost-metrics).
 
 **Past results.** On an 8 GB M1 MacBook Air with WebLLM 0.2.85, Llama-3.2-3B
-scored 31/63 under this condition (about 23 s per question). That is a
+scored 31/63 under the previous condition (Run 12: `eval/questions-v2.json`,
+prompt run12; about 23 s per question). That is a
 historical data point, not a target; the runs behind it and earlier model
 comparisons are described in the [experiment log](internals.md#experiment-log).
 
@@ -339,6 +340,15 @@ changes it even when no fact changes.
   become answerable and duplicated `c04`, so it now asks for a count filter; `m15`
   (earliest year), `c05`-`c06`, `s05`-`s06` and `u13` (a ratio) were added.
   63 items: 51 supported, 12 unsupported. Pass it with `--questions`.
+- `eval/questions-v3.json` (suite `rewind-nl2dsl-annotated-v3`) is v2 for
+  BeingDB 0.5.0's `sum`/`avg`/`min`/`max`, with the same fingerprint. `u04`
+  ("What is the average duration of the works?") is answerable and becomes `a01`;
+  running times are recorded under both `duration_minutes` and `length_minutes`, so
+  it accepts either or both as alternatives. `a02` (one artist's first and last
+  years), `a03` (each artist's earliest year) and `a04` (the latest year; works-only
+  years accepted, as in `c02`/`c06`) were added. `u12` (a count filter) and `u13`
+  (a ratio) stay unsupported. 66 items: 55 supported, 11 unsupported. Every other
+  item is unchanged from v2.
 - `npm run check-eval -- --questions <file>` checks references, examples and
   the scorer against the linked build for any of these files.
 
@@ -534,7 +544,27 @@ and `config.nonDefault` rather than the label.
 | Annotated predicates (Run 9) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `model` | historical ablation; prompt run9 is `beingdb-webllm` 5e28dc5 |
 | Annotated + BeingDB-guided repair (Run 10) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `db-guided` | historical ablation; as Run 9 |
 | Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | previous reference condition; as Run 9 |
-| Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); Llama 31/63 (below) |
+| Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); Llama 31/63 (below) |
+| Annotated v3 + proven repairs (Run 13) | `eval/questions-v3.json` | `nl2dsl-prompt/run13` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); not yet run |
+
+Prompt run13 lets the model write `sum(Var)`, `avg(Var)`, `min(Var)` and
+`max(Var)`: the grammar accepts them wherever it accepted `count(Var)`, a rule says
+to use them like `count` for totals, averages, earliest and latest and to keep the
+thing being added up as a variable (BeingDB adds each distinct combination of the
+named variables once, so `duration_minutes(_, Minutes)` would add equal running
+times once), the "unsupported" rule now names arithmetic and filters on a count or
+total, one example uses `min`, and the unsupported "total running time" example
+became an unsupported subtraction. Suite v3 makes `u04` (average duration) the
+answerable `a01` and adds `a02`-`a04`. To separate the prompt from the questions,
+run prompt run12 on v3 as well (check out the commit that adds
+`eval/questions-v3.json`), then compare both on the 62 shared questions and on
+`a01`-`a04`:
+
+```bash
+npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
+  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v3.json \
+  --repair-policy proven-only --condition annotated-v3-proven-repairs-run13-llama
+```
 
 Saved runs of the Run 11 condition carry the labels
 `annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`, with

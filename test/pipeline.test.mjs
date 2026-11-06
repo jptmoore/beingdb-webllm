@@ -114,12 +114,32 @@ test("db-guided: a provably empty zero count goes back to the model like an empt
   assert.equal(scoreItem(countingSuite.get("c01"), r, db).correct, true);
 });
 
-test("the grammar allows count(Var) in find and order by", () => {
+test("the grammar allows count, sum, avg, min and max in find and order by", () => {
   const grammar = buildGrammar(schema.meta);
-  assert.match(grammar, /^item ::= var \| count$/m);
-  assert.match(grammar, /^count ::= "count\(" var "\)"$/m);
+  assert.match(grammar, /^item ::= var \| aggregate$/m);
+  assert.match(grammar, /^aggregate ::= \("count" \| "sum" \| "avg" \| "min" \| "max"\) "\(" var "\)"$/m);
   assert.match(grammar, /"\\norder by " item dir/);
   assert.equal(countingSuite.has("u03"), false);
+});
+
+// Suite v3 (BeingDB 0.5.0 sum/avg/min/max): u04 became a01.
+const aggregateSuite = new Map(JSON.parse(readFileSync("eval/questions-v3.json", "utf8")).items.map((i) => [i.id, i]));
+
+test("aggregate queries run end to end and score against suite v3", async () => {
+  assert.equal(aggregateSuite.has("u04"), false);
+  for (const [id, dsl] of [
+    ["a01", "find avg(M)\nwhere\n  duration_minutes(W, M)"],
+    ["a02", "find min(Y), max(Y)\nwhere\n  created_by(W, madelon_hooykaas)\n  year_created(W, Y)"],
+    ["a03", "find A, min(Y)\nwhere\n  created_by(W, A)\n  year_created(W, Y)"],
+    ["a04", "find Year\nwhere\n  year_created(_, Year)\norder by Year descending\nlimit 1"],
+  ]) {
+    const { r } = await run([dsl], { repairPolicy: "proven-only" });
+    assert.equal(r.outcome, "ok", id);
+    assert.equal(scoreItem(aggregateSuite.get(id), r, db).correct, true, id);
+  }
+  // The latest year as a plain column is not the earliest-per-artist answer.
+  const { r } = await run(["find max(Y)\nwhere\n  year_created(W, Y)"]);
+  assert.equal(scoreItem(aggregateSuite.get("a03"), r, db).correct, false);
 });
 
 test("a proven argument swap is applied without a model repair", async () => {

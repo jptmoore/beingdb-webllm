@@ -1,7 +1,7 @@
 // node --test: the written answer's prompt and the check that guards it (no model).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { answerMessages, answerBlocks, checkAnswer, displayValue, ignoredByQuery, phraseAnswer, PHRASE_ROWS } from "../src/answer.js";
+import { answerMessages, answerBlocks, checkAnswer, displayValue, header, ignoredByQuery, phraseAnswer, PHRASE_ROWS, words } from "../src/answer.js";
 
 const atom = (value) => ({ type: "atom", value });
 const response = (variables, rows, extra = {}) => ({
@@ -119,4 +119,23 @@ test("phraseAnswer does not call the model when the search ignores the question'
 
 test("checkAnswer rejects an empty answer", () => {
   assert.equal(checkAnswer("  ", q, bbc, true).ok, false);
+});
+
+test("aggregate columns read as words in the answer prompt", () => {
+  assert.equal(words("avg(Minutes)"), "average minutes");
+  assert.equal(header("count(Work)"), "Work count");
+  assert.equal(header("min(Year)"), "Minimum year");
+  assert.equal(words("WorkTitle"), "work title");
+  const res = {
+    variables: ["avg(Minutes)"],
+    results: [{ "avg(Minutes)": { type: "decimal", value: "18" } }],
+    total: 1,
+    hasMore: false,
+    truncated: false,
+  };
+  const dsl = "find avg(Minutes)\nwhere\n  duration_minutes(Work, Minutes)";
+  const { messages } = answerMessages("What is the average duration of the works?", res, { dsl });
+  assert.match(messages.at(-1).content, /- Average minutes: 18/);
+  assert.equal(checkAnswer("On average the works last 18 minutes.", "What is the average duration of the works?", res, true, dsl).ok, true);
+  assert.equal(checkAnswer("On average the works last 20 minutes.", "What is the average duration of the works?", res, true, dsl).ok, false);
 });

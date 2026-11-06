@@ -27,7 +27,7 @@ export function buildGrammar(meta, { allowUnsupported = true } = {}) {
 root ::= ${allowUnsupported ? "query | unsupported" : "query"}
 unsupported ::= "UNSUPPORTED: " [^\n]{1,200}
 query ::= "find " ("distinct ")? item (", " item){0,5} "\nwhere" line{1,8} block{0,3} tail
-item ::= var | count
+item ::= var | aggregate
 line ::= "\n  " clause
 inner ::= "\n    " clause
 block ::= "\n  not" inner{1,4} | "\n  optional" inner{1,4} | "\n  either" inner{1,4} ("\n  or" inner{1,4}){1,3}
@@ -35,7 +35,7 @@ clause ::= pattern | var " " op " " value | var " between " value " and " value 
 op ::= "=" | "!=" | "<=" | ">=" | "<" | ">"
 value ::= var | year | integer | decimal | atom | string
 tail ::= ("\norder by " item dir (", " item dir){0,2})? ("\nlimit " [1-9] [0-9]{0,3})?
-count ::= "count(" var ")"
+aggregate ::= ("count" | "sum" | "avg" | "min" | "max") "(" var ")"
 dir ::= " ascending" | " descending"
 var ::= [A-Z] [A-Za-z0-9_]{0,23}
 atom ::= [a-z] [a-z0-9_]{0,63}

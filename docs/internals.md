@@ -83,8 +83,9 @@ Built at startup from BeingDB only (about 10-30 ms in the browser):
 Change the pack and the context, grammar and signatures change with it. The
 `environmentFingerprint` is checked against `eval/questions.json` (or the file
 given with `--questions`; `eval/questions-annotated.json` holds the same
-questions for the annotated pack's fingerprint, and `eval/questions-v2.json`
-is the current 63-question set).
+questions for the annotated pack's fingerprint, `eval/questions-v2.json` the
+63-question set for BeingDB 0.4, and `eval/questions-v3.json` the current
+66-question set with aggregates).
 
 Print the exact prompt with `node eval/show-prompt.mjs [--grammar]`.
 
@@ -114,11 +115,14 @@ where
 - "not" on its own line, followed by indented clauses, excludes matches. "optional" keeps rows with no match.
 - "order by Var ascending" only when the question asks for an order.
 - For "how many", count in the query: "find count(Work)" gives one number, "find Artist, count(Work)" one per artist, and "order by count(Work) descending" ranks them. count counts distinct values.
+- For totals, averages, earliest and latest, use sum(Var), avg(Var), min(Var), max(Var) the same way. Keep the thing being added up as a variable: duration_minutes(Work, Minutes), not duration_minutes(_, Minutes).
 - When the question gives only a word or part of a name, do not guess an atom or put the word in a clause: use a variable and add Var contains "word" (ignores case).
-- Queries cannot sum, average, divide or filter on a count: such questions are unsupported.
+- Queries cannot do arithmetic (subtract, divide, percentages) or filter on a count or total: such questions are unsupported.
 ```
 
-(Prompt run12. Up to run 11 the last rule read "Queries cannot count, sum,
+(Prompt run13. In run 12 there was no `sum`/`avg`/`min`/`max` rule or example,
+and the last rule read "Queries cannot sum, average, divide or filter on a count:
+such questions are unsupported." Up to run 11 the last rule read "Queries cannot count, sum,
 average or rank: such questions are unsupported.", and there were no counting or
 contains rules or examples.)
 
@@ -227,8 +231,9 @@ The three policies are one option, `--repair-policy model|db-guided|proven-only`
 
 ## Evaluation method
 
-`eval/questions.json`: 50 questions; `eval/questions-v2.json`, the current set,
-has 63 (51 supported, 12 unsupported; see
+`eval/questions.json`: 50 questions; `eval/questions-v2.json` has 63 (51
+supported, 12 unsupported) and `eval/questions-v3.json`, the current set, 66 (55
+supported, 11 unsupported; see
 [question sets](benchmarking.md#question-sets-data-fingerprints-and-prompt-versions)). Each supported item has a reference query
 (checked by `npm run check-eval` to be valid, non-empty, and to return the
 recorded number of rows), the predicates it needs, tags, and optionally `key`
@@ -737,7 +742,14 @@ Reports:
 [Llama rerun](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261009T102014Z_macbook-air-m1-8gb_Llama-3.2-3B-Instruct-q4f16_1-MLC/),
 [Hermes 3](https://github.com/jptmoore/beingdb-webllm/tree/349421841baa949de780054aeb788fdc9e3977b3/eval/results/benchmarks/20261009T095637Z_macbook-air-m1-8gb_Hermes-3-Llama-3.2-3B-q4f16_1-MLC/).
 
-### Run 12: counting and text search (current reference condition)
+### Run 13: sums, averages, minimum and maximum (current reference condition)
+
+66 questions (`eval/questions-v3.json`), prompt run 13 (`sum`/`avg`/`min`/`max`),
+`proven-only`, BeingDB/`beingdb-wasm` 0.5.0. Not yet run. Compare with Run 12 on
+the 62 questions the two sets share, and report `a01`-`a04` separately; see
+[past conditions](benchmarking.md#past-conditions).
+
+### Run 12: counting and text search
 
 63 questions (`eval/questions-v2.json`), prompt run 12 (`count` and `contains`),
 `proven-only`, BeingDB/`beingdb-wasm` 0.4.1. Llama-3.2-3B scored 31/63: 26/51
