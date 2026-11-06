@@ -636,6 +636,14 @@ exactly one value at that argument containing the guessed name
 under `not`, the unfiltered one in `h01`) stands. Entity grounding is therefore
 the main open problem after the pack cleanup.
 
+BeingDB 0.5.1 adds the `replace_constant` repair for exactly this: an atom that
+occurs in no fact, extended at an underscore by exactly one atom at that
+argument, in any scope (beingdb-wasm repinned to it). Replaying Run 14's
+recorded replies through it, `e17` and `h01` become correct with one model call
+and one proven repair; `m05` gets the atom right but keeps an unrelated clause
+the model added. With the same replies Run 14 would score 43/66; a new run
+measures it.
+
 Saved runs of the Run 11 condition carry the labels
 `annotated-predicates-proven-repairs-run11`, `…-llama` and `…-hermes`, with
 identical settings and hashes.
