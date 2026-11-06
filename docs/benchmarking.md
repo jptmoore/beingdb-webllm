@@ -8,7 +8,7 @@ policy makes the chatbot better or worse.
 ## What is measured
 
 The task has 66 questions over the REWIND dataset
-(`eval/questions-v3.json`): 55 answerable and 11 deliberately unsupported.
+(`eval/questions-v4.json`): 55 answerable and 11 deliberately unsupported.
 
 - An answerable question is correct if BeingDB returns the same answer rows
   for the generated query as for a trusted reference query.
@@ -41,7 +41,7 @@ Model-free checks, which need no GPU:
 
 ```sh
 npm test                                                         # chatbot and summary tests against the linked runtime
-npm run check-eval -- --questions eval/questions-v3.json         # reference queries + scorer against the linked pack
+npm run check-eval -- --questions eval/questions-v4.json         # reference queries + scorer against the linked pack
 ```
 
 **List models**
@@ -55,7 +55,7 @@ npm run models -- --filter qwen
 
 ```sh
 npm run benchmark -- --probe --model <MODEL-ID> \
-  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v3.json
+  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v4.json
 ```
 
 The probe ends with status `probe_ok`. Otherwise it reports `incompatible` or
@@ -69,7 +69,7 @@ the cache is reused.
 npm run benchmark -- \
   --model <MODEL-ID> \
   --machine "<MACHINE DESCRIPTION>" \
-  --questions eval/questions-v3.json \
+  --questions eval/questions-v4.json \
   --repair-policy proven-only \
   --condition annotated-v3-proven-repairs
 ```
@@ -104,7 +104,7 @@ The **reference condition** is everything besides the model and machine:
 
 | | |
 |---|---|
-| Questions | `eval/questions-v3.json` (66 items) |
+| Questions | `eval/questions-v4.json` (66 items) |
 | Data | the REWIND export and BeingDB runtime linked from `beingdb-wasm` |
 | Prompt and grammar | the current `src/prompt.js` and `src/grammar.js`, built from the predicate declarations |
 | Repair policy | `proven-only`, also the chatbot's default |
@@ -349,6 +349,20 @@ changes it even when no fact changes.
   years accepted, as in `c02`/`c06`) were added. `u12` (a count filter) and `u13`
   (a ratio) stay unsupported. 66 items: 55 supported, 11 unsupported. Every other
   item is unchanged from v2.
+- `eval/questions-v4.json` (suite `rewind-nl2dsl-annotated-v4`) has v3's questions
+  over the cleaned pack (beingdb-rewind-interviews a561d79, fingerprint
+  `sha256:1776a24b…`): duplicate entity atoms and synonym predicates were merged
+  (168 -> 114 predicates, 1,842 -> 1,778 facts). With one Arts Council atom,
+  education under `educated_at` only, running times under `duration_minutes` only
+  and `year_created` holding works only, `e09`/`m05`/`h01` use
+  `arts_council_of_great_britain` and lose their alternatives, `m06` and `a01` lose
+  theirs, and the `c02`/`c06`/`a04` alternatives that now return the reference's
+  rows are dropped; `e17` uses `maidstone_college_of_art`. Thirteen `expectCount`s
+  changed with the data, e.g. `m09` (Elsa Stansfield's 1980s works) from 1 to 5
+  once her facts under `elsa` joined. The Tate atoms (`e15`/`h06`) are unchanged.
+  Runs on v3 and v4 are not directly comparable: the answers changed with the data.
+  The pipeline replay tests (`test/replay.test.mjs`) load the v3 data from
+  `eval/test/fixtures/rewind-72f26c.browser.json.gz` so recorded runs still replay.
 - `npm run check-eval -- --questions <file>` checks references, examples and
   the scorer against the linked build for any of these files.
 
@@ -546,7 +560,7 @@ and `config.nonDefault` rather than the label.
 | Annotated + proven repairs (Run 11) | `eval/questions-annotated.json` | `nl2dsl-prompt/run9` | `proven-only` | previous reference condition; as Run 9 |
 | Annotated v2 + proven repairs (Run 12) | `eval/questions-v2.json` | `nl2dsl-prompt/run12` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.4.0); Llama 31/63 (below) |
 | Annotated v3 + proven repairs (Run 13) | `eval/questions-v3.json` | `nl2dsl-prompt/run13` | `proven-only` | previous reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); Llama 37/66 (below) |
-| Annotated v3 + proven repairs (Run 14) | `eval/questions-v3.json` | `nl2dsl-prompt/run14` | `proven-only` | reference condition (needs BeingDB/`beingdb-wasm` 0.5.0); not yet run |
+| Annotated v4 + proven repairs (Run 14) | `eval/questions-v4.json` | `nl2dsl-prompt/run14` | `proven-only` | reference condition (needs `beingdb-wasm` with the cleaned REWIND data); not yet run |
 
 Prompt run13 lets the model write `sum(Var)`, `avg(Var)`, `min(Var)` and
 `max(Var)`: the grammar accepts them wherever it accepted `count(Var)`, a rule says
@@ -593,13 +607,17 @@ got 7/10 against Run 13's 6/10 on the same items: `e13` became correct and refus
 gave fitting reasons instead of the count one. That draft also had an unsupported
 example "Who had more than five collaborators?" ("Queries cannot filter on a
 count"); the model copied its reason onto `c01` and still did not refuse `u12`, so
-it was removed. The draft's prompt hashes therefore differ from the final run14. It
-changes the prompt for every question, so it needs a full v3 run:
+it was removed. The draft's prompt hashes therefore differ from the final run14,
+whose "studied at a college" example also uses `educated_at` because the cleaned
+pack merged `studied_at` into it. Run 14 is measured on suite v4, so it changes
+the prompt and the data at once: compare it with Run 13 overall and per item, and
+read a change on an item whose data changed (the v4 entry above lists them) as
+possibly the data's. It needs a full run:
 
 ```bash
 npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
-  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v3.json \
-  --repair-policy proven-only --condition annotated-v3-proven-repairs-run14-llama
+  --machine "<MACHINE DESCRIPTION>" --questions eval/questions-v4.json \
+  --repair-policy proven-only --condition annotated-v4-proven-repairs-run14-llama
 ```
 
 Saved runs of the Run 11 condition carry the labels

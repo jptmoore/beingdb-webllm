@@ -43,11 +43,6 @@ const run = (replies, { db: inner, ...opts } = {}) => {
   return ask({ question: "q", generator, db: cdb, schema, prompt, ...opts }).then((r) => ({ r, generator, n: cdb.n }));
 };
 
-// Benchmark records (questions.jsonl) of a saved run kept as a test fixture.
-const FIXTURES = { "20261006T135634Z": "run9-model", "20261006T164839Z": "run10-db-guided" };
-const recordsOf = (prefix) =>
-  readFileSync(new URL(`../eval/test/fixtures/${FIXTURES[prefix]}/questions.jsonl`, import.meta.url), "utf8").trim().split("\n").map(JSON.parse);
-
 test("a correct candidate costs one model call in both conditions", async () => {
   const q = "find Work\nwhere\n  made_at(Work, oval_house)";
   for (const dbGuided of [false, true]) {
@@ -62,11 +57,11 @@ test("a correct candidate costs one model call in both conditions", async () => 
   }
 });
 
-// Suite v2 (BeingDB 0.3.0 count(Var), 0.4.0 contains): u03 became c01.
-const countingSuite = new Map(JSON.parse(readFileSync("eval/questions-v2.json", "utf8")).items.map((i) => [i.id, i]));
+// The current suite (v4, over the linked data): counts (c), contains (s) and aggregates (a).
+const suite = new Map(JSON.parse(readFileSync("eval/questions-v4.json", "utf8")).items.map((i) => [i.id, i]));
 
-test("a count query runs end to end and scores against the counting suite", async () => {
-  const c01 = countingSuite.get("c01");
+test("a count query runs end to end and scores against the current suite", async () => {
+  const c01 = suite.get("c01");
   for (const repairPolicy of ["model", "db-guided", "proven-only"]) {
     // Variable names are free: count(W) matches the reference's count(Work).
     const { r } = await run(["find count(W)\nwhere\n  created_by(W, george_barber)"], { repairPolicy });
@@ -81,8 +76,8 @@ test("a count query runs end to end and scores against the counting suite", asyn
   assert.equal(scoreItem(c01, zero, db).correct, false);
 });
 
-test("a contains query runs end to end and scores against suite v2", async () => {
-  const s02 = countingSuite.get("s02");
+test("a contains query runs end to end and scores against the current suite", async () => {
+  const s02 = suite.get("s02");
   const { r } = await run(['find distinct W\nwhere\n  created_by(W, _)\n  W contains "TAPE"'], { repairPolicy: "proven-only" });
   assert.equal(r.outcome, "ok");
   assert.equal(scoreItem(s02, r, db).correct, true);
@@ -90,7 +85,7 @@ test("a contains query runs end to end and scores against suite v2", async () =>
 });
 
 test("an answer matching an alternative reference is correct, and the verdict says which", async () => {
-  const e15 = countingSuite.get("e15");
+  const e15 = suite.get("e15");
   const score = async (dsl) => scoreItem(e15, (await run([dsl])).r, db);
   const ref = await score("find Work\nwhere\n  exhibited_at(Work, tate)");
   assert.equal(ref.correct, true);
@@ -111,7 +106,7 @@ test("db-guided: a provably empty zero count goes back to the model like an empt
   assert.match(r.attempts[0].feedback, /returned no rows, because:/);
   assert.match(r.attempts[0].feedback, /george_barbr/);
   assert.equal(r.attempts[1].reply.dsl, good);
-  assert.equal(scoreItem(countingSuite.get("c01"), r, db).correct, true);
+  assert.equal(scoreItem(suite.get("c01"), r, db).correct, true);
 });
 
 test("the grammar allows count, sum, avg, min and max in find and order by", () => {
@@ -119,14 +114,12 @@ test("the grammar allows count, sum, avg, min and max in find and order by", () 
   assert.match(grammar, /^item ::= var \| aggregate$/m);
   assert.match(grammar, /^aggregate ::= \("count" \| "sum" \| "avg" \| "min" \| "max"\) "\(" var "\)"$/m);
   assert.match(grammar, /"\\norder by " item dir/);
-  assert.equal(countingSuite.has("u03"), false);
+  assert.equal(suite.has("u03"), false);
 });
 
-// Suite v3 (BeingDB 0.5.0 sum/avg/min/max): u04 became a01.
-const aggregateSuite = new Map(JSON.parse(readFileSync("eval/questions-v3.json", "utf8")).items.map((i) => [i.id, i]));
 
-test("aggregate queries run end to end and score against suite v3", async () => {
-  assert.equal(aggregateSuite.has("u04"), false);
+test("aggregate queries run end to end and score against the current suite", async () => {
+  assert.equal(suite.has("u04"), false);
   for (const [id, dsl] of [
     ["a01", "find avg(M)\nwhere\n  duration_minutes(W, M)"],
     ["a02", "find min(Y), max(Y)\nwhere\n  created_by(W, madelon_hooykaas)\n  year_created(W, Y)"],
@@ -135,11 +128,11 @@ test("aggregate queries run end to end and score against suite v3", async () => 
   ]) {
     const { r } = await run([dsl], { repairPolicy: "proven-only" });
     assert.equal(r.outcome, "ok", id);
-    assert.equal(scoreItem(aggregateSuite.get(id), r, db).correct, true, id);
+    assert.equal(scoreItem(suite.get(id), r, db).correct, true, id);
   }
   // The latest year as a plain column is not the earliest-per-artist answer.
   const { r } = await run(["find max(Y)\nwhere\n  year_created(W, Y)"]);
-  assert.equal(scoreItem(aggregateSuite.get("a03"), r, db).correct, false);
+  assert.equal(scoreItem(suite.get("a03"), r, db).correct, false);
 });
 
 test("a proven argument swap is applied without a model repair", async () => {
@@ -291,83 +284,7 @@ test("proven-only: deterministic passes stay bounded", async () => {
   assert.equal(r.calls.model, 1);
 });
 
-// Where BeingDB proves no repair, proven-only must be run 9: replaying Run 9's
-// recorded replies, every such question reproduces Run 9 exactly.
-test("proven-only without a proven repair is exactly run 9 (Run 9 replay)", async () => {
-  let same = 0;
-  for (const rec of recordsOf("20261006T135634Z")) {
-    const { r, generator } = await run(rec.attempts.map((a) => a.raw), { repairPolicy: "proven-only", maxRepairs: 2 });
-    if (r.calls.deterministicRepairs > 0) continue;
-    const id = rec.question.id;
-    same++;
-    assert.equal(r.outcome, rec.outcome, `${id} outcome`);
-    assert.deepEqual(generator.calls.map((c) => c.grammar), rec.attempts.map((a) => a.grammar), `${id} grammars`);
-    assert.deepEqual(r.attempts.map((a) => a.feedback ?? null), rec.attempts.map((a) => a.feedback), `${id} repair messages`);
-    assert.deepEqual(r.attempts.map((a) => a.db?.status ?? null), rec.attempts.map((a) => a.beingdb?.status ?? null), `${id} BeingDB status`);
-  }
-  assert.ok(same >= 40, `${same} questions without a proven repair`);
-});
-
 test("conflicting or unknown repair policies are rejected", async () => {
   await assert.rejects(run(["find W\nwhere\n  created_by(W, A)"], { repairPolicy: "proven-only", dbGuided: true }), /conflicting/);
   await assert.rejects(run(["find W\nwhere\n  created_by(W, A)"], { repairPolicy: "llm" }), /unknown repair policy/);
-});
-
-// Replaying every model reply recorded by the Run 9 benchmark through the
-// default pipeline must reproduce Run 9's grammars, repair messages and outcomes.
-
-// Run 10 (db-guided) replayed from its recorded replies: same path, BeingDB
-// diagnoses, proven repairs, repair messages and outcomes. Run 10 predates
-// BeingDB 0.1.7's unsatisfiable_comparison diagnostic, which now adds lines to
-// two recorded messages (e16, u05), and 0.4.1's contains hint, which extends a
-// line (h02); only those additions are tolerated.
-const NEWER_DIAGNOSTIC_LINE = /^- No \w+ fact has a value at argument \d+ satisfying .+, so the query returns no rows\./;
-// BeingDB 0.4.1 may append a contains hint to a recorded diagnostic line.
-const CONTAINS_HINT = / Values there contain ".*?" \(.*?\): put a variable there and add \w+ contains ".*?"\./;
-function assertRecordedMessage(now, was, label) {
-  if (now !== null) now = now.split("\n").map((l) => l.replace(CONTAINS_HINT, "")).join("\n");
-  if (now === was || now === null || was === null) return assert.equal(now, was, label);
-  const nowLines = now.split("\n");
-  const wasLines = was.split("\n");
-  let k = 0;
-  for (const line of nowLines) {
-    if (k < wasLines.length && line === wasLines[k]) k++;
-    else
-      assert.ok(
-        NEWER_DIAGNOSTIC_LINE.test(line) || ["BeingDB also found:", "Relevant predicates:"].includes(line) || line.startsWith("  "),
-        `${label}: unexpected line ${JSON.stringify(line)}`,
-      );
-  }
-  assert.equal(k, wasLines.length, `${label}: recorded lines missing`);
-  assert.ok(nowLines.some((l) => NEWER_DIAGNOSTIC_LINE.test(l)), `${label}: differs without a newer diagnostic`);
-}
-test("db-guided repair reproduces Run 10 exactly from its recorded replies", async () => {
-  const records = recordsOf("20261006T164839Z");
-  assert.equal(records.length, 50);
-  for (const rec of records) {
-    const { r, generator } = await run(rec.attempts.map((a) => a.raw), { dbGuided: true, maxRepairs: 2 });
-    const id = rec.question.id;
-    assert.equal(r.outcome, rec.outcome, `${id} outcome`);
-    assert.deepEqual(generator.calls.map((c) => c.grammar), rec.attempts.map((a) => a.grammar), `${id} grammars`);
-    assert.equal(r.attempts.length, rec.attempts.length, `${id} attempts`);
-    r.attempts.forEach((a, i) => assertRecordedMessage(a.feedback ?? null, rec.attempts[i].feedback ?? null, `${id} repair message ${i}`));
-    assert.deepEqual(r.attempts.map((a) => a.reply.dsl ?? null), rec.attempts.map((a) => a.reply.dsl ?? null), `${id} judged queries`);
-    assert.deepEqual(r.attempts.map((a) => a.db?.status ?? null), rec.attempts.map((a) => a.beingdb?.status ?? null), `${id} BeingDB status`);
-    assert.deepEqual(r.path, rec.efficiency.path, `${id} path`);
-    assert.deepEqual(r.calls, rec.efficiency.calls, `${id} calls`);
-    assert.deepEqual(r.deterministicRepairs, rec.efficiency.deterministicRepairs, `${id} proven repairs`);
-  }
-});
-test("with db-guided repair off, Run 9 is reproduced exactly from its recorded replies", async () => {
-  const records = recordsOf("20261006T135634Z");
-  assert.equal(records.length, 50);
-  for (const rec of records) {
-    const { r, generator } = await run(rec.attempts.map((a) => a.raw), { maxRepairs: 2 });
-    const id = rec.question.id;
-    assert.equal(r.outcome, rec.outcome, `${id} outcome`);
-    assert.equal(r.attempts.length, rec.attempts.length, `${id} attempts`);
-    assert.deepEqual(generator.calls.map((c) => c.grammar), rec.attempts.map((a) => a.grammar), `${id} grammars`);
-    assert.deepEqual(r.attempts.map((a) => a.feedback ?? null), rec.attempts.map((a) => a.feedback), `${id} repair messages`);
-    assert.deepEqual(r.attempts.map((a) => a.db?.status ?? null), rec.attempts.map((a) => a.beingdb?.status ?? null), `${id} BeingDB status`);
-  }
 });

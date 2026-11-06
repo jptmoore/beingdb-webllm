@@ -1,7 +1,6 @@
 // node --test: schema context from declared predicate metadata (unit + linked WASM).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { buildSchema } from "../src/schema.js";
 import { buildPrompt, repairMessage } from "../src/prompt.js";
 import { loadBeingDB } from "../eval/node-beingdb.mjs";
@@ -87,24 +86,6 @@ test("declared roles win over inferred ones; descriptions only on main predicate
   assert.equal(s.signatures.get("rented_by"), "rented_by(Work, Renter): Relates a work to whoever rented it.");
   assert.equal(s.signatures.get("sold_at"), "sold_at(Thing, Thing2)");
   assert.deepEqual([s.stats.described, s.stats.describedInText, s.stats.declaredRoles], [2, 1, 3]);
-});
-
-test("linked beingdb-wasm with annotations stripped reproduces the run-8 baseline schema", async () => {
-  const { db } = await linked;
-  const meta = db.predicates();
-  const stripped = {
-    ...meta,
-    predicates: meta.predicates.map(({ description, ...p }) => ({
-      ...p,
-      arguments: p.arguments.map(({ role, semanticType, ...a }) => a),
-    })),
-  };
-  const schema = buildSchema({ ...db, predicates: () => stripped });
-  // schemaText hash recorded by the 20261005T160921Z Llama baseline benchmark.
-  assert.equal(
-    createHash("sha256").update(schema.text).digest("hex"),
-    "7fe2fa162c001c09e1d58f5e98cb3679ac244b7076989368312edc1eb901ab37",
-  );
 });
 
 test("linked beingdb-wasm: annotations reach the system prompt and repairs", async () => {
