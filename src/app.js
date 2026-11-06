@@ -1,7 +1,7 @@
 import { setupDatabase, setupModel, modelIsCached, CHAT_MODELS } from "./setup.js";
 import { DEFAULT_MODEL, prebuiltModels } from "./generator.js";
 import { ask } from "./pipeline.js";
-import { displayValue, words, header, phraseAnswer, answerBlocks } from "./answer.js";
+import { displayValue, words, header, isAggregate, phraseAnswer, answerBlocks } from "./answer.js";
 import { checkRelevance, ungroundedConstants } from "./guard.js";
 import { isGpuLost } from "./errors.js";
 
@@ -45,7 +45,7 @@ export function friendlyAnswer(res, { intro: withIntro = true } = {}) {
   const n = res.results.length;
   if (!n) return `<p>I couldn't find anything in the interview facts that matches that. Try rephrasing, or ask about something else.</p>`;
   const vars = res.variables;
-  const noun = vars.length === 1 ? words(vars[0]) : "result";
+  const noun = vars.length === 1 && !isAggregate(vars[0]) ? words(vars[0]) : "result";
   const things = (k) => `${k} ${k === 1 ? noun : plural(noun)}`;
   const intro =
     res.total !== undefined && res.total > n

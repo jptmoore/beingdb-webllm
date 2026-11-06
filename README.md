@@ -97,13 +97,13 @@ explanation, rather than retried.
 The quality of the chatbot depends on the model, the prompt, the schema
 context (the predicate declarations in your facts help a lot), the grammar
 and the repair loop. To change one and measure the effect, use the benchmark
-in [eval/](eval/): 63 REWIND questions with reference answers, run in a real
+in [eval/](eval/): 66 REWIND questions with reference answers, run in a real
 browser, scored by comparing BeingDB's answers.
 
 ```sh
 npm test                                                   # model-free checks
 npm run benchmark -- --model Llama-3.2-3B-Instruct-q4f16_1-MLC \
-  --machine "<your machine>" --questions eval/questions-v2.json --repair-policy proven-only
+  --machine "<your machine>" --questions eval/questions-v3.json --repair-policy proven-only
 ```
 
 Run the reference model before and after your change, on the same machine,
