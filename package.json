@@ -21,6 +21,6 @@
     "@mlc-ai/web-llm": "^0.2.85"
   },
   "devDependencies": {
-    "playwright-core": "1.63.0"
+    "playwright-core": "1.65.0"
   }
 }
